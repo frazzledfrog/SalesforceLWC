@@ -1,0 +1,103 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <lightning-card title="Gemini AI Prompt" icon-name="standard:bot">
+            <div class="slds-m-bottom_large">
+                <div>
+                    <p class="slds-text-color_weak">
+                        Ask Gemini AI anything and get intelligent responses. Perfect for brainstorming, analysis, and creative tasks.
+                    </p>
+                </div>
+            </div>
+        
+        <!-- Input Section -->
+        <div class="slds-form-element">
+            <lightning-textarea 
+                label="Enter your request here" 
+                value={prompt} 
+                onchange={handlePromptChange}
+                placeholder="e.g., 'What are the key features of Salesforce Lightning?' or 'Write a creative story about...'"
+                required
+                class="custom-textarea">
+            </lightning-textarea>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="slds-grid slds-grid_align-start slds-gutters_small slds-m-bottom_large">
+            <lightning-button 
+                label="Get Gemini Response" 
+                variant="brand" 
+                onclick={handleCallApi} 
+                disabled={isLoading}
+                class="button-primary">
+            </lightning-button>
+            <lightning-button 
+                label="Clear" 
+                variant="neutral" 
+                onclick={handleClear}
+                disabled={isLoading}
+                class="button-secondary">
+            </lightning-button>
+        </div>
+
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_medium slds-border_top slds-border_bottom slds-m-bottom_medium" style="background-color: var(--background-color);">
+                <lightning-spinner alternative-text="Processing your request..." size="medium" class="slds-m-bottom_small"></lightning-spinner>
+                <p class="slds-text-color_weak">
+                    Gemini AI is thinking...
+                </p>
+            </div>
+        </template>
+
+        <!-- Success Response -->
+        <template if:true={apiResponse}>
+            <div class="slds-card slds-card_boundary">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:success" size="small" variant="success"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title slds-text-heading_small">
+                                AI Response
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">
+                    <div class="response-container slds-scrollable_y" style="max-height: 400px;">
+                        <p class="response-text" style="white-space: pre-wrap; line-height: 1.6;">{apiResponse}</p>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={apiError}>
+            <div class="slds-card slds-card_boundary">
+                <div class="slds-card__header slds-grid">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                        <div class="slds-media__figure">
+                            <lightning-icon icon-name="utility:error" size="small" variant="error"></lightning-icon>
+                        </div>
+                        <div class="slds-media__body">
+                            <h2 class="slds-card__header-title slds-text-heading_small">
+                                Error Occurred
+                            </h2>
+                        </div>
+                    </header>
+                </div>
+                <div class="slds-card__body slds-card__body_inner">
+                    <div class="slds-notify slds-notify_alert slds-theme_error" style="position: relative; transform: none;">
+                        <span class="slds-assistive-text">Error</span>
+                        <div class="slds-notify__content">
+                            <p class="slds-text-body_regular">{apiError}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+        </lightning-card>
+    </div>
+</template>

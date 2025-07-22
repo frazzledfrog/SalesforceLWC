@@ -1,0 +1,52 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <div class="content-wrapper">
+            <div class="main-content">
+                <!-- Header with improved layout -->
+                <div class="metric-header slds-m-bottom_large">
+                    <div class="slds-grid slds-gutters_small">
+                        <lightning-icon icon-name="standard:dashboard" size="medium" style="color: var(--primary-color);"></lightning-icon>
+                        <h1 class="slds-text-heading_large slds-m-bottom_none">{cardTitle}</h1>
+                    </div>
+            
+            <div class="controls-section">
+                <template if:true={showDropdown}>
+                    <lightning-combobox
+                        name="region"
+                        label="Region"
+                        value={selectedRegion}
+                        placeholder="Select Region"
+                        options={regionOptions}
+                        onchange={handleRegionChange}
+                        disabled={isLoading}
+                        variant="label-hidden"
+                        class="slds-col_bump-left">
+                    </lightning-combobox>
+                </template>
+                <template if:false={showDropdown}>
+                    <div class="slds-grid slds-gutters_small slds-text-color_weak">
+                        <lightning-spinner size="x-small"></lightning-spinner>
+                        <span>Loading regions...</span>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Chart Section with improved styling -->
+        <div class="chart-section">
+            <template if:true={isLoading}>
+                <div class="slds-text-align_center slds-p-around_x-large">
+                    <lightning-spinner size="medium" alternative-text="Loading chart data..."></lightning-spinner>
+                    <p class="slds-text-color_weak slds-m-top_small">Loading chart data...</p>
+                </div>
+            </template>
+            
+            <div class="chart-container">
+                <canvas class="chart-canvas" lwc:dom="manual"></canvas>
+            </div>
+        </div>
+            </div>
+        </div>
+    </div>
+</template>

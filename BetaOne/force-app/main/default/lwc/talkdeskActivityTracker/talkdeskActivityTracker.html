@@ -1,0 +1,278 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <lightning-card title="Talkdesk Activity Tracker" icon-name="standard:call">
+            <div class="slds-m-bottom_large">
+                <p class="slds-text-color_weak">Monitor call activity and performance metrics</p>
+            </div>
+        
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-spinner size="medium"></lightning-spinner>
+                <p class="slds-text-color_weak slds-m-top_small">Loading activity data...</p>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="status-error slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                {error}
+            </div>
+        </template>
+
+        <!-- Improved Filters Section -->
+        <template if:true={showFilters}>
+            <div class="metric-card slds-m-bottom_large">
+                <div class="metric-header slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_none">Filters</h3>
+                </div>
+                <div class="slds-grid slds-wrap slds-gutters_medium">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            name="salesperson"
+                            label="Salesperson"
+                            value={selectedSalesperson}
+                            placeholder="Choose Salesperson"
+                            options={salespeople}
+                            onchange={handleSalespersonChange}>
+                        </lightning-combobox>
+                    </div>
+                    
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-3">
+                        <lightning-combobox
+                            name="channel"
+                            label="Channel"
+                            value={selectedChannel}
+                            placeholder="Choose Channel"
+                            options={channelOptions}
+                            onchange={handleChannelChange}>
+                        </lightning-combobox>
+                    </div>
+                    
+                    <lightning-combobox
+                            name="direction"
+                            label="Direction"
+                            value={selectedDirection}
+                            placeholder="Choose Direction"
+                        options={directionOptions}
+                        onchange={handleDirectionChange}>
+                    </lightning-combobox>
+                    
+                    <lightning-combobox
+                        name="timeframe"
+                        label="Timeframe"
+                        value={selectedTimeframe}
+                        options={timeframeOptions}
+                        onchange={handleTimeframeChange}>
+                    </lightning-combobox>
+                </div>
+            </div>
+        </template>
+
+        <!-- Main Dashboard with improved layout -->
+        <template if:true={selectedSalespersonData}>
+            <!-- Summary Stats -->
+            <div class="slds-m-bottom_large">
+                <div class="metric-card">
+                    <div class="slds-m-bottom_medium">
+                        <h3 class="slds-text-heading_small slds-m-bottom_none">Activity Summary</h3>
+                    </div>
+                    <div class="chart-wrapper">
+                        <svg viewBox="0 0 120 120" class="chart-svg">
+                            <defs>
+                                <linearGradient id="talkdeskProgressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#10b981;stop-opacity:1"/>
+                                    <stop offset="25%" style="stop-color:#84cc16;stop-opacity:1"/>
+                                    <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                    <stop offset="75%" style="stop-color:#f97316;stop-opacity:1"/>
+                                    <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1"/>
+                                </linearGradient>
+                                <linearGradient id="talkdeskGoldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1"/>
+                                    <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                    <stop offset="100%" style="stop-color:#d97706;stop-opacity:1"/>
+                                </linearGradient>
+                            </defs>
+                            
+                            <!-- Background circle -->
+                            <circle cx="60" cy="60" r="45" 
+                                    fill="none" 
+                                    stroke="#e5e7eb" 
+                                    stroke-width="12"/>
+                            
+                            <!-- Progress circle -->
+                            <circle cx="60" cy="60" r="45" 
+                                    fill="none" 
+                                    stroke={progressColor}
+                                    stroke-width="14"
+                                    stroke-linecap="round"
+                                    stroke-dasharray="282.74"
+                                    stroke-dashoffset={progressOffset}
+                                    transform="rotate(-90 60 60)"
+                                    style="transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.3s ease-in-out;"/>
+                                    
+                            <!-- Overflow circle -->
+                            <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
+                                <circle cx="60" cy="60" r="45" 
+                                        fill="none" 
+                                        stroke="url(#talkdeskGoldGradient)"
+                                        stroke-width="13"
+                                        stroke-linecap="round"
+                                        stroke-dasharray="282.74"
+                                        stroke-dashoffset={overflowOffset}
+                                        transform="rotate(-90 60 60)"
+                                        style="transition: stroke-dashoffset 0.5s ease-in-out;"/>
+                            </template>
+                        </svg>
+                        
+                        <div class="chart-center">
+                            <div class="calls-number">{selectedSalespersonData.goalProgress.calls}</div>
+                            <div class="calls-text">calls</div>
+                            <div class="goal-text">of {dailyGoal}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Progress</span>
+                            <span class="stat-value">{selectedSalespersonData.goalProgress.percentage}%</span>
+                        </div>
+                        <template if:false={selectedSalespersonData.goalProgress.isOverGoal}>
+                            <div class="stat-item">
+                                <span class="stat-label">Remaining</span>
+                                <span class="stat-value">{selectedSalespersonData.goalProgress.remaining}</span>
+                            </div>
+                        </template>
+                        <div class="stat-item">
+                            <span class="stat-label">Success Rate</span>
+                            <span class="stat-value">{successRate}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Attempts</span>
+                            <span class="stat-value">{totalAttempts}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Total Talk Time</span>
+                            <span class="stat-value">{totalTalkTimeFormatted}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Avg Talk Time</span>
+                            <span class="stat-value">{averageTalkTimeFormatted}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Performance Trend Indicator -->
+                    <div class="trend-indicator">
+                        <lightning-icon 
+                            icon-name={trendIcon} 
+                            size="small" 
+                            class="trend-icon">
+                        </lightning-icon>
+                        <span class="trend-message">{trendMessage}</span>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <!-- Activity Details -->
+        <template if:true={hasData}>
+            <div class="details-section">
+                <div class="section-header">
+                    <h3 class="section-title">Activity Details - {timeframeLabel}</h3>
+                    <div class="button-group">
+                        <lightning-button
+                            label="Refresh"
+                            icon-name="utility:refresh"
+                            onclick={refreshData}
+                            variant="neutral"
+                            class="refresh-button">
+                        </lightning-button>
+                        <lightning-button
+                            label="Export Data"
+                            icon-name="utility:download"
+                            onclick={handleExportData}
+                            variant="neutral"
+                            class="export-button">
+                        </lightning-button>
+                    </div>
+                </div>
+                
+                <template for:each={groupedActivities} for:item="group">
+                    <div key={group.salespersonName} class="salesperson-group">
+                        <div class="group-header">
+                            <h4 class="salesperson-name">{group.salespersonName}</h4>
+                            <div class="group-summary">
+                                <span class="summary-item">
+                                    <lightning-icon icon-name="utility:call" size="xx-small"></lightning-icon>
+                                    {group.totalCalls} calls
+                                </span>
+                                <span class="summary-item">
+                                    <lightning-icon icon-name="utility:clock" size="xx-small"></lightning-icon>
+                                    {group.formattedTotalTalkTime} total
+                                </span>
+                                <span class="summary-item">
+                                    <lightning-icon icon-name="utility:trending" size="xx-small"></lightning-icon>
+                                    {group.formattedAverageTalkTime} avg
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="activity-cards">
+                            <template for:each={group.activities} for:item="activity">
+                                <div key={activity.id} class="activity-card">
+                                    <div class="activity-header">
+                                        <div class="activity-type">
+                                            <lightning-icon icon-name={activity.channelIcon} size="x-small" class="channel-icon"></lightning-icon>
+                                            <span class="channel-text">{activity.channel}</span>
+                                            <lightning-icon icon-name={activity.directionIcon} size="x-small" class="direction-icon"></lightning-icon>
+                                            <span class="direction-text">{activity.direction}</span>
+                                        </div>
+                                        <template if:true={activity.accountName}>
+                                            <div class="account-info">
+                                                <lightning-icon icon-name="standard:account" size="xx-small"></lightning-icon>
+                                                <span class="account-name">{activity.accountName}</span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    
+                                    <div class="activity-metrics">
+                                        <div class="metric">
+                                            <span class="metric-label">Calls</span>
+                                            <span class="metric-value">{activity.totalActivities}</span>
+                                        </div>
+                                        <div class="metric">
+                                            <span class="metric-label">Total Time</span>
+                                            <span class="metric-value">{activity.formattedTotalTalkTime}</span>
+                                        </div>
+                                        <div class="metric">
+                                            <span class="metric-label">Avg Time</span>
+                                            <span class="metric-value">{activity.formattedAverageTalkTime}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- No Data State -->
+        <template if:false={hasData}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <div class="no-data-state">
+                        <lightning-icon icon-name="utility:call" size="large" class="no-data-icon"></lightning-icon>
+                        <h3 class="no-data-title">No Talkdesk Activity Found</h3>
+                        <p class="no-data-message">
+                            No activities with conversations found for the selected filters and timeframe.
+                        </p>
+                    </div>
+                </template>
+            </template>
+        </template>
+        </lightning-card>
+    </div>
+</template>

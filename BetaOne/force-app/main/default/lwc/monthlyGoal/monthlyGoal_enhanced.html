@@ -1,0 +1,87 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="app-canvas">
+        <div class="content-canvas">
+            <!-- Enhanced Canvas Header -->
+            <div class="canvas-header">
+                <h1 class="canvas-title">Monthly Goal Dashboard</h1>
+                <p class="canvas-subtitle">Track progress towards monthly targets and regional performance</p>
+            </div>
+            
+            <div class="canvas-body">
+                <!-- Control Panel Section -->
+                <div class="visual-section">
+                    <div class="visual-section-header">
+                        <h2 class="visual-section-title">
+                            <lightning-icon icon-name="utility:settings" size="small"></lightning-icon>
+                            Goal Configuration
+                        </h2>
+                    </div>
+                    
+                    <div class="content-grid content-grid-2">
+                        <template if:true={showDropdown}>
+                            <lightning-combobox
+                                name="region"
+                                label="Select Region"
+                                value={selectedRegion}
+                                placeholder="Choose Region"
+                                options={regionOptions}
+                                onchange={handleRegionChange}
+                                disabled={isLoading}
+                                variant="standard">
+                            </lightning-combobox>
+                        </template>
+                        
+                        <template if:false={showDropdown}>
+                            <div class="loading-overlay">
+                                <div class="loading-content">
+                                    <lightning-spinner size="small"></lightning-spinner>
+                                    <p class="loading-text">Loading regions...</p>
+                                </div>
+                            </div>
+                        </template>
+                        
+                        <div style="display: flex; align-items: end;">
+                            <div class="status-badge info">
+                                <lightning-icon icon-name="utility:target" size="x-small"></lightning-icon>
+                                Monthly Target
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goal Progress Section -->
+                <template if:false={isLoading}>
+                    <div class="visual-section">
+                        <div class="visual-section-header">
+                            <h2 class="visual-section-title">
+                                <lightning-icon icon-name="utility:chart" size="small"></lightning-icon>
+                                Goal Progress Visualization
+                            </h2>
+                            <div class="status-badge success">
+                                {selectedRegion} Region
+                            </div>
+                        </div>
+                        
+                        <!-- Enhanced Chart Container -->
+                        <div class="chart-container">
+                            <div class="chart-wrapper">
+                                <canvas class="chart-canvas" lwc:dom="manual"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Loading State -->
+                <template if:true={isLoading}>
+                    <div class="loading-overlay">
+                        <div class="loading-content">
+                            <lightning-spinner size="medium" alternative-text="Loading chart data..."></lightning-spinner>
+                            <p class="loading-text">Loading goal progress data...</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

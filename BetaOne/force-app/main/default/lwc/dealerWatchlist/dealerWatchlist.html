@@ -1,0 +1,136 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <lightning-card title="Dealer Performance Watchlist" icon-name="standard:list_view">
+        <div class="content-wrapper">
+            <div class="main-content">
+                <!-- Header with improved layout -->
+                <div class="metric-header slds-m-bottom_large">
+                    <div class="dealer-watchlist-header">
+                        <p class="slds-text-color_weak">{bannerSubtitle}</p>
+                    </div>
+            
+            <div class="slds-grid slds-gutters_medium">
+                <div class="slds-grid slds-gutters_small">
+                    <lightning-input
+                        type="toggle"
+                        label="Year over Year"
+                        checked={isYearOverYear}
+                        onchange={handleComparisonToggle}
+                        variant="label-hidden"
+                        class="toggle-switch">
+                    </lightning-input>
+                    <span class="slds-text-color_weak slds-text-body_small">{toggleLabel}</span>
+                </div>
+                
+                <lightning-combobox
+                    name="regionFilter"
+                    value={selectedRegion}
+                    options={regionOptions}
+                    onchange={handleRegionChange}
+                    variant="label-hidden"
+                    placeholder="Region"
+                    class="slds-col_bump-left">
+                </lightning-combobox>
+                
+                <lightning-combobox
+                    name="limitFilter"
+                    value={selectedLimit}
+                    options={limitOptions}
+                    onchange={handleLimitChange}
+                    variant="label-hidden"
+                    placeholder="Limit"
+                    class="slds-col_bump-left">
+                </lightning-combobox>
+            </div>
+        </div>
+        
+        <!-- Content with improved styling -->
+        <template if:true={watchlistData}>
+            <template if:true={hasNoData}>
+                <div class="slds-text-align_center slds-p-around_x-large">
+                    <lightning-icon icon-name="utility:success" size="medium" class="slds-m-bottom_small" style="color: var(--success-color);"></lightning-icon>
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">No Winners or Losers</h3>
+                    <p class="slds-text-color_weak">No dealers with significant changes this period.</p>
+                </div>
+            </template>
+
+            <template if:false={hasNoData}>
+                <div class="regions-container">
+                    <template for:each={filteredRegions} for:item="region">
+                        <div key={region.name} class="region-section slds-m-bottom_medium">
+                            <div class="winners-losers-container">
+                                <template if:true={region.hasWinners}>
+                                    <div class="winners-list">
+                                        <h4 class="slds-text-title_caps slds-m-bottom_xx-small">Winners</h4>
+                                        <template for:each={region.winners} for:item="dealer">
+                                            <div key={dealer.name} class="dealer-item winner">
+                                                <div class="dealer-content">
+                                                    <div class="dealer-name">
+                                                        <c-dealer-account-link dealer-name={dealer.name}></c-dealer-account-link>
+                                                    </div>
+                                                    <div class="dealer-metrics">
+                                                        <span class="metric">{dealer.currentLabel}: {dealer.mtdText}</span>
+                                                        <span class="metric">{dealer.previousLabel}: {dealer.prevText}</span>
+                                                        <span class="metric-delta">Delta: <span class={dealer.deltaClass}>{dealer.deltaText}</span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template if:false={region.hasWinners}>
+                                    <div class="winners-list">
+                                        <h4 class="slds-text-title_caps slds-m-bottom_xx-small">Winners</h4>
+                                        <div class="no-dealers-column">
+                                            <span class="slds-text-color_weak">No winners this period</span>
+                                        </div>
+                                    </div>
+                                </template>
+                                
+                                <template if:true={region.hasLosers}>
+                                    <div class="losers-list">
+                                        <h4 class="slds-text-title_caps slds-m-bottom_xx-small">Losers</h4>
+                                        <template for:each={region.losers} for:item="dealer">
+                                            <div key={dealer.name} class="dealer-item loser">
+                                                <div class="dealer-content">
+                                                    <div class="dealer-name">
+                                                        <c-dealer-account-link dealer-name={dealer.name}></c-dealer-account-link>
+                                                    </div>
+                                                    <div class="dealer-metrics">
+                                                        <span class="metric">{dealer.currentLabel}: {dealer.mtdText}</span>
+                                                        <span class="metric">{dealer.previousLabel}: {dealer.prevText}</span>
+                                                        <span class="metric-delta">Delta: <span class={dealer.deltaClass}>{dealer.deltaText}</span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template if:false={region.hasLosers}>
+                                    <div class="losers-list">
+                                        <h4 class="slds-text-title_caps slds-m-bottom_xx-small">Losers</h4>
+                                        <div class="no-dealers-column">
+                                            <span class="slds-text-color_weak">No losers this period</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                            <template if:false={region.hasWinners}>
+                                <template if:false={region.hasLosers}>
+                                    <div class="no-dealers slds-text-align_center slds-p-around_small">
+                                        <lightning-icon icon-name="utility:success" size="x-small" class="slds-m-right_x-small success-icon"></lightning-icon>
+                                        <span class="slds-text-color_success">No winners or losers in this region</span>
+                                    </div>
+                                </template>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </template>
+        </template>
+            </div>
+        </div>
+        </lightning-card>
+    </div>
+</template>

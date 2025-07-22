@@ -1,0 +1,125 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <lightning-card title="Account Assignment View" icon-name="standard:assignment">
+            <div class="metric-header slds-m-bottom_large">
+                <div>
+                    <p class="slds-text-color_weak">View and manage account assignments by sales representative</p>
+                </div>
+            </div>
+        
+        <!-- Sales Rep Selection -->
+        <div class="slds-form-element">
+            <label class="slds-form-element__label" for="salesRepSelect">
+                Select Sales Representative
+            </label>
+            <div class="slds-form-element__control">
+                <lightning-combobox
+                    id="salesRepSelect"
+                    options={salesRepOptions}
+                    value={selectedSalesRep}
+                    onchange={handleSalesRepChange}
+                    placeholder="Select a sales rep..."
+                    class="slds-input">
+                </lightning-combobox>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-spinner alternative-text="Loading accounts..." size="medium"></lightning-spinner>
+                <p class="slds-text-color_weak slds-m-top_small">Loading accounts...</p>
+            </div>
+        </template>
+
+        <!-- Error Message -->
+        <template if:true={error}>
+            <div class="status-error slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                {error}
+            </div>
+        </template>
+
+        <!-- Accounts Display -->
+        <template if:true={hasAccounts}>
+                <div class="slds-m-bottom_medium">
+                    <h3 class="slds-text-heading_small slds-m-bottom_x-small">
+                        Accounts assigned to {selectedSalesRepName}
+                    </h3>
+                    <p class="slds-text-color_weak slds-text-body_small">
+                        Grouped by Index Call Assignment Number
+                    </p>
+                </div>
+
+                <template for:each={groupedAccounts} for:item="group">
+                    <div key={group.assignmentNumber} class="assignment-group slds-m-bottom_large">
+                        <div class="group-header slds-p-around_small">
+                            <h4 class="slds-text-heading_small">
+                                Assignment Number: {group.assignmentNumber}
+                                <span class="account-count">({group.accounts.length} accounts)</span>
+                            </h4>
+                        </div>
+                        
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th class="slds-text-title_caps" scope="col">Account Name</th>
+                                    <th class="slds-text-title_caps" scope="col">Type</th>
+                                    <th class="slds-text-title_caps" scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <template for:each={group.accounts} for:item="account">
+                                    <tr key={account.id} class="slds-hint-parent">
+                                        <td data-label="Account Name">
+                                            <lightning-formatted-url 
+                                                value={account.recordUrl} 
+                                                label={account.name}
+                                                target="_blank">
+                                            </lightning-formatted-url>
+                                        </td>
+                                        <td data-label="Type">
+                                            <span class="account-type">{account.type}</span>
+                                        </td>
+                                        <td data-label="Actions">
+                                            <lightning-button-menu 
+                                                alternative-text="Actions" 
+                                                icon-size="x-small">
+                                                <lightning-menu-item 
+                                                    value="view" 
+                                                    label="View Account">
+                                                </lightning-menu-item>
+                                                <lightning-menu-item 
+                                                    value="call" 
+                                                    label="Create Call Task">
+                                                </lightning-menu-item>
+                                            </lightning-button-menu>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </template>
+            </template>
+
+            <!-- No Accounts Message -->
+            <template if:false={hasAccounts}>
+                <template if:false={isLoading}>
+                    <template if:false={error}>
+                        <div class="slds-align_absolute-center slds-p-around_large">
+                            <div class="slds-text-align_center">
+                                <lightning-icon icon-name="standard:account" size="large" class="slds-m-bottom_small"></lightning-icon>
+                                <h3 class="slds-text-heading_medium slds-m-bottom_small">No Accounts Found</h3>
+                                <p class="slds-text-body_regular">
+                                    {selectedSalesRepName} has no accounts with assignment numbers.
+                                </p>
+                            </div>
+                        </div>
+                    </template>
+                </template>
+            </template>
+        </lightning-card>
+    </div>
+</template>

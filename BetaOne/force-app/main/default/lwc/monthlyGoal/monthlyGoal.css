@@ -1,0 +1,33 @@
+/* Clean monthly goal component styles */
+.header-section {
+    background: var(--primary-color);
+    padding: var(--spacing-large);
+}
+
+.main-title {
+    color: white;
+    font-size: var(--font-size-xl);
+    font-weight: 700;
+    margin: 0;
+}
+
+.chart-section {
+    padding: 0;
+    position: relative;
+    height: 450px;
+}
+
+.chart-container {
+    height: 100%;
+    position: relative;
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.chart-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}

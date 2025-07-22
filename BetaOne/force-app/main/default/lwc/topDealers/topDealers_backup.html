@@ -1,0 +1,70 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <div class="metric-card">
+            <div class="metric-header slds-m-bottom_medium">
+                <h2 class="slds-text-heading_medium slds-m-bottom_none">Top 5 Dealers by Region</h2>
+                <lightning-combobox
+                    name="region"
+                    label="Select a Region"
+                    value={selectedRegion}
+                    placeholder="Select Region"
+                    options={regionOptions}
+                    onchange={handleRegionChange}
+                    variant="label-hidden"
+                    class="slds-col_bump-left">
+                </lightning-combobox>
+            </div>
+
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
+                <p class="slds-text-color_weak slds-m-top_small">Loading dealers...</p>
+            </div>
+        </template>
+
+        <template if:true={error}>
+            <div class="status-error slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                {error}
+            </div>
+        </template>
+
+        <template if:false={hasDealers}>
+            <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-icon icon-name="utility:info" size="medium" class="slds-m-bottom_small" style="color: var(--text-muted);"></lightning-icon>
+                <h3 class="slds-text-heading_small slds-m-bottom_x-small">No dealers to display</h3>
+                <p class="slds-text-color_weak">Try selecting a different region.</p>
+            </div>
+        </template>
+
+        <template if:true={hasDealers}>
+            <div class="dealer-cards-container">
+                <template for:each={dealers} for:item="dealer">
+                    <div key={dealer.accountName} class="dealer-card">
+                        <div class="slds-grid slds-gutters_medium">
+                            <div class="dealer-rank">
+                                <span class="rank-badge">{dealer.rank}</span>
+                            </div>
+                            <div class="slds-col slds-has-flexi-truncate">
+                                <h4 class="slds-text-heading_small slds-m-bottom_x-small">
+                                    <c-dealer-account-link dealer-name={dealer.accountName}></c-dealer-account-link>
+                                </h4>
+                                <div class="slds-grid slds-gutters_small">
+                                    <span class="info-label">Amount Financed:</span>
+                                    <lightning-formatted-number 
+                                        value={dealer.totalAmount} 
+                                        format-style="currency" 
+                                        currency-code="CAD"
+                                        class="info-value slds-text-body_regular">
+                                    </lightning-formatted-number>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,13 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="slds-card">
+        <div class="slds-card__body slds-card__body_inner">
+            <template if:true={accountId}>
+                <a href={accountUrl} target="_blank">{accountName}</a>
+            </template>
+            <template if:false={accountId}>
+                <span>{accountName} (account not found)</span>
+            </template>
+        </div>
+    </div>
+</template>

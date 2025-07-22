@@ -1,0 +1,102 @@
+/* Clean activity tracker styles */
+.chart-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    margin: 0 auto var(--spacing-large) auto;
+}
+
+.calls-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    line-height: 1;
+}
+
+.stats-row {
+    display: flex;
+    justify-content: center;
+    gap: var(--spacing-xl);
+    margin-top: var(--spacing-medium);
+    padding: var(--spacing-medium);
+    background: var(--background-color);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-light);
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.stat-number.over-goal {
+    color: var(--secondary-color);
+}
+
+.stat-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+}
+
+/* Empty State */
+.empty-state {
+    padding: 3rem 1rem;
+    color: #6b7280;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.empty-text {
+    margin-top: 1rem;
+    font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .tracker-container {
+        padding: 1rem;
+    }
+    
+    .chart-wrapper {
+        width: min(80vw, 280px);
+        height: min(80vw, 280px);
+    }
+    
+    .salesperson-select .slds-combobox__input {
+        font-size: 1.25rem;
+    }
+    
+    .stats-row {
+        gap: 1.5rem;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .tracker-container {
+        padding: 0.75rem;
+    }
+    
+    .salesperson-select {
+        margin-bottom: 1.5rem;
+    }
+    
+    .chart-wrapper {
+        width: min(85vw, 220px);
+        height: min(85vw, 220px);
+        margin-bottom: 1rem;
+    }
+    
+    .stats-row {
+        gap: 1rem;
+        flex-direction: column;
+    }
+    
+    .stat {
+        margin-bottom: 0.5rem;
+    }
+}

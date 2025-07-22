@@ -1,0 +1,90 @@
+/* Enhanced dealer watchlist styles using design system */
+
+/* Header styling improvements */
+.dealer-watchlist-header {
+    flex: 1;
+}
+
+.toggle-switch {
+    --slds-c-toggle-color-background-checked: var(--primary-color);
+}
+
+/* Improved dealer item styling */
+.dealer-item {
+    border-bottom: 1px solid var(--border-light);
+    padding: var(--spacing-medium) 0;
+    transition: background-color 0.2s ease;
+}
+
+.dealer-item:hover {
+    background-color: var(--background-color);
+    border-radius: var(--border-radius-small);
+    margin: 0 calc(-1 * var(--spacing-small));
+    padding-left: var(--spacing-small);
+    padding-right: var(--spacing-small);
+}
+
+.dealer-item:last-child {
+    border-bottom: none;
+}
+
+.dealer-name {
+    font-weight: 500;
+    color: var(--text-color);
+    flex: 1;
+    min-width: 0;
+    font-size: var(--font-size-base);
+}
+
+/* Enhanced delta indicators */
+.delta-positive {
+    color: var(--success-color);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.delta-negative {
+    color: var(--error-color);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.delta-positive::before {
+    content: '↗';
+    font-size: var(--font-size-sm);
+}
+
+.delta-negative::before {
+    content: '↘';
+    font-size: var(--font-size-sm);
+}
+
+.winners-list {
+    min-height: 200px;
+    padding: var(--spacing-small);
+    background-color: var(--success-background);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--success-color);
+}
+
+.losers-list {
+    min-height: 200px;
+    padding: var(--spacing-small);
+    background-color: var(--error-background);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--error-color);
+}
+
+.metric {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.metric-delta {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+}

@@ -1,0 +1,133 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="app-canvas">
+        <div class="content-canvas">
+            <!-- Enhanced Canvas Header -->
+            <div class="canvas-header">
+                <h1 class="canvas-title">Top Performing Dealers</h1>
+                <p class="canvas-subtitle">Regional performance leaders and trending dealers</p>
+            </div>
+            
+            <div class="canvas-body">
+                <!-- Control Panel Section -->
+                <div class="visual-section">
+                    <div class="visual-section-header">
+                        <h2 class="visual-section-title">
+                            <lightning-icon icon-name="utility:filter" size="small"></lightning-icon>
+                            Performance Filters
+                        </h2>
+                    </div>
+                    
+                    <div class="content-grid content-grid-2">
+                        <lightning-combobox
+                            name="regionFilter"
+                            label="Filter by Region"
+                            value={selectedRegion}
+                            placeholder="All Regions"
+                            options={regionOptions}
+                            onchange={handleRegionChange}
+                            variant="standard">
+                        </lightning-combobox>
+                        
+                        <div style="display: flex; align-items: end;">
+                            <div class="status-badge info">
+                                <lightning-icon icon-name="utility:trending" size="x-small"></lightning-icon>
+                                Top 5 Results
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading State -->
+                <template if:true={isLoading}>
+                    <div class="loading-overlay">
+                        <div class="loading-content">
+                            <lightning-spinner size="medium" alternative-text="Loading..."></lightning-spinner>
+                            <p class="loading-text">Loading top dealers...</p>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Error State -->
+                <template if:true={error}>
+                    <div class="error-container">
+                        <div class="error-title">
+                            <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                            Error Loading Dealers
+                        </div>
+                        <p class="error-text">{error}</p>
+                    </div>
+                </template>
+
+                <!-- Empty State -->
+                <template if:false={hasDealers}>
+                    <template if:false={isLoading}>
+                        <template if:false={error}>
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📊</div>
+                                <h2 class="empty-state-title">No Dealer Data Available</h2>
+                                <p class="empty-state-description">No dealer performance data found for the selected region</p>
+                            </div>
+                        </template>
+                    </template>
+                </template>
+
+                <!-- Top Dealers List -->
+                <template if:true={hasDealers}>
+                    <div class="visual-section">
+                        <div class="visual-section-header">
+                            <h2 class="visual-section-title">
+                                <lightning-icon icon-name="utility:trending" size="small"></lightning-icon>
+                                Top 5 Dealers by Amount Financed
+                            </h2>
+                            <div class="status-badge success">
+                                {selectedRegion} Region
+                            </div>
+                        </div>
+                        
+                        <div class="content-grid content-grid-2">
+                            <template for:each={dealers} for:item="dealer" for:index="index">
+                                <div key={dealer.accountName} class="dashboard-tile interactive-element">
+                                    <div class="tile-header">
+                                        <div>
+                                            <div class="status-badge primary" style="display: inline-flex; align-items: center; gap: var(--spacing-xs);">
+                                                <lightning-icon icon-name="utility:number_input" size="x-small"></lightning-icon>
+                                                #{dealer.rank}
+                                            </div>
+                                            <h3 class="tile-title">
+                                                <c-dealer-account-link dealer-name={dealer.accountName}></c-dealer-account-link>
+                                            </h3>
+                                            <p class="tile-subtitle">Performance Leader</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="metric-card primary">
+                                        <div class="metric-label">Total Amount Financed</div>
+                                        <div class="metric-value">
+                                            <lightning-formatted-number 
+                                                value={dealer.totalAmount} 
+                                                format-style="currency" 
+                                                currency-code="CAD">
+                                            </lightning-formatted-number>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Performance Indicator -->
+                                    <div style="margin-top: var(--spacing-medium);">
+                                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-xs);">
+                                            <span class="caption-text">Regional Ranking</span>
+                                            <span class="caption-text">Top {dealer.rank} of 5</span>
+                                        </div>
+                                        <div style="width: 100%; height: 8px; background: var(--border-light); border-radius: 4px; overflow: hidden;">
+                                            <div class="performance-bar" data-rank={dealer.rank} style="height: 100%; background: linear-gradient(90deg, var(--brand-primary), var(--secondary-color)); border-radius: 4px; transition: width 0.3s ease;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+</template>

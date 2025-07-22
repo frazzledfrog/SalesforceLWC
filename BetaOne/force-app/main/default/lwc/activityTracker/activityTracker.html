@@ -1,0 +1,135 @@
+<template>
+    <c-shared-styles></c-shared-styles>
+    <div class="container">
+        <lightning-card title="Daily Call Goal" icon-name="standard:task">
+            <div class="metric-header slds-m-bottom_large">
+                
+                <!-- Salesperson Dropdown -->
+                <template if:true={selectedSalespersonData}>
+                    <lightning-combobox
+                        name="salesperson"
+                        value={selectedSalesperson}
+                        placeholder="Choose Salesperson"
+                        options={salespeople}
+                        onchange={handleSalespersonChange}
+                        variant="label-hidden"
+                        class="slds-col_bump-left">
+                    </lightning-combobox>
+                </template>
+            </div>
+        
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-spinner size="medium"></lightning-spinner>
+                <p class="slds-text-color_weak slds-m-top_small">Loading activity data...</p>
+            </div>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="status-error slds-m-bottom_medium">
+                <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
+                {error}
+            </div>
+        </template>
+
+        <!-- Main Display -->
+        <template if:true={selectedSalespersonData}>
+            <!-- Donut Chart -->
+            <div class="chart-wrapper slds-text-align_center">
+                <div style="position: relative; display: inline-block; max-width: 300px; margin: 0 auto;">
+                    <svg viewBox="0 0 120 120" class="chart-svg" style="width: 100%; height: auto;">
+                        <defs>
+                            <!-- Circular gradient that follows the arc -->
+                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1"/>
+                                <stop offset="25%" style="stop-color:#84cc16;stop-opacity:1"/>
+                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                <stop offset="75%" style="stop-color:#f97316;stop-opacity:1"/>
+                                <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1"/>
+                            </linearGradient>
+                            <!-- Gold gradient for overflow -->
+                            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1"/>
+                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1"/>
+                            </linearGradient>
+                        </defs>
+                        
+                        <!-- Background circle -->
+                        <circle cx="60" cy="60" r="45" 
+                                fill="none" 
+                                stroke="#e5e7eb" 
+                                stroke-width="12"/>
+                        
+                        <!-- Progress circle -->
+                        <circle cx="60" cy="60" r="45" 
+                                fill="none" 
+                                stroke={progressColor}
+                                stroke-width="14"
+                                stroke-linecap="round"
+                                stroke-dasharray="282.74"
+                                stroke-dashoffset={progressOffset}
+                                transform="rotate(-90 60 60)"
+                                style="transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.3s ease-in-out;"/>
+                                
+                        <!-- Overflow circle -->
+                        <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
+                            <circle cx="60" cy="60" r="45" 
+                                    fill="none" 
+                                    stroke="url(#goldGradient)"
+                                    stroke-width="13"
+                                    stroke-linecap="round"
+                                    stroke-dasharray="282.74"
+                                    stroke-dashoffset={overflowOffset}
+                                    transform="rotate(-90 60 60)"
+                                    style="transition: stroke-dashoffset 0.5s ease-in-out;"/>
+                        </template>
+                    </svg>
+                    
+                    <!-- Chart Center Content -->
+                    <div class="chart-center" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                        <div class="calls-number" style="font-size: 2rem; font-weight: bold; color: #181818;">{selectedSalespersonData.goalProgress.calls}</div>
+                        <div class="calls-text" style="font-size: 0.875rem; color: #666;">calls</div>
+                        <div class="goal-text" style="font-size: 0.75rem; color: #999;">of {dailyGoal}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="stats-row slds-grid slds-gutters_medium slds-text-align_center slds-m-top_large">
+                <div class="stat slds-col slds-size_1-of-2">
+                    <span class="stat-number slds-text-heading_large" style="color: #10b981; font-weight: bold;">{selectedSalespersonData.goalProgress.percentage}%</span>
+                    <div class="stat-text slds-text-body_small slds-text-color_weak">Complete</div>
+                </div>
+                <template if:false={selectedSalespersonData.goalProgress.isOverGoal}>
+                    <div class="stat slds-col slds-size_1-of-2">
+                        <span class="stat-number slds-text-heading_large" style="color: #666; font-weight: bold;">{selectedSalespersonData.goalProgress.remaining}</span>
+                        <div class="stat-text slds-text-body_small slds-text-color_weak">Remaining</div>
+                    </div>
+                </template>
+                <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
+                    <div class="stat slds-col slds-size_1-of-2">
+                        <span class="stat-number over-goal slds-text-heading_large" style="color: #f59e0b; font-weight: bold;">+{overGoalCalls}</span>
+                        <div class="stat-text slds-text-body_small slds-text-color_weak">Over Goal</div>
+                    </div>
+                </template>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={selectedSalespersonData}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <div class="empty-state slds-text-align_center slds-p-around_x-large">
+                        <lightning-icon icon-name="utility:phone" size="large" class="slds-m-bottom_medium" style="color: #cccccc;"></lightning-icon>
+                        <div class="empty-text slds-text-heading_small slds-text-color_weak">No calls logged today</div>
+                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">Start making calls to track your progress toward your daily goal.</p>
+                    </div>
+                </template>
+            </template>
+        </template>
+        </lightning-card>
+    </div>
+</template>
