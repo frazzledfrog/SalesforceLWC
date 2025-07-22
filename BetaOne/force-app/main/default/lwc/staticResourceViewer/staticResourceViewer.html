@@ -1,8 +1,7 @@
 <template>
-    <iframe 
-        src={resourceUrl} 
-        class="pdf-viewer"
-        scrolling="no"
-        frameborder="0">
-    </iframe>
+    <object 
+        data={pdfUrl} 
+        type="application/pdf" 
+        class="pdf-image">
+    </object>
 </template>

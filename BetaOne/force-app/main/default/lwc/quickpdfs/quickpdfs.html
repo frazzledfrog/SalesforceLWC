@@ -5,7 +5,7 @@
             <div class="header-content">
                 <div class="title-group">
                     <div class="header-icon">
-                        <lightning-icon icon-name="utility:file" size="medium"></lightning-icon>
+                        <lightning-icon icon-name="doctype:pdf" size="medium"></lightning-icon>
                     </div>
                     <h2 class="main-title">Quick PDFs</h2>
                 </div>
@@ -26,9 +26,6 @@
                         <div key={file.id} class="pdf-card">
                             <div class="pdf-header">
                                 <div class="file-info">
-                                    <div class="file-icon">
-                                        <lightning-icon icon-name="utility:file" size="small"></lightning-icon>
-                                    </div>
                                     <div class="file-details">
                                         <h3 class="file-name" title={file.name}>{file.name}</h3>
                                         <p class="file-meta">PDF Document</p>
@@ -38,7 +35,7 @@
                             
                             <div class="pdf-actions">
                                 <lightning-button 
-                                    variant="brand-outline" 
+                                    variant="brand" 
                                     label="Preview"
                                     icon-name="utility:preview"
                                     icon-position="left"
@@ -65,7 +62,7 @@
             <template if:false={hasPdfFiles}>
                 <div class="empty-state">
                     <div class="empty-icon">
-                        <lightning-icon icon-name="utility:file" size="large"></lightning-icon>
+                        <lightning-icon icon-name="doctype:pdf" size="large"></lightning-icon>
                     </div>
                     <h3 class="empty-title">No PDFs Available</h3>
                     <p class="empty-description">PDF documents will appear here when they become available for download.</p>

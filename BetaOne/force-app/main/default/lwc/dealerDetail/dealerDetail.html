@@ -1,308 +1,202 @@
-﻿<!-- 
-    DEALER DETAIL COMPONENT TEMPLATE
-    
-    This component provides a comprehensive dashboard for viewing individual dealer analytics,
-    including search functionality, performance metrics, and trend visualization.
-    
-    Key Features:
-    - Dealer search with real-time filtering
-    - Performance metrics display
-    - Interactive charts for trend analysis
-    - Responsive design with modern UI
--->
 <template>
-    <!-- Import shared design tokens and styling -->
-    <c-shared-styles></c-shared-styles>
-    
-    <!-- Main container with improved spacing -->
-    <div class="container slds-p-around_large">
-        <!-- Primary dashboard card wrapper -->
-        <lightning-card icon-name="standard:account">
-            <div slot="title">
-                <h1 class="slds-text-heading_large slds-text-color_default">Dealer Analytics Dashboard</h1>
-                <p class="slds-text-body_small slds-text-color_weak slds-m-top_xx-small">
-                    Comprehensive dealer performance insights and real-time metrics
-                </p>
+    <!-- Modern Dealer Analytics Component -->
+    <div class="dealer-analytics-container">
+
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner size="medium" alternative-text="Loading dealer data..."></lightning-spinner>
+                <p class="loading-text">Loading dealer performance data...</p>
             </div>
-            
-            <!-- Dashboard content wrapper for proper spacing and layout -->
-            <div class="dashboard-content slds-p-around_large">
-                <!-- ==========================================
-                     SEARCH SECTION
-                     ========================================== -->
-                <div class="slds-m-bottom_xx-large">
-                    <!-- Centered search container with proper spacing -->
-                    <div class="slds-grid slds-grid_align-center slds-m-bottom_large">
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_8-of-12 slds-large-size_6-of-12">
-                            <!-- Search input with dropdown results -->
-                            <div class="search-container" style="position: relative;">
-                                <!-- Main search input field -->
-                                <lightning-input
-                                    type="search"
-                                    label="Find Dealer"
-                                    placeholder="Search dealer by name or region..."
-                                    value={searchTerm}
-                                    onchange={handleSearchInput}
-                                    onfocus={handleInputFocus}
-                                    onblur={handleInputBlur}
-                                    class="dealer-search slds-m-bottom_small"
-                                    variant="standard">
-                                </lightning-input>
-                                
-                                <!-- Dynamic search results dropdown -->
-                                <!-- Only visible when user is typing and results are available -->
-                                <template if:true={showResults}>
-                                    <div class="search-dropdown"
-                                         style="position: absolute; top: 100%; left: 0; right: 0; z-index: 1000; 
-                                                background: var(--card-background-color); border: 1px solid var(--border-color); 
-                                                border-radius: var(--border-radius); box-shadow: var(--card-shadow-hover); 
-                                                max-height: 300px; overflow-y: auto; margin-top: 4px;">
-                                        <!-- Loop through search results -->
-                                        <template for:each={searchResults} for:item="dealer">
-                                            <div key={dealer.id} 
-                                                 onclick={handleDealerSelect} 
-                                                 data-dealer-id={dealer.id}
-                                                 class="search-result-item"
-                                                 style="padding: var(--spacing-small) var(--spacing-medium); 
-                                                        border-bottom: 1px solid var(--border-light); 
-                                                        cursor: pointer; transition: all 0.2s ease;">
-                                                <!-- Dealer name and region display -->
-                                                <div style="font-weight: 600; color: var(--heading-color);">{dealer.name}</div>
-                                                <div style="font-size: var(--font-size-sm); color: var(--text-muted);">{dealer.region}</div>
-                                            </div>
-                                        </template>
+        </template>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="error-container">
+                <lightning-icon icon-name="utility:error" size="small" class="error-icon"></lightning-icon>
+                <span class="error-text">{error}</span>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={hasSelectedDealer}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <!-- Header with Search for Empty State -->
+                    <div class="dealer-header empty-header">
+                        <div class="dealer-info">
+                            <lightning-icon icon-name="standard:account" size="large" class="dealer-icon"></lightning-icon>
+                            <div class="dealer-details">
+                                <h1 class="dealer-name">Dealer Analytics</h1>
+                                <div class="dealer-subtitle">Select a dealer to view performance metrics</div>
+                            </div>
+                        </div>
+                        <!-- Search in Header -->
+                        <div class="header-search-container">
+                            <lightning-input
+                                type="search"
+                                placeholder="Search dealer by name or region..."
+                                value={searchTerm}
+                                onchange={handleSearchInput}
+                                onfocus={handleInputFocus}
+                                onblur={handleInputBlur}
+                                class="dealer-search header-search"
+                                variant="label-hidden">
+                            </lightning-input>
+                            
+                            <!-- Search Results Dropdown -->
+                            <template if:true={showResults}>
+                                <div class="search-dropdown">
+                                    <template for:each={searchResults} for:item="dealer">
+                                        <div key={dealer.id} 
+                                             onclick={handleDealerSelect} 
+                                             data-dealer-id={dealer.id}
+                                             class="search-result-item">
+                                            <div class="dealer-result-name">{dealer.name}</div>
+                                            <div class="dealer-result-region">{dealer.region}</div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:search" size="large" class="empty-icon"></lightning-icon>
+                        <h2 class="empty-title">Select a Dealer</h2>
+                        <p class="empty-description">Search and select a dealer above to view detailed analytics and performance metrics</p>
+                        <div class="feature-badges">
+                            <lightning-badge label="Real-time Data" variant="lightest"></lightning-badge>
+                            <lightning-badge label="Performance Metrics" variant="lightest"></lightning-badge>
+                            <lightning-badge label="Trend Analysis" variant="lightest"></lightning-badge>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Main Dealer Content -->
+        <template if:true={hasSelectedDealer}>
+            <div class="dealer-content">
+                
+                <!-- Dealer Header with Integrated Search -->
+                <div class="dealer-header">
+                    <div class="dealer-info">
+                        <lightning-icon icon-name="standard:account" size="large" class="dealer-icon"></lightning-icon>
+                        <div class="dealer-details">
+                            <h1 class="dealer-name">{selectedDealer.name}</h1>
+                            <div class="dealer-badges">
+                                <lightning-badge label={selectedDealer.region} class="region-badge"></lightning-badge>
+                                <lightning-badge label="Active" variant="success" class="status-badge"></lightning-badge>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Search in Header -->
+                    <div class="header-search-container">
+                        <lightning-input
+                            type="search"
+                            placeholder="Search dealer by name or region..."
+                            value={searchTerm}
+                            onchange={handleSearchInput}
+                            onfocus={handleInputFocus}
+                            onblur={handleInputBlur}
+                            class="dealer-search header-search"
+                            variant="label-hidden">
+                        </lightning-input>
+                        
+                        <!-- Search Results Dropdown -->
+                        <template if:true={showResults}>
+                            <div class="search-dropdown">
+                                <template for:each={searchResults} for:item="dealer">
+                                    <div key={dealer.id} 
+                                         onclick={handleDealerSelect} 
+                                         data-dealer-id={dealer.id}
+                                         class="search-result-item">
+                                        <div class="dealer-result-name">{dealer.name}</div>
+                                        <div class="dealer-result-region">{dealer.region}</div>
                                     </div>
                                 </template>
                             </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
-            </div>
 
-            <!-- ==========================================
-                 LOADING STATE
-                 ========================================== -->
-            <!-- Displays animated spinner while data is being fetched -->
-            <template if:true={isLoading}>
-                <div class="slds-text-align_center slds-p-around_x-large fade-in">
-                    <lightning-spinner size="medium" alternative-text="Loading..." variant="brand"></lightning-spinner>
-                    <p class="slds-text-color_weak slds-m-top_small slds-text-heading_small">Loading dealer data...</p>
-                    <!-- Progress bar animation for visual feedback -->
-                    <div class="slds-m-top_medium">
-                        <div class="slds-progress-bar slds-progress-bar_x-small" style="width: 200px; margin: 0 auto;">
-                            <span class="slds-progress-bar__value" style="width: 100%; animation: loadingProgress 2s infinite;">
-                                <span class="slds-assistive-text">Progress: Loading</span>
-                            </span>
+                <!-- Key Metrics Grid -->
+                <div class="metrics-grid">
+                    <!-- Amount Financed This Month -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:currency" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Amount Financed This Month</span>
                         </div>
+                        <div class="metric-value">{selectedDealer.monthlyAmountFinanced}</div>
+                    </div>
+
+                    <!-- Average Deal Size -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:chart" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Average Deal Size</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.averageDealSize}</div>
+                    </div>
+
+                    <!-- Deals This Month -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:number_input" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Deals This Month</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.monthlyDeals}</div>
+                    </div>
+
+                    <!-- Last Month Amount -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:date_time" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Last Month Amount</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.lastMonthAmountFinanced}</div>
                     </div>
                 </div>
-            </template>
 
-            <!-- ==========================================
-                 ERROR STATE
-                 ========================================== -->
-            <!-- Displays error messages with dismiss functionality -->
-            <template if:true={error}>
-                <div class="status-error slds-m-bottom_medium slide-up">
-                    <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
-                    <span>{error}</span>
-                    <lightning-button-icon 
-                        icon-name="utility:close" 
-                        size="small" 
-                        variant="bare" 
-                        class="slds-m-left_auto"
-                        title="Dismiss error">
-                    </lightning-button-icon>
-                </div>
-            </template>
-
-            <!-- ==========================================
-                 EMPTY STATE - NO DEALER SELECTED
-                 ========================================== -->
-            <!-- Displays when no dealer has been selected yet -->
-            <template if:false={hasSelectedDealer}>
-                <!-- Only show empty state when not loading and no errors -->
-                <template if:false={isLoading}>
-                    <template if:false={error}>
-                        <!-- Welcome/instruction screen with call-to-action -->
-                        <div class="slds-text-align_center slds-p-around_x-large fade-in">
-                            <!-- Animated search icon -->
-                            <div class="slds-m-bottom_large">
-                                <lightning-icon icon-name="utility:search" size="large" class="slds-m-bottom_medium" 
-                                    style="color: var(--text-muted); animation: pulse 2s infinite;"></lightning-icon>
-                            </div>
-                            <!-- Instructions for user -->
-                            <h2 class="slds-text-heading_medium slds-m-bottom_small">Select a Dealer</h2>
-                            <p class="slds-text-color_weak slds-m-bottom_large">Search and select a dealer above to view detailed analytics and performance metrics</p>
-                            <!-- Feature badges to highlight capabilities -->
-                            <div class="slds-grid slds-grid_align-center slds-gutters_small slds-wrap">
-                                <lightning-badge label="Real-time Data" variant="lightest" class="slds-m-around_xx-small"></lightning-badge>
-                                <lightning-badge label="Performance Metrics" variant="lightest" class="slds-m-around_xx-small"></lightning-badge>
-                                <lightning-badge label="Trend Analysis" variant="lightest" class="slds-m-around_xx-small"></lightning-badge>
-                            </div>
+                <!-- Performance Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <div class="chart-title-area">
+                            <lightning-icon icon-name="utility:chart" size="small" class="chart-icon"></lightning-icon>
+                            <h2 class="chart-title">Performance Trends</h2>
                         </div>
-                    </template>
-                </template>
-            </template>
-
-            <!-- ==========================================
-                 DEALER DETAILS VIEW
-                 ========================================== -->
-            <!-- Main content area - only visible when a dealer is selected -->
-            <template if:true={hasSelectedDealer}>
-                <div class="fade-in slds-p-horizontal_large">
-                <!-- ==========================================
-                     DEALER HEADER SECTION
-                     ========================================== -->
-                <div class="slds-m-bottom_x-large">
-                    <!-- Dealer information header with icon, name, and status badges -->
-                    <div class="slds-media slds-media_center slds-m-bottom_large slide-up">
-                        <div class="slds-media__figure">
-                            <lightning-icon icon-name="standard:account" size="large" class="slds-icon-custom-custom57"></lightning-icon>
-                        </div>
-                        <div class="slds-media__body">
-                            <!-- Dealer name as main heading -->
-                            <h2 class="slds-text-heading_large slds-m-bottom_xx-small">{selectedDealer.name}</h2>
-                            <!-- Status badges showing region and active status -->
-                            <div class="slds-grid slds-grid_align-start slds-gutters_x-small">
-                                <lightning-badge label={selectedDealer.region} class="slds-theme_info"></lightning-badge>
-                                <lightning-badge label="Active" variant="success" class="slds-m-left_x-small"></lightning-badge>
-                            </div>
+                        <div class="chart-controls">
+                            <lightning-combobox
+                                value={selectedLookbackPeriod}
+                                placeholder="Select Period"
+                                options={lookbackPeriodOptions}
+                                onchange={handleLookbackPeriodChange}
+                                class="period-selector"
+                                variant="label-hidden">
+                            </lightning-combobox>
                         </div>
                     </div>
                     
-                    <!-- ==========================================
-                         PERFORMANCE METRICS GRID
-                         ========================================== -->
-                    <!-- Responsive grid layout for key performance indicators -->
-                    <div class="slds-grid slds-wrap slds-gutters_large slds-m-top_x-large">
-                        <!-- Metric Card 1: Current Month Amount Financed -->
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                            <div class="metric-card slds-box slds-p-around_medium">
-                                <div class="slds-media slds-media_small">
-                                    <div class="slds-media__figure">
-                                        <lightning-icon icon-name="utility:currency" size="small" class="slds-icon-text-default"></lightning-icon>
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <div class="metric-label slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Amount Financed This Month</div>
-                                        <div class="metric-value slds-text-heading_medium">{selectedDealer.monthlyAmountFinanced}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                  
 
-                        <!-- Metric Card 2: Average Deal Size -->
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                            <div class="metric-card slds-box slds-p-around_medium">
-                                <div class="slds-media slds-media_small">
-                                    <div class="slds-media__figure">
-                                        <lightning-icon icon-name="utility:chart" size="small" class="slds-icon-text-default"></lightning-icon>
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <div class="metric-label slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Average Deal Size</div>
-                                        <div class="metric-value slds-text-heading_medium">{selectedDealer.averageDealSize}</div>
-                                    </div>
-                                </div>
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <template if:true={isChartLoading}>
+                            <div class="chart-loading">
+                                <lightning-spinner size="small" alternative-text="Loading chart..."></lightning-spinner>
+                                <p class="chart-loading-text">Loading chart data...</p>
                             </div>
-                        </div>
-
-                        <!-- Metric Card 3: Number of Deals This Month -->
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                            <div class="metric-card slds-box slds-p-around_medium">
-                                <div class="slds-media slds-media_small">
-                                    <div class="slds-media__figure">
-                                        <lightning-icon icon-name="utility:number_input" size="small" class="slds-icon-text-default"></lightning-icon>
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <div class="metric-label slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Deals This Month</div>
-                                        <div class="metric-value slds-text-heading_medium">{selectedDealer.monthlyDeals}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Metric Card 4: Previous Month Comparison -->
-                        <div class="slds-col slds-size_1-of-1 slds-medium-size_1-of-2 slds-large-size_1-of-4">
-                            <div class="metric-card slds-box slds-p-around_medium">
-                                <div class="slds-media slds-media_small">
-                                    <div class="slds-media__figure">
-                                        <lightning-icon icon-name="utility:date_time" size="small" class="slds-icon-text-default"></lightning-icon>
-                                    </div>
-                                    <div class="slds-media__body">
-                                        <div class="metric-label slds-text-body_small slds-text-color_weak slds-m-bottom_xx-small">Last Month Amount</div>
-                                        <div class="metric-value slds-text-heading_medium">{selectedDealer.lastMonthAmountFinanced}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ==========================================
-                     PERFORMANCE TRENDS CHART SECTION
-                     ========================================== -->
-                <!-- Chart card for visualizing dealer performance over time -->
-                <div class="slds-m-top_xx-large">
-                    <div class="slds-card">
-                        <!-- Chart header with title and period selector -->
-                        <div class="slds-card__header slds-grid">
-                            <header class="slds-media slds-media_center slds-has-flexi-truncate">
-                                <div class="slds-media__figure">
-                                    <lightning-icon icon-name="utility:chart" size="small" class="slds-icon-text-default"></lightning-icon>
-                                </div>
-                                <div class="slds-media__body">
-                                    <h3 class="slds-card__header-title slds-text-heading_small">Performance Trends</h3>
-                                </div>
-                            </header>
-                            <!-- Time period selector for chart data -->
-                            <div class="slds-no-flex">
-                                <lightning-combobox
-                                    name="lookbackPeriod"
-                                    label="Period"
-                                    value={selectedLookbackPeriod}
-                                    placeholder="Select period"
-                                    options={lookbackPeriodOptions}
-                                    onchange={handleLookbackPeriodChange}
-                                    variant="label-hidden">
-                                </lightning-combobox>
-                            </div>
-                        </div>
+                        </template>
                         
-                        <!-- Chart content area with multiple states -->
-                        <div class="slds-card__body slds-card__body_inner">
-                            <div class="chart-container">
-                                <!-- Loading state for chart data -->
-                                <template if:true={showChartLoading}>
-                                    <div class="slds-text-align_center slds-p-around_large">
-                                        <lightning-spinner size="small"></lightning-spinner>
-                                        <p class="slds-text-color_weak slds-m-top_small">Loading chart data...</p>
-                                    </div>
-                                </template>
-                                
-                                <!-- Active chart display -->
-                                <template if:true={showChart}>
-                                    <div class="chart-wrapper">
-                                        <!-- Canvas element where Chart.js renders the visualization -->
-                                        <canvas class="chart-canvas"></canvas>
-                                    </div>
-                                </template>
-                                
-                                <!-- Empty state when no chart data is available -->
-                                <template if:false={showChart}>
-                                    <template if:false={showChartLoading}>
-                                        <div class="slds-text-align_center slds-p-around_large">
-                                            <lightning-icon icon-name="utility:chart" size="large" class="slds-icon-text-light slds-m-bottom_small"></lightning-icon>
-                                            <h4 class="slds-text-heading_small slds-m-bottom_small">No Chart Data Available</h4>
-                                            <p class="slds-text-color_weak">Chart data will appear here when available for the selected period.</p>
-                                        </div>
-                                    </template>
-                                </template>
-                            </div>
-                        </div>
+                        <template if:false={isChartLoading}>
+                            <canvas class="chart-canvas"></canvas>
+                        </template>
                     </div>
                 </div>
-                </div>
-            </template>
-        </lightning-card>
+
+            </div>
+        </template>
     </div>
 </template>

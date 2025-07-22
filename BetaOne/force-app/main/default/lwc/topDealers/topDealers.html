@@ -1,77 +1,107 @@
 <template>
-    <c-shared-styles></c-shared-styles>
-    <div class="container">
-        <lightning-card title="Top 5 Dealers by Region" icon-name="standard:account">
-            <div class="metric-header slds-m-bottom_medium">
-                <lightning-combobox
-                    name="region"
-                    label="Select a Region"
-                    value={selectedRegion}
-                    placeholder="Select Region"
-                    options={regionOptions}
-                    onchange={handleRegionChange}
-                    variant="label-hidden"
-                    class="slds-col_bump-left">
-                </lightning-combobox>
+    <div class="top-dealers-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-area">
+                    <lightning-icon icon-name="standard:account" size="medium" class="header-icon"></lightning-icon>
+                    <div class="title-info">
+                        <h2 class="component-title">Top Performers</h2>
+                        <p class="component-subtitle">Leading dealers by financing volume</p>
+                    </div>
+                </div>
+                <div class="controls-area">
+                    <lightning-combobox
+                        name="region"
+                        label="Region"
+                        value={selectedRegion}
+                        placeholder="Select Region"
+                        options={regionOptions}
+                        onchange={handleRegionChange}
+                        variant="label-hidden"
+                        class="region-selector">
+                    </lightning-combobox>
+                </div>
             </div>
+        </div>
 
-        <template if:true={isLoading}>
-            <div class="slds-text-align_center slds-p-around_x-large">
-                <lightning-spinner alternative-text="Loading..." size="small"></lightning-spinner>
-                <p class="slds-text-color_weak slds-m-top_small">Loading dealers...</p>
-            </div>
-        </template>
+        <!-- Content Section -->
+        <div class="content-section">
+            <!-- Loading State -->
+            <template if:true={isLoading}>
+                <div class="loading-container">
+                    <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                    <p class="loading-text">Loading top dealers...</p>
+                </div>
+            </template>
 
-        <template if:true={error}>
-            <div class="status-error slds-m-bottom_medium">
-                <lightning-icon icon-name="utility:error" size="small" class="slds-m-right_x-small"></lightning-icon>
-                {error}
-            </div>
-        </template>
+            <!-- Error State -->
+            <template if:true={error}>
+                <div class="error-container">
+                    <lightning-icon icon-name="utility:error" size="small" class="error-icon"></lightning-icon>
+                    <p class="error-text">{error}</p>
+                </div>
+            </template>
 
-        <template if:false={hasDealers}>
-            <div class="slds-text-align_center slds-p-around_x-large">
-                <lightning-icon icon-name="utility:info" size="medium" class="slds-m-bottom_small" style="color: var(--text-muted);"></lightning-icon>
-                <h3 class="slds-text-heading_small slds-m-bottom_x-small">No dealers to display</h3>
-                <p class="slds-text-color_weak">Try selecting a different region.</p>
-            </div>
-        </template>
+            <!-- Empty State -->
+            <template if:false={hasDealers}>
+                <template if:false={isLoading}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:search" size="large" class="empty-icon"></lightning-icon>
+                        <h3 class="empty-title">No dealers found</h3>
+                        <p class="empty-description">No dealers available for the selected region. Try choosing a different region to see results.</p>
+                    </div>
+                </template>
+            </template>
 
-        <template if:true={hasDealers}>
-            <div class="dealer-cards-container">
-                <template for:each={dealers} for:item="dealer">
-                    <div key={dealer.accountName} class="dealer-card enhanced-card">
-                        <div class="slds-grid slds-gutters_medium">
-                            <div class="dealer-rank">
-                                <span class="rank-badge enhanced-badge">{dealer.rank}</span>
+            <!-- Top 5 Dealers List -->
+            <template if:true={hasDealers}>
+                <div class="dealers-list">
+                    <template for:each={top5Dealers} for:item="dealer">
+                        <div key={dealer.accountName} class="dealer-list-item" data-rank={dealer.rank}>
+                            <!-- Rank and Trophy -->
+                            <div class="rank-container">
+                                <div class="rank-circle" data-rank={dealer.rank}>
+                                    <span class="rank-number">{dealer.rank}</span>
+                                </div>
+                                <template if:true={dealer.isTop3}>
+                                    <div class="rank-label" data-rank={dealer.rank}>{dealer.rankLabel}</div>
+                                </template>
                             </div>
-                            <div class="slds-col slds-has-flexi-truncate">
-                                <h4 class="slds-text-heading_small slds-m-bottom_x-small">
-                                    <c-dealer-account-link dealer-name={dealer.accountName}></c-dealer-account-link>
-                                </h4>
-                                <div class="slds-grid slds-gutters_small slds-m-top_small">
-                                    <div class="info-row">
-                                        <span class="info-label">Amount Financed:</span>
+
+                            <!-- Dealer Content -->
+                            <div class="dealer-content">
+                                <!-- Dealer Name and Region -->
+                                <div class="dealer-header">
+                                    <h3 class="dealer-name">
+                                        <c-dealer-account-link dealer-name={dealer.accountName}></c-dealer-account-link>
+                                    </h3>
+                                    <span class="dealer-region">{dealer.region}</span>
+                                </div>
+
+                                <!-- Financial Info -->
+                                <div class="dealer-financial">
+                                    <div class="total-financed">
+                                        <span class="label">TOTAL FINANCED</span>
                                         <lightning-formatted-number 
                                             value={dealer.totalAmount} 
                                             format-style="currency" 
                                             currency-code="CAD"
-                                            class="info-value slds-text-body_regular">
+                                            class="amount">
                                         </lightning-formatted-number>
                                     </div>
-                                </div>
-                                <!-- Performance Bar -->
-                                <div class="performance-indicator" style="margin-top: var(--spacing-small);">
+
+                                    <!-- Performance Bar -->
                                     <div class="performance-bar-container">
-                                        <div class="performance-bar" data-rank={dealer.rank}></div>
+                                        <div class="performance-bar" data-rank={dealer.rank} style={dealer.performanceBarStyle}></div>
                                     </div>
+                                    <span class="performance-percentage">{dealer.performanceLabel}</span>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </template>
-            </div>
-        </template>
-        </lightning-card>
+                    </template>
+                </div>
+            </template>
+        </div>
     </div>
 </template>

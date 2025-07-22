@@ -250,91 +250,93 @@ export default class DealerDetail extends LightningElement {
     }
 
     renderChart(data) {
+        // Wait for the next tick to ensure DOM is updated
         setTimeout(() => {
-            const canvas = this.template.querySelector('canvas.chart-canvas');
-            if (!canvas) {
-                console.error('Canvas not found');
-                this.error = 'Chart canvas element not found';
-                this.isChartLoading = false;
-                return;
-            }
+            // Set loading to false first so canvas is available
+            this.isChartLoading = false;
+            
+            // Wait another tick for template to re-render
+            setTimeout(() => {
+                const canvas = this.template.querySelector('canvas.chart-canvas');
+                if (!canvas) {
+                    console.error('Canvas not found');
+                    this.error = 'Chart canvas element not found';
+                    return;
+                }
 
-            if (this.chart) {
-                this.chart.destroy();
-                this.chart = null;
-            }
+                if (this.chart) {
+                    this.chart.destroy();
+                    this.chart = null;
+                }
 
-            if (!data?.monthlyData?.length) {
-                console.error('Invalid chart data structure:', data);
-                this.error = 'Invalid chart data received';
-                this.isChartLoading = false;
-                return;
-            }
+                if (!data?.monthlyData?.length) {
+                    console.error('Invalid chart data structure:', data);
+                    this.error = 'Invalid chart data received';
+                    return;
+                }
 
-            const months = data.monthlyData.map(item => item.month || 'Unknown');
-            const deals = data.monthlyData.map(item => item.dealCount || 0);
-            const amounts = data.monthlyData.map(item => item.totalFinanced || 0);
+                const months = data.monthlyData.map(item => item.month || 'Unknown');
+                const deals = data.monthlyData.map(item => item.dealCount || 0);
+                const amounts = data.monthlyData.map(item => item.totalFinanced || 0);
 
-            try {
-                this.chart = new window.Chart(canvas, {
-                    type: 'bar',
-                    data: {
-                        labels: months,
-                        datasets: [{
-                            label: 'Number of Deals',
-                            data: deals,
-                            backgroundColor: '#0066CC80',
-                            borderColor: '#0066CC',
-                            borderWidth: 1,
-                            yAxisID: 'y'
-                        }, {
-                            label: 'Amount Financed ($)',
-                            data: amounts,
-                            type: 'line',
-                            borderColor: '#FF8A00',
-                            backgroundColor: '#FF8A0020',
-                            borderWidth: 2,
-                            fill: false,
-                            yAxisID: 'y1',
-                            tension: 0.1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        animation: { duration: 300 },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                position: 'left',
-                                title: { display: true, text: 'Deals' }
-                            },
-                            y1: {
-                                beginAtZero: true,
-                                position: 'right',
-                                title: { display: true, text: 'Amount ($)' },
-                                grid: { drawOnChartArea: false },
-                                ticks: {
-                                    callback: function(value) {
-                                        return '$' + new Intl.NumberFormat('en-US').format(value);
+                try {
+                    this.chart = new window.Chart(canvas, {
+                        type: 'bar',
+                        data: {
+                            labels: months,
+                            datasets: [{
+                                label: 'Number of Deals',
+                                data: deals,
+                                backgroundColor: '#0066CC80',
+                                borderColor: '#0066CC',
+                                borderWidth: 1,
+                                yAxisID: 'y'
+                            }, {
+                                label: 'Amount Financed ($)',
+                                data: amounts,
+                                type: 'line',
+                                borderColor: '#FF8A00',
+                                backgroundColor: '#FF8A0020',
+                                borderWidth: 2,
+                                fill: false,
+                                yAxisID: 'y1',
+                                tension: 0.1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: { duration: 300 },
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    position: 'left',
+                                    title: { display: true, text: 'Deals' }
+                                },
+                                y1: {
+                                    beginAtZero: true,
+                                    position: 'right',
+                                    title: { display: true, text: 'Amount ($)' },
+                                    grid: { drawOnChartArea: false },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return '$' + new Intl.NumberFormat('en-US').format(value);
+                                        }
                                     }
                                 }
+                            },
+                            plugins: {
+                                legend: { display: false }
                             }
-                        },
-                        plugins: {
-                            legend: { display: true, position: 'top' }
                         }
-                    }
-                });
+                    });
 
-                this.isChartLoading = false;
-
-            } catch (error) {
-                console.error('Chart creation failed:', error);
-                this.error = `Chart rendering failed: ${error.message}`;
-                this.isChartLoading = false;
-            }
-        }, 50);
+                } catch (error) {
+                    console.error('Chart creation failed:', error);
+                    this.error = `Chart rendering failed: ${error.message}`;
+                }
+            }, 100); // Second timeout to ensure template re-renders
+        }, 50); // First timeout for DOM update
     }
 
     formatCurrency(value) {

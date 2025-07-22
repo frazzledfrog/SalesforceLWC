@@ -1,4 +1,9 @@
 /* Compact activity tracker styles */
+.container {
+    max-width: 100%;
+    overflow: hidden;
+}
+
 .chart-wrapper {
     position: relative;
     width: 200px;
@@ -22,6 +27,8 @@
     background: #f8f9fa;
     border-radius: 3px;
     border: 1px solid #d1d5db;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 .stat-number {
