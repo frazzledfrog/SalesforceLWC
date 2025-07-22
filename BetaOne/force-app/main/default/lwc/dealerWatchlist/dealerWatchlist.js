@@ -125,7 +125,8 @@ export default class DealerWatchlist extends LightningElement {
 
     // Getters for template data
     get currentRegionData() {
-        return this.watchlistData.find(region => region.name === this.selectedRegion) || { winners: [], losers: [] };
+        return this.watchlistData.find(region => region.name === this.selectedRegion) || 
+               { winners: [], losers: [] };
     }
 
     get winners() {

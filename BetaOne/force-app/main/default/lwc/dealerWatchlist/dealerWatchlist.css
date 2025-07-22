@@ -114,13 +114,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
-    gap: 1rem;
+    padding: 2rem 1rem;
+    gap: 0.75rem;
 }
 
 .loading-text {
-    color: #6b7280;
-    font-size: 0.875rem;
+    color: #6c757d;
+    font-size: 0.8rem;
     margin: 0;
 }
 
@@ -130,34 +130,34 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 4rem 2rem;
+    padding: 2rem 1rem;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .empty-icon {
-    color: #9ca3af;
-    background: #f3f4f6;
-    padding: 1.5rem;
-    border-radius: 12px;
+    color: #adb5bd;
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .empty-title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 600;
-    color: #374151;
+    color: #495057;
     margin: 0;
 }
 
 .empty-description {
-    color: #6b7280;
-    max-width: 400px;
-    line-height: 1.5;
+    color: #6c757d;
+    max-width: 350px;
+    line-height: 1.4;
     margin: 0;
-    font-size: 0.925rem;
+    font-size: 0.8rem;
 }
 
 /* Performance Grid */
@@ -246,12 +246,12 @@
 }
 
 .dealer-table tbody .dealer-row {
-    border-bottom: 1px solid #f3f4f6;
-    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #e9ecef;
+    transition: background-color 0.15s ease;
 }
 
 .dealer-table tbody .dealer-row:hover {
-    background: #f9fafb;
+    background: #f8f9fa;
 }
 
 .dealer-table tbody .dealer-row:last-child {
@@ -259,49 +259,52 @@
 }
 
 .dealer-table td {
-    padding: 0.75rem;
+    padding: 0.375rem 0.5rem;
     vertical-align: middle;
+    line-height: 1.2;
 }
 
 .dealer-name-cell {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.375rem;
 }
 
 .rank-number {
-    background: #e5e7eb;
-    color: #6b7280;
-    width: 20px;
-    height: 20px;
+    background: #e9ecef;
+    color: #6c757d;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 600;
     flex-shrink: 0;
 }
 
 .winners-table .rank-number {
-    background: #d1fae5;
-    color: #065f46;
+    background: #e8f4fd;
+    color: #0066cc;
 }
 
 .losers-table .rank-number {
-    background: #fee2e2;
-    color: #991b1b;
+    background: #fff4e8;
+    color: #cc4400;
 }
 
 .dealer-name {
     font-weight: 600;
-    color: #111827;
+    color: #212529;
     word-break: break-word;
+    font-size: 0.75rem;
 }
 
 .metric-cell {
-    color: #6b7280;
+    color: #6c757d;
     font-weight: 500;
+    font-size: 0.75rem;
 }
 
 .delta-cell {
@@ -316,37 +319,38 @@
 .delta-value {
     display: inline-flex;
     align-items: center;
-    gap: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
-    font-size: 0.75rem;
+    gap: 0.125rem;
+    padding: 0.125rem 0.25rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
     font-weight: 600;
 }
 
 .positive-delta {
-    background: #dcfdf4;
-    color: #065f46;
+    background: #e8f4fd;
+    color: #0066cc;
 }
 
 .negative-delta {
-    background: #fef2f2;
-    color: #991b1b;
+    background: #fff4e8;
+    color: #cc4400;
 }
 
 .positive-delta lightning-icon {
-    color: #10b981;
+    color: #ff6b35;
 }
 
 .negative-delta lightning-icon {
-    color: #ef4444;
+    color: #0066cc;
 }
 
 /* No Data Message */
 .no-data-message {
-    padding: 1.5rem;
+    padding: 1rem;
     text-align: center;
-    color: #6b7280;
+    color: #6c757d;
     font-style: italic;
+    font-size: 0.8rem;
 }
 
 .no-data-message p {
@@ -357,7 +361,7 @@
 @media (max-width: 1024px) {
     .performance-grid {
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 0.75rem;
     }
 }
 
@@ -365,7 +369,7 @@
     .controls-row {
         flex-direction: column;
         align-items: stretch;
-        gap: 1rem;
+        gap: 0.5rem;
     }
     
     .control-group {
@@ -373,19 +377,19 @@
     }
     
     .content-section {
-        padding: 1.5rem;
+        padding: 0.5rem;
     }
     
     .header-section {
-        padding: 1.5rem;
+        padding: 0.375rem 0.75rem;
     }
     
     .main-title {
-        font-size: 1.25rem;
+        font-size: 0.9rem;
     }
     
     .banner-subtitle {
-        font-size: 0.8125rem;
+        font-size: 0.7rem;
     }
 }
 
@@ -394,25 +398,26 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 1rem;
+        gap: 0.5rem;
     }
     
     .dealer-table {
-        font-size: 0.8125rem;
+        font-size: 0.7rem;
     }
     
     .dealer-table td {
-        padding: 0.75rem 0.5rem;
+        padding: 0.25rem 0.375rem;
     }
     
     .dealer-name-cell {
         flex-direction: column;
         align-items: flex-start;
-        gap: 0.5rem;
+        gap: 0.25rem;
     }
     
     .section-header {
-        padding: 0.75rem 1rem;
+        padding: 0.375rem 0.5rem;
+        font-size: 0.75rem;
     }
 }
 

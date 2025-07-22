@@ -24,6 +24,9 @@
     left: 0;
     right: 0;
     bottom: 0;
+    /* Ensure content scales to fit horizontally */
+    max-width: 100%;
+    object-position: center top;
 }
 
 /* Additional styles to ensure proper PDF scaling */

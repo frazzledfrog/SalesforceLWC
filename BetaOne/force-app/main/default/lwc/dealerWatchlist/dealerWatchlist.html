@@ -111,11 +111,11 @@
                                             </thead>
                                             <tbody>
                                                 <template for:each={winners} for:item="dealer" for:index="index">
-                                                    <tr key={dealer.dealerName} class="dealer-row">
+                                                    <tr key={dealer.name} class="dealer-row">
                                                         <td class="dealer-name-cell">
                                                             <div class="rank-number">{dealer.rank}</div>
-                                                            <span class="dealer-name" title={dealer.dealerName}>
-                                                                {dealer.dealerName}
+                                                            <span class="dealer-name" title={dealer.name}>
+                                                                {dealer.name}
                                                             </span>
                                                         </td>
                                                         <td class="metric-cell text-right">{dealer.mtdText}</td>
@@ -161,11 +161,11 @@
                                             </thead>
                                             <tbody>
                                                 <template for:each={losers} for:item="dealer" for:index="index">
-                                                    <tr key={dealer.dealerName} class="dealer-row">
+                                                    <tr key={dealer.name} class="dealer-row">
                                                         <td class="dealer-name-cell">
                                                             <div class="rank-number">{dealer.rank}</div>
-                                                            <span class="dealer-name" title={dealer.dealerName}>
-                                                                {dealer.dealerName}
+                                                            <span class="dealer-name" title={dealer.name}>
+                                                                {dealer.name}
                                                             </span>
                                                         </td>
                                                         <td class="metric-cell text-right">{dealer.mtdText}</td>
