@@ -24,8 +24,7 @@ export default class DealerWatchlist extends LightningElement {
         { label: 'Top 5', value: 5 },
         { label: 'Top 10', value: 10 },
         { label: 'Top 15', value: 15 },
-        { label: 'Top 25', value: 25 },
-        { label: 'All', value: 999 }
+        { label: 'Top 25', value: 25 }
     ];
     
     // New getter for comparison type toggle
@@ -59,6 +58,7 @@ export default class DealerWatchlist extends LightningElement {
 
     handleRegionChange(event) {
         this.selectedRegion = event.detail.value;
+        this.fetchWatchlistData(); // Refresh data when region changes
         setLastRegion({ componentName: COMPONENT_NAME, lastRegion: this.selectedRegion })
             .catch(error => {
                 console.error('Error setting last region:', error);
@@ -93,24 +93,19 @@ export default class DealerWatchlist extends LightningElement {
     processWinnersLosersData(data) {
         // Each region has: { region, winners: [DealerDelta], losers: [DealerDelta] }
         return data.map(regionData => {
-            const processDealer = dealer => {
+            const processDealer = (dealer, index) => {
                 const deltaText = dealer.delta != null ? `$${dealer.delta.toLocaleString(undefined, {maximumFractionDigits: 0})}` : 'N/A';
                 const currentText = dealer.mtdAmount != null ? `$${dealer.mtdAmount.toLocaleString(undefined, {maximumFractionDigits: 0})}` : 'N/A';
                 const previousText = dealer.prevMonthAmount != null ? `$${dealer.prevMonthAmount.toLocaleString(undefined, {maximumFractionDigits: 0})}` : 'N/A';
                 const absDelta = dealer.delta != null ? Math.abs(dealer.delta) : 0;
                 const deltaClass = dealer.delta > 0 ? 'delta-positive' : (dealer.delta < 0 ? 'delta-negative' : '');
                 
-                // Dynamic labels based on comparison type
-                const currentLabel = this.isYearOverYear ? 'YTD' : 'MTD';
-                const previousLabel = this.isYearOverYear ? '2024' : 'Prev';
-                
                 return {
                     ...dealer,
+                    rank: index + 1,
                     deltaText,
-                    mtdText: currentText, // Keep same property name for template compatibility
-                    prevText: previousText, // Keep same property name for template compatibility
-                    currentLabel,
-                    previousLabel,
+                    mtdText: currentText,
+                    prevText: previousText,
                     absDelta,
                     deltaClass
                 };
@@ -118,7 +113,7 @@ export default class DealerWatchlist extends LightningElement {
             const winners = (regionData.winners || []).map(processDealer);
             const losers = (regionData.losers || []).map(processDealer);
             return {
-                name: regionData.region, // Map 'region' property to 'name'
+                name: regionData.region,
                 region: regionData.region,
                 winners,
                 losers,
@@ -128,15 +123,44 @@ export default class DealerWatchlist extends LightningElement {
         });
     }
 
-    get filteredRegions() {
-        if (this.selectedRegion === 'All') {
-            return this.watchlistData;
-        }
-        return this.watchlistData.filter(region => region.name === this.selectedRegion);
+    // Getters for template data
+    get currentRegionData() {
+        return this.watchlistData.find(region => region.name === this.selectedRegion) || { winners: [], losers: [] };
+    }
+
+    get winners() {
+        return this.currentRegionData.winners || [];
+    }
+
+    get losers() {
+        return this.currentRegionData.losers || [];
+    }
+
+    get hasWinners() {
+        return this.winners.length > 0;
+    }
+
+    get hasLosers() {
+        return this.losers.length > 0;
+    }
+
+    get winnersCount() {
+        return this.winners.length;
+    }
+
+    get losersCount() {
+        return this.losers.length;
+    }
+
+    get currentPeriodLabel() {
+        return this.isYearOverYear ? 'YTD 2025' : 'Current Month';
+    }
+
+    get previousPeriodLabel() {
+        return this.isYearOverYear ? 'YTD 2024' : 'Previous Month';
     }
 
     get hasNoData() {
-        // No winners or losers in any region
-        return this.filteredRegions.every(region => !region.hasWinners && !region.hasLosers);
+        return !this.hasWinners && !this.hasLosers;
     }
 }
