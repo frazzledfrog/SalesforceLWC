@@ -10,7 +10,11 @@ public with sharing class ActivityController {
         @AuraEnabled public String salespersonId { get; set; }
         @AuraEnabled public String salespersonName { get; set; }
         @AuraEnabled public String eventType { get; set; }
+        @AuraEnabled public String status { get; set; }
+        @AuraEnabled public String subject { get; set; }
         @AuraEnabled public Integer totalActivities { get; set; }
+        @AuraEnabled public Integer completedActivities { get; set; }
+        @AuraEnabled public Integer pendingActivities { get; set; }
     }
     
     @AuraEnabled(cacheable=true)
@@ -45,8 +49,8 @@ public with sharing class ActivityController {
         try {
             List<ActivityData> activityList = new List<ActivityData>();
             
-            // Build dynamic SOQL query for Task object (today only, all task types)
-            String query = 'SELECT OwnerId, Owner.Name, Type, COUNT(Id) activityCount ' +
+            // Build dynamic SOQL query for Task object with enhanced grouping
+            String query = 'SELECT OwnerId, Owner.Name, Type, Status, COUNT(Id) totalCount ' +
                           'FROM Task ' +
                           'WHERE CreatedDate = TODAY ';
             
@@ -59,17 +63,30 @@ public with sharing class ActivityController {
                 query += 'AND Type = :eventType ';
             }
             
-            query += 'GROUP BY OwnerId, Owner.Name, Type ORDER BY Owner.Name, Type';
+            query += 'GROUP BY OwnerId, Owner.Name, Type, Status ORDER BY Owner.Name, Type, Status';
             
             List<AggregateResult> results = Database.query(query);
             
             for (AggregateResult result : results) {
                 ActivityData activity = new ActivityData();
-                activity.id = (String) result.get('OwnerId') + '_' + (String) result.get('Type');
+                activity.id = (String) result.get('OwnerId') + '_' + (String) result.get('Type') + '_' + (String) result.get('Status');
                 activity.salespersonId = (String) result.get('OwnerId');
                 activity.salespersonName = (String) result.get('Name');
                 activity.eventType = (String) result.get('Type');
-                activity.totalActivities = (Integer) result.get('activityCount');
+                activity.status = (String) result.get('Status');
+                activity.totalActivities = (Integer) result.get('totalCount');
+                
+                // Calculate completed vs pending based on status
+                String status = (String) result.get('Status');
+                Integer count = (Integer) result.get('totalCount');
+                if (status != null && status.equalsIgnoreCase('Completed')) {
+                    activity.completedActivities = count;
+                    activity.pendingActivities = 0;
+                } else {
+                    activity.completedActivities = 0;
+                    activity.pendingActivities = count;
+                }
+                
                 activityList.add(activity);
             }
             

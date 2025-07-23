@@ -114,11 +114,6 @@
     transition: opacity 0.2s ease;
 }
 
-.pdf-card:hover {
-    border-color: #0066cc;
-    box-shadow: 0 2px 8px rgba(0, 102, 204, 0.1);
-}
-
 .pdf-card:hover::before {
     opacity: 1;
 }
