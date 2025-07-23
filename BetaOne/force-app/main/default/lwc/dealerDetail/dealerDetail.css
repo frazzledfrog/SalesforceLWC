@@ -16,6 +16,7 @@
     position: relative;
     min-width: 300px;
     max-width: 400px;
+    z-index: 100;
 }
 
 .header-search {
@@ -23,10 +24,17 @@
     --slds-c-input-color-background: rgb(255, 255, 255);
     --slds-c-input-color-border-focus: rgb(255, 255, 255);
     --slds-c-input-text-color: rgb(0, 0, 0);
-    --slds-c-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.4);
-    /* Add more specific custom properties */
     --slds-c-input-color-foreground: rgb(0, 0, 0);
-    --slds-c-input-color-foreground-default: rgb(0, 0, 0);
+    --slds-c-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    position: relative;
+    z-index: 101;
+}
+
+/* Force black text on white background for typed input */
+.header-search lightning-input {
+    --slds-c-input-text-color: rgb(0, 0, 0);
+    --slds-c-input-color-foreground: rgb(0, 0, 0);
+    --slds-c-input-color-background: rgb(255, 255, 255);
 }
 
 .header-search input {
@@ -36,37 +44,28 @@
 }
 
 .header-search input::placeholder {
-    color: rgb(255, 255, 255) !important;
+    color: rgba(0, 0, 0, 0.5) !important;
     font-weight: 400 !important;
 }
 
-/* Additional styling to ensure visibility */
-.header-search lightning-input {
-    --slds-c-input-text-color: rgb(0, 0, 0);
-    --slds-c-input-color-foreground: rgb(0, 0, 0);
-    --slds-c-input-color-foreground-default: rgb(0, 0, 0);
-}
-
-.header-search .slds-input {
+/* Comprehensive search input styling - force black text everywhere */
+.header-search .slds-input,
+.header-search .slds-input:focus,
+.header-search .slds-input:active,
+.header-search .slds-input:hover,
+.header-search input,
+.header-search input:focus,
+.header-search input:active,
+.header-search input:hover {
     color: black !important;
     background: rgb(255, 255, 255) !important;
     border-color: rgba(255, 255, 255, 0.6) !important;
+    z-index: 10 !important;
 }
 
-/* Highest specificity for input text */
-.header-search-container .header-search lightning-input input {
-    color: black !important;
-    background: white !important;
-}
-
-/* Additional targeting for Lightning Input internal elements */
-.dealer-search.header-search {
-    --slds-c-input-text-color: black;
-    --slds-c-input-color-foreground: black;
-}
-
-.header-search .slds-input::placeholder {
-    color: rgba(255, 255, 255, 0.9) !important;
+.header-search .slds-input::placeholder,
+.header-search input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
 }
 
 .search-dropdown {
@@ -363,8 +362,6 @@
     --slds-c-combobox-radius-border: 6px;
 }
 
-
-
 .chart-container {
     position: relative;
     padding: 1rem 2rem 0 2rem;
@@ -423,6 +420,9 @@
     
     .dealer-header {
         padding: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
     }
     
     .dealer-name {
@@ -445,12 +445,6 @@
     .chart-container {
         padding: 1rem 1rem 0 1rem;
         height: 230px;
-    }
-    
-    .dealer-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
     }
     
     .header-search-container {

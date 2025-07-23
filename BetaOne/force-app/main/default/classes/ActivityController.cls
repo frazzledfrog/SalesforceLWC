@@ -19,10 +19,12 @@ public with sharing class ActivityController {
             List<SalespersonInfo> salespeople = new List<SalespersonInfo>();
             
             List<User> users = [
-                SELECT Id, Name
+                SELECT Id, Name, Email
                 FROM User 
                 WHERE IsActive = true
-                AND (Name LIKE 'Gianluca%' OR Name LIKE 'Ricky%' OR Name LIKE 'Sophie%' OR Name LIKE 'Corine%')
+                AND (Name LIKE 'Gianluca%' OR Name LIKE 'Ricky%' OR Name LIKE 'Sophie%' OR Name LIKE 'Corine%'
+                     OR Email = 'sophie.ahyam@preferafinance.com'
+                     OR Email = 'corine.vanstone@preferafinance.com')
                 ORDER BY Name
             ];
             
