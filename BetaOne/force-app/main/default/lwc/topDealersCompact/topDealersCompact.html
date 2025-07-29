@@ -1,0 +1,39 @@
+<template>
+    <div class="top-dealers-compact-container">
+        <div class="compact-header">
+            <h3 class="compact-title">Top 5 Largest Dealers</h3>
+        </div>
+        <div class="region-selector-row">
+            <lightning-combobox
+                name="region"
+                label="Region"
+                value={region}
+                options={regionOptions}
+                onchange={handleRegionChange}
+                class="region-combobox"
+                variant="label-hidden">
+            </lightning-combobox>
+        </div>
+        <template if:true={dealers}>
+            <div class="dealers-table-wrapper">
+                <div class="dealers-table-header">
+                    <span class="header-rank">#</span>
+                    <span class="header-name">Dealer Name</span>
+                    <span class="header-metric">Amount Financed (MTD)</span>
+                </div>
+                <ul class="dealers-list">
+                    <template for:each={dealers} for:item="dealer">
+                        <li key={dealer.rank} class="dealer-item">
+                            <span class="dealer-rank">{dealer.rank}</span>
+                            <span class="dealer-name" title={dealer.Name}>{dealer.Name}</span>
+                            <span class="dealer-metric">{dealer.MetricFormatted}</span>
+                        </li>
+                    </template>
+                </ul>
+            </div>
+        </template>
+        <template if:false={dealers}>
+            <div class="no-data-message">No dealer data available.</div>
+        </template>
+    </div>
+</template>

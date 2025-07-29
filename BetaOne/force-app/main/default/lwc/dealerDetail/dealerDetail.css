@@ -68,6 +68,25 @@
     color: rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Force black text during active typing/editing state */
+.header-search lightning-input input,
+.header-search lightning-input .slds-input,
+.header-search lightning-input input:focus,
+.header-search lightning-input .slds-input:focus,
+.header-search lightning-input input[type="text"],
+.header-search lightning-input .slds-input[type="text"] {
+    color: rgb(0, 0, 0) !important;
+    background-color: rgb(255, 255, 255) !important;
+    caret-color: rgb(0, 0, 0) !important;
+}
+
+/* Ensure text selection is visible */
+.header-search input::selection,
+.header-search .slds-input::selection {
+    background-color: rgba(37, 99, 235, 0.3) !important;
+    color: rgb(0, 0, 0) !important;
+}
+
 .search-dropdown {
     position: absolute;
     top: 100%;
