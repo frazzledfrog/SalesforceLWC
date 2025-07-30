@@ -3,35 +3,69 @@ public class ActivityControllerTest {
     
     @testSetup
     static void makeData() {
-        // Create test tasks with standard Type field
-        List<Task> testTasks = new List<Task>();
-        
-        // Create tasks for different call types and owners
-        testTasks.add(new Task(
-            Subject = 'Test Call Back',
-            Type = 'Call',
-            ActivityDate = Date.today().addDays(-5),
-            OwnerId = UserInfo.getUserId(),
-            Status = 'Completed'
+        // Create test Talkdesk Activities with required fields
+        List<talkdesk__Talkdesk_Activity__c> activities = new List<talkdesk__Talkdesk_Activity__c>();
+
+
+        // Removed duplicate testUserId declaration
+        Id testUserId = UserInfo.getUserId();
+        Date today = Date.today();
+        // All activities except Voicemail/Disconnect should be counted, regardless of talk time
+        activities.add(new talkdesk__Talkdesk_Activity__c(
+            Name = 'Test Call',
+            talkdesk__User__c = testUserId,
+            talkdesk__Type__c = 'Call',
+            talkdesk__Status__c = 'Sent',
+            talkdesk__Talk_Time_sec__c = 20,
+            talkdesk__Talkdesk_Id__c = 'test-id-1',
+            talkdesk__Start_Time__c = today
         ));
-        
-        testTasks.add(new Task(
-            Subject = 'Test Email',
-            Type = 'Email',
-            ActivityDate = Date.today().addDays(-10),
-            OwnerId = UserInfo.getUserId(),
-            Status = 'Completed'
+
+        // This short call should now be counted
+        activities.add(new talkdesk__Talkdesk_Activity__c(
+            Name = 'Short Call',
+            talkdesk__User__c = testUserId,
+            talkdesk__Type__c = 'Call',
+            talkdesk__Status__c = 'Sent',
+            talkdesk__Talk_Time_sec__c = 5,
+            talkdesk__Talkdesk_Id__c = 'test-id-2',
+            talkdesk__Start_Time__c = today
         ));
-        
-        testTasks.add(new Task(
-            Subject = 'Test Meeting',
-            Type = 'Meeting',
-            ActivityDate = Date.today().addDays(-15),
-            OwnerId = UserInfo.getUserId(),
-            Status = 'Completed'
+
+        // Should be excluded (Voicemail)
+        activities.add(new talkdesk__Talkdesk_Activity__c(
+            Name = 'Voicemail',
+            talkdesk__User__c = testUserId,
+            talkdesk__Type__c = 'Voicemail',
+            talkdesk__Status__c = 'Sent',
+            talkdesk__Talk_Time_sec__c = 30,
+            talkdesk__Talkdesk_Id__c = 'test-id-3',
+            talkdesk__Start_Time__c = today
         ));
-        
-        insert testTasks;
+
+        // Should be excluded (Disconnect)
+        activities.add(new talkdesk__Talkdesk_Activity__c(
+            Name = 'Disconnect',
+            talkdesk__User__c = testUserId,
+            talkdesk__Type__c = 'Disconnect',
+            talkdesk__Status__c = 'Sent',
+            talkdesk__Talk_Time_sec__c = 30,
+            talkdesk__Talkdesk_Id__c = 'test-id-4',
+            talkdesk__Start_Time__c = today
+        ));
+
+        // Valid activity, different type
+        activities.add(new talkdesk__Talkdesk_Activity__c(
+            Name = 'Test Email',
+            talkdesk__User__c = testUserId,
+            talkdesk__Type__c = 'Email',
+            talkdesk__Status__c = 'Sent',
+            talkdesk__Talk_Time_sec__c = 15,
+            talkdesk__Talkdesk_Id__c = 'test-id-5',
+            talkdesk__Start_Time__c = today
+        ));
+
+        insert activities;
     }
     
     @isTest
@@ -62,8 +96,7 @@ public class ActivityControllerTest {
         Test.startTest();
         
         // Test with specific salesperson and task type
-        String currentUserId = UserInfo.getUserId();
-        List<ActivityController.ActivityData> activityData = ActivityController.getActivityData(currentUserId, 'Call', '30');
+        List<ActivityController.ActivityData> activityData = ActivityController.getActivityData(UserInfo.getUserId(), 'Call', '30');
         
         Test.stopTest();
         
@@ -104,7 +137,7 @@ public class ActivityControllerTest {
     static void testGetActivityDataEdgeCases() {
         Test.startTest();
         
-        // Test with specific user that doesn't exist
+        // Test with specific user that doesn't exist (LastModifiedById)
         List<ActivityController.ActivityData> noUserData = ActivityController.getActivityData('fakeuserid', null, '30');
         
         // Test with specific task type

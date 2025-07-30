@@ -1,215 +1,135 @@
 <template>
+    <!-- Modern Dealer Analytics Component -->
+    <div class="dealer-analytics-container">
 
-    <div class="container">
-        <div class="dashboard-tile">
-            <div class="slds-card__body slds-card__body_inner">
-                <div class={containerClass}>
-                <!-- Compact Mode - Small footprint when no data found -->
-                <template if:true={showCompactMode}>
-                    <div class="compact-mode">
-                        <div class="compact-content">
-                            <lightning-icon icon-name="standard:account" size="x-small" class="compact-icon"></lightning-icon>
-                            <span class="compact-text">No dealer data available</span>
-                        </div>
-                    </div>
-                </template>
-
-                <!-- Loading State -->
-                <template if:true={isLoading}>
-                    <div class="loading-container">
-                        <lightning-spinner size="medium" alternative-text="Loading..."></lightning-spinner>
-                        <p class="loading-text">Loading dealer data...</p>
-                    </div>
-                </template>
-
-                <!-- Error State -->
-                <template if:true={error}>
-                    <div class="error-container">
-                        <span class="error-text">{error}</span>
-                    </div>
-                </template>
-
-                <!-- Empty State (only show if not compact mode) -->
-                <template if:false={hasDealer}>
-                    <template if:false={isLoading}>
-                        <template if:false={error}>
-                            <template if:false={showCompactMode}>
-                                <div class="empty-state">
-                                    <h2 class="empty-title">No Dealer Data</h2>
-                                    <p class="empty-description">No dealer information found for this account</p>
-                                </div>
-                            </template>
-                        </template>
-                    </template>
-                </template>
-                <!-- ...rest of the file... -->
-                <template if:true={showFullContent}>
-                    <!-- Dealer Header -->
-                    <div class="dealer-header">
-                        <div class="dealer-info">
-                            <h2 class="dealer-name">{selectedDealer.name}</h2>
-                            <span class="dealer-region">{selectedDealer.region}</span>
-                        </div>
-                    </div>
-
-                    <!-- Metrics Dashboard -->
-                    <div class="metrics-grid">
-                        <div class="metric-card primary">
-                            <div class="metric-content">
-                                <div class="metric-data">
-                                    <div class="metric-value">{selectedDealer.monthlyAmountFinanced}</div>
-                                    <div class="metric-label">Amount Financed This Month</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="metric-card">
-                            <div class="metric-content">
-                                <div class="metric-data">
-                                    <div class="metric-value">{selectedDealer.averageDealSize}</div>
-                                    <div class="metric-label">Average Deal Size This Month</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="metric-card">
-                            <div class="metric-content">
-                                <div class="metric-data">
-                                    <div class="metric-value">{selectedDealer.monthlyDeals}</div>
-                                    <div class="metric-label">Deals This Month</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="metric-card">
-                            <div class="metric-content">
-                                <div class="metric-data">
-                                    <div class="metric-value">{selectedDealer.lastMonthAmountFinanced}</div>
-                                    <div class="metric-label">Last Month Amount</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Chart Section -->
-                    <div class="chart-section">
-                        <div class="chart-header">
-                            <h3 class="chart-title">Volume Trend</h3>
-                            <div class="chart-controls">
-                                <lightning-combobox
-                                    name="lookbackPeriod"
-                                    label="Lookback Period"
-                                    value={selectedLookbackPeriod}
-                                    placeholder="Select period"
-                                    options={lookbackPeriodOptions}
-                                    onchange={handleLookbackPeriodChange}
-                                    variant="label-hidden"
-                                    class="period-selector">
-                                </lightning-combobox>
-                            </div>
-                        </div>
-                        <div class="chart-container">
-                            <template if:true={showChartLoading}>
-                                <div class="chart-loading">
-                                    <lightning-spinner size="small"></lightning-spinner>
-                                    <p class="loading-text">Loading chart data...</p>
-                                </div>
-                            </template>
-                            <template if:true={showChart}>
-                                <div class="chart-wrapper">
-                                    <canvas class="chart-canvas"></canvas>
-                                </div>
-                            </template>
-                        </div>
-                    </div>
-                </template>
-            </div>
-        </div>
-    </div>
-
-        <!-- Main Content - Full Size -->
-        <template if:true={showFullContent}>
-            <!-- Dealer Header -->
-            <div class="dealer-header">
-                <div class="dealer-info">
-                    <h2 class="dealer-name">{selectedDealer.name}</h2>
-                    <span class="dealer-region">{selectedDealer.region}</span>
-                </div>
-            </div>
-
-            <!-- Metrics Dashboard -->
-            <div class="metrics-grid">
-                <div class="metric-card primary">
-                    <div class="metric-content">
-                        <div class="metric-data">
-                            <div class="metric-value">{selectedDealer.monthlyAmountFinanced}</div>
-                            <div class="metric-label">Amount Financed This Month</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-content">
-                        <div class="metric-data">
-                            <div class="metric-value">{selectedDealer.averageDealSize}</div>
-                            <div class="metric-label">Average Deal Size This Month</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-content">
-                        <div class="metric-data">
-                            <div class="metric-value">{selectedDealer.monthlyDeals}</div>
-                            <div class="metric-label">Deals This Month</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-content">
-                        <div class="metric-data">
-                            <div class="metric-value">{selectedDealer.lastMonthAmountFinanced}</div>
-                            <div class="metric-label">Last Month Amount</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Chart Section -->
-            <div class="chart-section">
-                <div class="chart-header">
-                    <h3 class="chart-title">Volume Trend</h3>
-                    <div class="chart-controls">
-                        <lightning-combobox
-                            name="lookbackPeriod"
-                            label="Lookback Period"
-                            value={selectedLookbackPeriod}
-                            placeholder="Select period"
-                            options={lookbackPeriodOptions}
-                            onchange={handleLookbackPeriodChange}
-                            variant="label-hidden"
-                            class="period-selector">
-                        </lightning-combobox>
-                    </div>
-                </div>
-                
-                <div class="chart-container">
-                    <template if:true={showChartLoading}>
-                        <div class="chart-loading">
-                            <lightning-spinner size="small"></lightning-spinner>
-                            <p class="loading-text">Loading chart data...</p>
-                        </div>
-                    </template>
-                    
-                    <template if:true={showChart}>
-                        <div class="chart-wrapper">
-                            <canvas class="chart-canvas"></canvas>
-                        </div>
-                    </template>
-                </div>
+        <!-- Loading State -->
+        <template if:true={isLoading}>
+            <div class="loading-container">
+                <lightning-spinner size="medium" alternative-text="Loading dealer data..."></lightning-spinner>
+                <p class="loading-text">Loading dealer performance data...</p>
             </div>
         </template>
-        </div>
+
+        <!-- Error State -->
+        <template if:true={error}>
+            <div class="error-container">
+                <lightning-icon icon-name="utility:error" size="small" class="error-icon"></lightning-icon>
+                <span class="error-text">{error}</span>
+            </div>
+        </template>
+
+        <!-- Empty State -->
+        <template if:false={hasDealer}>
+            <template if:false={isLoading}>
+                <template if:false={error}>
+                    <div class="empty-state">
+                        <lightning-icon icon-name="utility:search" size="large" class="empty-icon"></lightning-icon>
+                        <h2 class="empty-title">No Dealer Selected</h2>
+                        <p class="empty-description">No dealer data available for this account.</p>
+                        <div class="feature-badges">
+                            <lightning-badge label="Real-time Data" variant="lightest"></lightning-badge>
+                            <lightning-badge label="Performance Metrics" variant="lightest"></lightning-badge>
+                            <lightning-badge label="Trend Analysis" variant="lightest"></lightning-badge>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+
+        <!-- Main Dealer Content -->
+        <template if:true={hasDealer}>
+            <div class="dealer-content">
+                
+                <!-- Dealer Header -->
+                <div class="dealer-header">
+                    <div class="dealer-info">
+                        <lightning-icon icon-name="standard:account" size="large" class="dealer-icon"></lightning-icon>
+                        <div class="dealer-details">
+                            <h1 class="dealer-name">{selectedDealer.name}</h1>
+                            <div class="dealer-badges">
+                                <lightning-badge label={selectedDealer.region} class="region-badge"></lightning-badge>
+                                <lightning-badge label="Active" variant="success" class="status-badge"></lightning-badge>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Key Metrics Grid -->
+                <div class="metrics-grid">
+                    <!-- Amount Financed This Month -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:currency" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Amount Financed This Month</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.monthlyAmountFinanced}</div>
+                    </div>
+
+                    <!-- Average Deal Size -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:chart" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Average Deal Size</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.averageDealSize}</div>
+                    </div>
+
+                    <!-- Deals This Month -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:number_input" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Deals This Month</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.monthlyDeals}</div>
+                    </div>
+
+                    <!-- Last Month Amount -->
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            <lightning-icon icon-name="utility:date_time" size="small" class="metric-icon"></lightning-icon>
+                            <span class="metric-label">Last Month Amount</span>
+                        </div>
+                        <div class="metric-value">{selectedDealer.lastMonthAmountFinanced}</div>
+                    </div>
+                </div>
+
+                <!-- Performance Chart Section -->
+                <div class="chart-section">
+                    <div class="chart-header">
+                        <div class="chart-title-area">
+                            <lightning-icon icon-name="utility:chart" size="small" class="chart-icon"></lightning-icon>
+                            <h2 class="chart-title">Performance Trends</h2>
+                        </div>
+                        <div class="chart-controls">
+                            <lightning-combobox
+                                value={selectedLookbackPeriod}
+                                placeholder="Select Period"
+                                options={lookbackPeriodOptions}
+                                onchange={handleLookbackPeriodChange}
+                                class="period-selector"
+                                variant="label-hidden">
+                            </lightning-combobox>
+                        </div>
+                    </div>
+                    
+                  
+
+                    <!-- Chart Container -->
+                    <div class="chart-container">
+                        <template if:true={isChartLoading}>
+                            <div class="chart-loading">
+                                <lightning-spinner size="small" alternative-text="Loading chart..."></lightning-spinner>
+                                <p class="chart-loading-text">Loading chart data...</p>
+                            </div>
+                        </template>
+                        
+                        <template if:false={isChartLoading}>
+                            <canvas class="chart-canvas"></canvas>
+                        </template>
+                    </div>
+                </div>
+
+            </div>
+        </template>
     </div>
 </template>

@@ -48,36 +48,37 @@ public with sharing class ActivityController {
     public static List<ActivityData> getActivityData(String salespersonId, String eventType, String timeframe) {
         try {
             List<ActivityData> activityList = new List<ActivityData>();
-            
-            // Build dynamic SOQL query for Task object with enhanced grouping
-            String query = 'SELECT OwnerId, Owner.Name, Type, Status, COUNT(Id) totalCount ' +
-                          'FROM Task ' +
-                          'WHERE CreatedDate = TODAY ';
-            
+
+            // Build dynamic SOQL query for Talkdesk Activity object with enhanced grouping
+            String baseQuery = 'SELECT talkdesk__User__c, talkdesk__User__r.Name, talkdesk__Type__c, talkdesk__Status__c, COUNT(Id) totalCount ' +
+                               'FROM talkdesk__Talkdesk_Activity__c WHERE talkdesk__Start_Date__c = TODAY ' +
+                               'AND (talkdesk__Type__c != \'Voicemail\') ' +
+                               'AND talkdesk__User__c != null ';
+
             // Add filters
             if (String.isNotBlank(salespersonId)) {
-                query += 'AND OwnerId = :salespersonId ';
+                baseQuery += 'AND talkdesk__User__c = :salespersonId ';
             }
-            
+
             if (String.isNotBlank(eventType)) {
-                query += 'AND Type = :eventType ';
+                baseQuery += 'AND talkdesk__Type__c = :eventType ';
             }
-            
-            query += 'GROUP BY OwnerId, Owner.Name, Type, Status ORDER BY Owner.Name, Type, Status';
-            
-            List<AggregateResult> results = Database.query(query);
-            
+
+            baseQuery += 'GROUP BY talkdesk__User__c, talkdesk__User__r.Name, talkdesk__Type__c, talkdesk__Status__c ORDER BY talkdesk__User__r.Name, talkdesk__Type__c, talkdesk__Status__c';
+
+            List<AggregateResult> results = Database.query(baseQuery);
+
             for (AggregateResult result : results) {
                 ActivityData activity = new ActivityData();
-                activity.id = (String) result.get('OwnerId') + '_' + (String) result.get('Type') + '_' + (String) result.get('Status');
-                activity.salespersonId = (String) result.get('OwnerId');
+                activity.id = (String) result.get('talkdesk__User__c') + '_' + (String) result.get('talkdesk__Type__c') + '_' + (String) result.get('talkdesk__Status__c');
+                activity.salespersonId = (String) result.get('talkdesk__User__c');
                 activity.salespersonName = (String) result.get('Name');
-                activity.eventType = (String) result.get('Type');
-                activity.status = (String) result.get('Status');
+                activity.eventType = (String) result.get('talkdesk__Type__c');
+                activity.status = (String) result.get('talkdesk__Status__c');
                 activity.totalActivities = (Integer) result.get('totalCount');
-                
+
                 // Calculate completed vs pending based on status
-                String status = (String) result.get('Status');
+                String status = (String) result.get('talkdesk__Status__c');
                 Integer count = (Integer) result.get('totalCount');
                 if (status != null && status.equalsIgnoreCase('Completed')) {
                     activity.completedActivities = count;
@@ -86,10 +87,10 @@ public with sharing class ActivityController {
                     activity.completedActivities = 0;
                     activity.pendingActivities = count;
                 }
-                
+
                 activityList.add(activity);
             }
-            
+
             return activityList;
         } catch (Exception e) {
             throw new AuraHandledException('Error retrieving activity data: ' + e.getMessage());

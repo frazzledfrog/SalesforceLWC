@@ -18,6 +18,8 @@ export default class ActivityTracker extends LightningElement {
 
     // Track if confetti has been shown for the current salesperson
     _confettiShownFor = '';
+    // Track previous call count to prevent confetti on navigation away
+    _prevCalls = null;
 
     connectedCallback() {
         // Preference loading will happen after salespeople data is loaded
@@ -89,7 +91,6 @@ export default class ActivityTracker extends LightningElement {
 
     loadActivityData() {
         if (!this.selectedSalesperson) return;
-        
         this.isLoading = true;
         this.error = null;
 
@@ -98,6 +99,11 @@ export default class ActivityTracker extends LightningElement {
             eventType: null,
             timeframe: 'today'
         };
+
+        // Store previous calls before loading new data
+        const prevCalls = this.selectedSalespersonData && this.selectedSalespersonData.goalProgress
+            ? this.selectedSalespersonData.goalProgress.calls
+            : null;
 
         getActivityData(params)
             .then(result => {
@@ -109,10 +115,16 @@ export default class ActivityTracker extends LightningElement {
                 }));
                 this.isLoading = false;
 
-                // Confetti logic: show if rep meets/exceeds goal, only once per rep per load
+                // Confetti logic: only show if previous calls < goal and new calls >= goal
                 const data = this.selectedSalespersonData;
-                if (data && data.goalProgress && data.goalProgress.isComplete && this._confettiShownFor !== this.selectedSalesperson) {
-                    // Wait for DOM to update, then launch confetti
+                const newCalls = data && data.goalProgress ? data.goalProgress.calls : null;
+                if (
+                    newCalls !== null &&
+                    prevCalls !== null &&
+                    prevCalls < this.dailyGoal &&
+                    newCalls >= this.dailyGoal &&
+                    this._confettiShownFor !== this.selectedSalesperson
+                ) {
                     setTimeout(() => launchConfetti(this.template), 100);
                     this._confettiShownFor = this.selectedSalesperson;
                 }
@@ -120,6 +132,8 @@ export default class ActivityTracker extends LightningElement {
                 if (data && (!data.goalProgress.isComplete) && this._confettiShownFor === this.selectedSalesperson) {
                     this._confettiShownFor = '';
                 }
+                // Update previous calls
+                this._prevCalls = newCalls;
             })
             .catch(error => {
                 this.error = 'Error loading activity data: ' + error.body.message;
@@ -128,12 +142,9 @@ export default class ActivityTracker extends LightningElement {
             });
     }
     renderedCallback() {
-        // On initial load, if a rep is already at/over goal, show confetti (only once)
-        const data = this.selectedSalespersonData;
-        if (data && data.goalProgress && data.goalProgress.isComplete && this._confettiShownFor !== this.selectedSalesperson) {
-            setTimeout(() => launchConfetti(this.template), 100);
-            this._confettiShownFor = this.selectedSalesperson;
-        }
+        // On initial load, if a rep is already at/over goal, do NOT show confetti (only show on transition)
+        // This prevents confetti on navigation to an account already at/over goal
+        // No-op
     }
 
     formatNumber(value) {
@@ -164,9 +175,15 @@ export default class ActivityTracker extends LightningElement {
 
     get selectedSalespersonData() {
         if (this.activityData.length > 0) {
-            return this.activityData[0];
+            // Sum totalActivities across all items for the selected salesperson
+            const total = this.activityData.reduce((sum, item) => sum + (item.totalActivities || 0), 0);
+            const salespersonName = this.activityData[0].salespersonName;
+            return {
+                salespersonName,
+                goalProgress: this.calculateGoalProgress(total)
+            };
         }
-        
+
         // Create default data when no activity data exists but salesperson is selected
         if (this.selectedSalesperson && this.salespeople.length > 0) {
             const selectedPerson = this.salespeople.find(p => p.value === this.selectedSalesperson);
@@ -177,7 +194,7 @@ export default class ActivityTracker extends LightningElement {
                 };
             }
         }
-        
+
         return null;
     }
 
@@ -221,7 +238,7 @@ export default class ActivityTracker extends LightningElement {
         const progress = this.selectedSalespersonData.goalProgress;
         
         if (progress.isOverGoal) {
-            return '#10b981'; // Green when over goal
+            return '#0a643aff'; // Green when over goal
         } else if (progress.percentage >= 75) {
             return '#10b981'; // Green for high progress (75-100%)
         } else if (progress.percentage >= 50) {
