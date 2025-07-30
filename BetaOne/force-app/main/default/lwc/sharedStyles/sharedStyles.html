@@ -1,3 +1,18 @@
 <template>
-    <!-- This component provides shared CSS styles -->
+    <div class="shared-preview-container">
+        <h1 class="shared-heading">Shared Styles Preview</h1>
+        <p class="shared-body">This app previews the shared text and color styles.</p>
+        <div class="shared-color-row">
+            <span class="shared-color-sample" style="background: var(--brand-primary);"></span> Brand Primary
+            <span class="shared-color-sample" style="background: var(--success-color);"></span> Success
+            <span class="shared-color-sample" style="background: var(--error-color);"></span> Error
+            <span class="shared-color-sample" style="background: var(--warning-color);"></span> Warning
+            <span class="shared-color-sample" style="background: var(--info-color);"></span> Info
+        </div>
+        <div class="shared-text-row">
+            <span class="shared-heading">Heading Example</span>
+            <span class="shared-body">Body Example</span>
+            <span class="shared-muted">Muted Example</span>
+        </div>
+    </div>
 </template>

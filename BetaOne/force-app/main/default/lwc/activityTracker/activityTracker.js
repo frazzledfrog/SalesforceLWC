@@ -1,4 +1,5 @@
 import { LightningElement, track, wire } from 'lwc';
+import { launchConfetti } from './confetti';
 import getActivityData from '@salesforce/apex/ActivityController.getActivityData';
 import getSalespeople from '@salesforce/apex/ActivityController.getSalespeople';
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
@@ -14,6 +15,9 @@ export default class ActivityTracker extends LightningElement {
     
     componentName = 'ActivityTracker';
     dailyGoal = 30;
+
+    // Track if confetti has been shown for the current salesperson
+    _confettiShownFor = '';
 
     connectedCallback() {
         // Preference loading will happen after salespeople data is loaded
@@ -104,12 +108,32 @@ export default class ActivityTracker extends LightningElement {
                     goalProgress: this.calculateGoalProgress(item.totalActivities)
                 }));
                 this.isLoading = false;
+
+                // Confetti logic: show if rep meets/exceeds goal, only once per rep per load
+                const data = this.selectedSalespersonData;
+                if (data && data.goalProgress && data.goalProgress.isComplete && this._confettiShownFor !== this.selectedSalesperson) {
+                    // Wait for DOM to update, then launch confetti
+                    setTimeout(() => launchConfetti(this.template), 100);
+                    this._confettiShownFor = this.selectedSalesperson;
+                }
+                // Reset confetti if rep falls below goal
+                if (data && (!data.goalProgress.isComplete) && this._confettiShownFor === this.selectedSalesperson) {
+                    this._confettiShownFor = '';
+                }
             })
             .catch(error => {
                 this.error = 'Error loading activity data: ' + error.body.message;
                 this.isLoading = false;
                 console.error('Error getting activity data', error);
             });
+    }
+    renderedCallback() {
+        // On initial load, if a rep is already at/over goal, show confetti (only once)
+        const data = this.selectedSalespersonData;
+        if (data && data.goalProgress && data.goalProgress.isComplete && this._confettiShownFor !== this.selectedSalesperson) {
+            setTimeout(() => launchConfetti(this.template), 100);
+            this._confettiShownFor = this.selectedSalesperson;
+        }
     }
 
     formatNumber(value) {
