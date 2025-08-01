@@ -1,0 +1,171 @@
+/* ==============================================
+   FIGMA APP STYLES
+   Using Shared Static Resource Design Tokens
+   ============================================== */
+
+/* Reference the shared design system tokens from the static resource */
+:root {
+  /* Typography Scale - Using shared design system values */
+  --font-size: var(--font-size-base, 0.875rem);  /* 14px from shared system */
+  --text-xs: var(--font-size-xs, 0.625rem);      /* 10px */
+  --text-sm: var(--font-size-sm, 0.75rem);       /* 12px */
+  --text-base: var(--font-size-base, 0.875rem);  /* 14px */
+  --text-lg: var(--font-size-lg, 1rem);          /* 16px */
+  --text-xl: var(--font-size-xl, 1.125rem);      /* 18px */
+  --text-2xl: var(--font-size-xxl, 1.25rem);     /* 20px */
+  --text-3xl: var(--font-size-xxxl, 1.5rem);     /* 24px */
+  --text-4xl: 2.25rem;                           /* Custom larger size */
+  --text-5xl: 3rem;                              /* Custom largest size */
+  
+  /* Colors - Using shared design system */
+  --background: var(--card-background-color, #ffffff);
+  --foreground: var(--text-color, #181818);
+  --card: var(--card-background-color, #ffffff);
+  --card-foreground: var(--text-color, #181818);
+  --popover: var(--card-background-color, #ffffff);
+  --popover-foreground: var(--text-color, #181818);
+  --primary: var(--brand-primary, #1b96ff);
+  --primary-foreground: #ffffff;
+  --secondary: var(--brand-light, #f4f6fe);
+  --secondary-foreground: var(--brand-dark, #014486);
+  --muted: var(--background-color, #f3f3f3);
+  --muted-foreground: var(--text-muted, #444444);
+  --accent: var(--brand-light, #f4f6fe);
+  --accent-foreground: var(--brand-dark, #014486);
+  --destructive: var(--error-color, #ea001e);
+  --destructive-foreground: #ffffff;
+  --border: var(--border-color, #e5e5e5);
+  --input: transparent;
+  --input-background: var(--background-color, #f3f3f3);
+  --switch-background: var(--border-color, #e5e5e5);
+  
+  /* Font Weights - Using shared design system */
+  --font-weight-medium: var(--font-weight-medium, 500);
+  --font-weight-normal: var(--font-weight-normal, 400);
+  
+  /* Ring/Focus */
+  --ring: var(--brand-primary, #1b96ff);
+  
+  /* Chart Colors - Custom for FIGMA app */
+  --chart-1: var(--brand-primary, #1b96ff);
+  --chart-2: var(--secondary-color, #1de9b6);
+  --chart-3: var(--success-color, #45c65a);
+  --chart-4: var(--warning-color, #fe9339);
+  --chart-5: var(--error-color, #ea001e);
+  
+  /* Border Radius - Using shared design system */
+  --radius: var(--border-radius-lg, 0.5rem);
+  
+  /* Sidebar Colors - Using shared design system */
+  --sidebar: var(--card-background-color, #ffffff);
+  --sidebar-foreground: var(--text-color, #181818);
+  --sidebar-primary: var(--brand-primary, #1b96ff);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--brand-light, #f4f6fe);
+  --sidebar-accent-foreground: var(--brand-dark, #014486);
+  --sidebar-border: var(--border-color, #e5e5e5);
+  --sidebar-ring: var(--brand-primary, #1b96ff);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.145 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.145 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.985 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.269 0 0);
+  --input: oklch(0.269 0 0);
+  --ring: oklch(0.439 0 0);
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(0.269 0 0);
+  --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* Base element styling */
+* {
+  border-color: var(--border);
+  outline-color: var(--ring);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+h1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+h2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+h3 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+h4 {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+p {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+
+label {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+button {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.5;
+}
+
+input {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+}
+
+html {
+  font-size: var(--font-size);
+}

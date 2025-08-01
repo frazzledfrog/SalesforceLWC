@@ -37,9 +37,12 @@ export default class DealerDetailAccount extends LightningElement {
     wiredAccount({ error, data }) {
         if (data) {
             this.account = { data };
-            this.findAndLoadAccountDealer();
+            console.log('Account loaded:', data.fields.Name.value);
+            // Call findAndLoadAccountDealer with a small delay to ensure other wire methods have executed
+            setTimeout(() => this.findAndLoadAccountDealer(), 100);
         } else if (error) {
-            this.error = 'Error loading account: ' + error.body.message;
+            this.error = 'Error loading account: ' + (error.body?.message || error.message);
+            this.isLoading = false;
             console.error('Error getting account', error);
         }
     }
@@ -54,9 +57,12 @@ export default class DealerDetailAccount extends LightningElement {
                 name: dealer.name,
                 region: dealer.region
             }));
-            this.findAndLoadAccountDealer();
+            console.log('Dealer options loaded:', this.dealerOptions.length, 'dealers');
+            // Call findAndLoadAccountDealer with a small delay to ensure other wire methods have executed
+            setTimeout(() => this.findAndLoadAccountDealer(), 100);
         } else if (error) {
-            this.error = 'Error loading dealer options: ' + error.body.message;
+            this.error = 'Error loading dealer options: ' + (error.body?.message || error.message);
+            this.isLoading = false;
             console.error('Error getting dealer options', error);
         }
     }
@@ -66,20 +72,14 @@ export default class DealerDetailAccount extends LightningElement {
         
         // Start loading timeout - switch to compact mode after 8 seconds
         this.loadingTimeout = setTimeout(() => {
-            if (this.isLoading) {
+            if (this.isLoading && !this.selectedDealer) {
+                console.log('Loading timeout reached, switching to compact mode');
                 this.hasTimedOut = true;
                 this.isCompactMode = true;
                 this.isLoading = false;
-                if (!this.selectedDealer && !this.error) {
-                    this.error = null; // Don't show error, just go compact
-                }
+                this.error = null; // Don't show error, just go compact
             }
         }, 8000);
-        
-        // Add a small delay to ensure all wired data is processed
-        setTimeout(() => {
-            this.findAndLoadAccountDealer();
-        }, 500);
     }
 
     disconnectedCallback() {
@@ -103,25 +103,59 @@ export default class DealerDetailAccount extends LightningElement {
         const accountName = this.account.data.fields.Name.value;
         console.log('Attempting to match account:', accountName, 'with dealers:', this.dealerOptions.length);
         
-        // Try to find a matching dealer by account name
-        const matchingDealer = this.dealerOptions.find(dealer => 
-            dealer.name.toLowerCase().includes(accountName.toLowerCase()) ||
-            accountName.toLowerCase().includes(dealer.name.toLowerCase())
+        // Try multiple matching strategies
+        let matchingDealer = null;
+        
+        // Strategy 1: Exact match
+        matchingDealer = this.dealerOptions.find(dealer => 
+            dealer.name.toLowerCase() === accountName.toLowerCase()
         );
+        
+        // Strategy 2: Dealer name contains account name
+        if (!matchingDealer) {
+            matchingDealer = this.dealerOptions.find(dealer => 
+                dealer.name.toLowerCase().includes(accountName.toLowerCase())
+            );
+        }
+        
+        // Strategy 3: Account name contains dealer name
+        if (!matchingDealer) {
+            matchingDealer = this.dealerOptions.find(dealer => 
+                accountName.toLowerCase().includes(dealer.name.toLowerCase())
+            );
+        }
+        
+        // Strategy 4: Partial word matching (remove common words)
+        if (!matchingDealer) {
+            const cleanAccountName = accountName.toLowerCase()
+                .replace(/\b(motor|sales|auto|automotive|ltd|limited|inc|corp|corporation)\b/g, '')
+                .trim();
+            
+            matchingDealer = this.dealerOptions.find(dealer => {
+                const cleanDealerName = dealer.name.toLowerCase()
+                    .replace(/\b(motor|sales|auto|automotive|ltd|limited|inc|corp|corporation)\b/g, '')
+                    .trim();
+                
+                return cleanDealerName.includes(cleanAccountName) || 
+                       cleanAccountName.includes(cleanDealerName);
+            });
+        }
 
         if (matchingDealer) {
             console.log('Found matching dealer:', matchingDealer.name);
             this.loadDealerDetails(matchingDealer.id);
         } else {
             console.log('No matching dealer found for:', accountName);
-            // Set compact mode and stop loading after timeout
+            console.log('Available dealers:', this.dealerOptions.map(d => d.name));
+            
+            // Set compact mode and stop loading after a short delay
             setTimeout(() => {
                 if (!this.selectedDealer) {
                     this.isCompactMode = true;
                     this.isLoading = false;
                     this.error = null; // Don't show error in compact mode
                 }
-            }, 2000);
+            }, 1000); // Reduced from 2000ms
         }
     }
 
@@ -167,6 +201,10 @@ export default class DealerDetailAccount extends LightningElement {
         return classes;
     }
 
+    get chartCanvasStyle() {
+        return this.isChartLoading ? 'display: none;' : 'display: block;';
+    }
+
     handleLookbackPeriodChange(event) {
         this.selectedLookbackPeriod = event.detail.value;
         if (this.selectedDealer) {
@@ -189,8 +227,11 @@ export default class DealerDetailAccount extends LightningElement {
             this.chart = null;
         }
         
+        console.log('Loading dealer details for ID:', dealerId);
+        
         getDealerDetails({ dealerId: dealerId })
             .then(result => {
+                console.log('Dealer details loaded successfully:', result);
                 this.selectedDealer = {
                     ...result,
                     totalFinancedAmount: this.formatCurrency(result.totalFinancedAmount),
@@ -204,9 +245,9 @@ export default class DealerDetailAccount extends LightningElement {
                 this.loadChartData(dealerId);
             })
             .catch(error => {
-                this.error = 'Error loading dealer details: ' + error.body.message;
+                console.error('Error loading dealer details:', error);
+                this.error = 'Error loading dealer details: ' + (error.body?.message || error.message);
                 this.isLoading = false;
-                console.error('Error getting dealer details', error);
             });
     }
 
@@ -239,7 +280,13 @@ export default class DealerDetailAccount extends LightningElement {
                 return;
             }
             
-            this.renderChart(chartData);
+            // Set loading to false BEFORE rendering chart so canvas is visible
+            this.isChartLoading = false;
+            
+            // Wait for DOM update then render chart
+            setTimeout(() => {
+                this.renderChart(chartData);
+            }, 100);
             
         } catch (error) {
             console.error('Chart loading failed:', error);
@@ -252,11 +299,16 @@ export default class DealerDetailAccount extends LightningElement {
         setTimeout(() => {
             const canvas = this.template.querySelector('canvas.chart-canvas');
             if (!canvas) {
-                console.error('Canvas not found');
+                console.error('Canvas not found - template state:', {
+                    hasTemplate: !!this.template,
+                    isChartLoading: this.isChartLoading,
+                    hasData: !!data
+                });
                 this.error = 'Chart canvas element not found';
-                this.isChartLoading = false;
                 return;
             }
+
+            console.log('Canvas found, rendering chart with data:', data);
 
             if (this.chart) {
                 this.chart.destroy();
@@ -266,7 +318,6 @@ export default class DealerDetailAccount extends LightningElement {
             if (!data?.monthlyData?.length) {
                 console.error('Invalid chart data structure:', data);
                 this.error = 'Invalid chart data received';
-                this.isChartLoading = false;
                 return;
             }
 
@@ -326,12 +377,9 @@ export default class DealerDetailAccount extends LightningElement {
                     }
                 });
 
-                this.isChartLoading = false;
-
             } catch (error) {
                 console.error('Chart creation failed:', error);
                 this.error = `Chart rendering failed: ${error.message}`;
-                this.isChartLoading = false;
             }
         }, 50);
     }

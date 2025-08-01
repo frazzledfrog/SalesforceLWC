@@ -1,0 +1,134 @@
+/* ==============================================
+   FIGMA COMPONENT STYLES
+   Using Shared Design System Variables
+   ============================================== */
+
+/* Main Container - Same design as quickpdfs */
+.figma-container {
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+}
+
+/* Header Section - Blue gradient design (same as quickpdfs) */
+.header-section {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-primary) 100%);
+    padding: var(--spacing-small) var(--spacing-medium);
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-medium);
+    margin-bottom: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+}
+
+.header-icon {
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.main-title {
+    color: white;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    margin: 0;
+}
+
+/* Info Banner */
+.info-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    background: var(--warning-background);
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius-small);
+    border: 1px solid rgba(254, 147, 57, 0.2);
+}
+
+.info-icon {
+    color: var(--warning-color);
+    flex-shrink: 0;
+}
+
+.info-text {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-normal);
+    margin: 0;
+}
+
+/* Content Section */
+.content-section {
+    padding: var(--spacing-medium);
+    background: var(--card-background-color);
+}
+
+/* Use shared utility classes from the static resource */
+.shared-card {
+    /* These styles come from the sharedStyles static resource */
+    margin-bottom: var(--spacing-medium);
+}
+
+.shared-title {
+    /* These styles come from the sharedStyles static resource */
+    margin-bottom: var(--spacing-small);
+}
+
+.shared-text {
+    /* These styles come from the sharedStyles static resource */
+    margin-bottom: var(--spacing-small);
+}
+
+.shared-text-muted {
+    /* These styles come from the sharedStyles static resource */
+    margin-bottom: var(--spacing-medium);
+}
+
+.shared-button-primary,
+.shared-button-secondary {
+    /* These styles come from the sharedStyles static resource */
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--spacing-large);
+    }
+    
+    .title-group {
+        justify-content: center;
+        text-align: center;
+    }
+    
+    .content-section {
+        padding: var(--spacing-large);
+    }
+    
+    .main-title {
+        font-size: var(--font-size-xl);
+    }
+}

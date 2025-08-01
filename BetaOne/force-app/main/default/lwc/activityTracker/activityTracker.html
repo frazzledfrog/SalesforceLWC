@@ -1,9 +1,8 @@
 <template>
 
     <div class="container">
-        <lightning-card title="Daily Call Goal" icon-name="standard:task">
+        <lightning-card title="Daily Call Goal">
             <div class="metric-header slds-m-bottom_large">
-                
                 <!-- Salesperson Dropdown -->
                 <template if:true={selectedSalespersonData}>
                     <lightning-combobox
@@ -123,7 +122,6 @@
             <template if:false={isLoading}>
                 <template if:false={error}>
                     <div class="empty-state slds-text-align_center slds-p-around_x-large">
-                        <lightning-icon icon-name="utility:phone" size="large" class="slds-m-bottom_medium" style="color: #cccccc;"></lightning-icon>
                         <div class="empty-text slds-text-heading_small slds-text-color_weak">No calls logged today</div>
                         <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">Start making calls to track your progress toward your daily goal.</p>
                     </div>

@@ -1,0 +1,36 @@
+<template>
+    <div class="figma-container">
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-group">
+                    <div class="header-icon">
+                        <lightning-icon icon-name="utility:apps" size="medium"></lightning-icon>
+                    </div>
+                    <h2 class="main-title">FIGMA App</h2>
+                </div>
+            </div>
+            <div class="info-banner">
+                <div class="info-icon">
+                    <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                </div>
+                <p class="info-text">Using shared design system tokens from static resources</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <!-- Your React components would be embedded here -->
+            <div class="shared-card">
+                <h3 class="shared-title">FIGMA Components</h3>
+                <p class="shared-text">This component now uses the same design tokens as the QuickPDFs app.</p>
+                <div class="shared-text-muted">
+                    Shared design system variables: brand colors, spacing, typography, and more.
+                </div>
+                
+                <div style="margin-top: var(--spacing-medium);">
+                    <button class="shared-button-primary">Primary Button</button>
+                    <button class="shared-button-secondary" style="margin-left: var(--spacing-small);">Secondary Button</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,4 +1,6 @@
 import { LightningElement } from 'lwc';
+import { loadStyle } from 'lightning/platformResourceLoader';
+import sharedStyles from '@salesforce/resourceUrl/sharedStyles';
 import VIN_Amendment from '@salesforce/resourceUrl/VIN_Amendment';
 import Trustee_Form from '@salesforce/resourceUrl/Trustee_Form';
 import RecSheetPDF from '@salesforce/resourceUrl/RecSheetPDF';
@@ -68,6 +70,15 @@ export default class QuickPdfs extends LightningElement {
     }
 
     connectedCallback() {
+        // Load shared styles
+        loadStyle(this, sharedStyles)
+            .then(() => {
+                console.log('Shared styles loaded successfully');
+            })
+            .catch(error => {
+                console.error('Error loading shared styles:', error);
+            });
+
         console.log('PDF Files loaded:', this.pdfFiles);
         console.log('VIN_Amendment URL:', VIN_Amendment);
         console.log('Trustee_Form URL:', Trustee_Form);

@@ -39,20 +39,6 @@
         <!-- Main Dealer Content -->
         <template if:true={hasDealer}>
             <div class="dealer-content">
-                
-                <!-- Dealer Header -->
-                <div class="dealer-header">
-                    <div class="dealer-info">
-                        <lightning-icon icon-name="standard:account" size="large" class="dealer-icon"></lightning-icon>
-                        <div class="dealer-details">
-                            <h1 class="dealer-name">{selectedDealer.name}</h1>
-                            <div class="dealer-badges">
-                                <lightning-badge label={selectedDealer.region} class="region-badge"></lightning-badge>
-                                <lightning-badge label="Active" variant="success" class="status-badge"></lightning-badge>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Key Metrics Grid -->
                 <div class="metrics-grid">
@@ -123,9 +109,8 @@
                             </div>
                         </template>
                         
-                        <template if:false={isChartLoading}>
-                            <canvas class="chart-canvas"></canvas>
-                        </template>
+                        <!-- Canvas is always present but hidden when loading -->
+                        <canvas class="chart-canvas" style={chartCanvasStyle}></canvas>
                     </div>
                 </div>
 

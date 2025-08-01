@@ -1,22 +1,22 @@
 /* ==============================================
    QUICK PDFS COMPONENT STYLES
-   Modern, Professional Design
+   Using Shared Design System Variables
    ============================================== */
 
 /* Main Container - Modern card design */
 .pdf-container {
-    background: #ffffff;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
     overflow: hidden;
     min-height: 300px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-color);
 }
 
 /* Header Section - Blue gradient design */
 .header-section {
-    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
-    padding: 0.5rem 1rem;
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-primary) 100%);
+    padding: var(--spacing-small) var(--spacing-medium);
     position: relative;
 }
 
@@ -25,7 +25,7 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: var(--spacing-medium);
     margin-bottom: 0;
     position: relative;
     z-index: 1;
@@ -34,14 +34,14 @@
 .title-group {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: var(--spacing-small);
 }
 
 .header-icon {
     color: white;
     background: rgba(255, 255, 255, 0.15);
-    padding: 0.25rem;
-    border-radius: 3px;
+    padding: var(--spacing-xs);
+    border-radius: var(--border-radius-small);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,8 +49,8 @@
 
 .main-title {
     color: white;
-    font-size: 1rem;
-    font-weight: 600;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
     margin: 0;
 }
 
@@ -58,46 +58,46 @@
 .info-banner {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 107, 53, 0.1);
-    padding: 0.5rem 0.75rem;
-    border-radius: 3px;
-    border: 1px solid rgba(255, 107, 53, 0.2);
+    gap: var(--spacing-small);
+    background: var(--warning-background);
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius-small);
+    border: 1px solid rgba(254, 147, 57, 0.2);
 }
 
 .info-icon {
-    color: #ff6b35;
+    color: var(--warning-color);
     flex-shrink: 0;
 }
 
 .info-text {
     color: rgba(255, 255, 255, 0.95);
-    font-size: 0.75rem;
-    line-height: 1.3;
-    font-weight: 400;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-normal);
     margin: 0;
 }
 
 /* Content Section */
 .content-section {
-    padding: 0.75rem;
-    background: #ffffff;
+    padding: var(--spacing-medium);
+    background: var(--card-background-color);
 }
 
 /* PDF Grid Layout */
 .pdf-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 0.75rem;
-    margin-top: 0.5rem;
+    gap: var(--spacing-medium);
+    margin-top: var(--spacing-small);
 }
 
 /* Modern PDF Card Design */
 .pdf-card {
-    background: #ffffff;
-    border: 1px solid #d1d5db;
-    border-radius: 3px;
-    padding: 0.75rem;
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-medium);
     transition: all 0.15s ease;
     position: relative;
 }
@@ -109,7 +109,7 @@
     left: 0;
     right: 0;
     height: 2px;
-    background: linear-gradient(90deg, #1e40af 0%, #ff6b35 100%);
+    background: linear-gradient(90deg, var(--brand-dark) 0%, var(--secondary-color) 100%);
     opacity: 0;
     transition: opacity 0.2s ease;
 }
@@ -120,7 +120,7 @@
 
 /* PDF Header Section */
 .pdf-header {
-    margin-bottom: 0.75rem;
+    margin-bottom: var(--spacing-medium);
 }
 
 .file-info {
@@ -136,27 +136,27 @@
 }
 
 .file-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #212529;
-    margin: 0 0 0.125rem 0;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--heading-color);
+    margin: 0 0 var(--spacing-xs) 0;
     word-break: break-word;
-    line-height: 1.2;
+    line-height: var(--line-height-tight);
 }
 
 .file-meta {
-    font-size: 0.7rem;
-    color: #6c757d;
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
     margin: 0;
-    font-weight: 400;
+    font-weight: var(--font-weight-normal);
 }
 
 /* PDF Actions Section - Improved button styling */
 .pdf-actions {
     display: flex;
-    gap: 0.75rem;
+    gap: var(--spacing-medium);
     flex-wrap: wrap;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-small);
 }
 
 .action-button {
@@ -164,10 +164,10 @@
     min-width: 110px;
     max-width: 140px;
     height: 36px;
-    border-radius: 4px;
-    font-weight: 500;
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
     transition: background-color 0.2s ease, border-color 0.2s ease;
-    font-size: 0.8rem;
+    font-size: var(--font-size-sm);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -175,33 +175,33 @@
 }
 
 .preview-btn {
-    --slds-c-button-brand-color-background: #0066cc;
-    --slds-c-button-brand-color-border: #0066cc;
-    background: #0066cc;
-    border: 1px solid #0066cc;
+    --slds-c-button-brand-color-background: var(--brand-accessible);
+    --slds-c-button-brand-color-border: var(--brand-accessible);
+    background: var(--brand-accessible);
+    border: 1px solid var(--brand-accessible);
     color: white;
 }
 
 .preview-btn:hover {
-    background: #005bb5;
-    --slds-c-button-brand-color-background: #005bb5;
-    --slds-c-button-brand-color-border: #005bb5;
-    border: 1px solid #005bb5;
+    background: var(--brand-dark);
+    --slds-c-button-brand-color-background: var(--brand-dark);
+    --slds-c-button-brand-color-border: var(--brand-dark);
+    border: 1px solid var(--brand-dark);
 }
 
 .download-btn {
-    --slds-c-button-brand-color-background: #ff6b35;
-    --slds-c-button-brand-color-border: #ff6b35;
-    background: #ff6b35;
-    border: 1px solid #ff6b35;
+    --slds-c-button-brand-color-background: var(--secondary-color);
+    --slds-c-button-brand-color-border: var(--secondary-color);
+    background: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
     color: white;
 }
 
 .download-btn:hover {
-    background: #e55a2b;
-    --slds-c-button-brand-color-background: #e55a2b;
-    --slds-c-button-brand-color-border: #e55a2b;
-    border: 1px solid #e55a2b;
+    background: rgba(29, 233, 182, 0.8);
+    --slds-c-button-brand-color-background: rgba(29, 233, 182, 0.8);
+    --slds-c-button-brand-color-border: rgba(29, 233, 182, 0.8);
+    border: 1px solid rgba(29, 233, 182, 0.8);
 }
 
 /* Enhanced Empty State */
@@ -210,53 +210,43 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 5rem 2rem;
+    padding: var(--spacing-xxl) var(--spacing-xl);
     text-align: center;
-    gap: 1.5rem;
-    background: linear-gradient(135deg, 
-        rgba(255, 107, 107, 0.08) 0%, 
-        rgba(78, 205, 196, 0.08) 25%,
-        rgba(150, 206, 180, 0.08) 50%,
-        rgba(254, 202, 87, 0.08) 75%,
-        #ffffff 100%);
-    border-radius: 16px;
-    border: 2px solid rgba(78, 205, 196, 0.2);
-    box-shadow: 0 8px 32px rgba(78, 205, 196, 0.1);
+    gap: var(--spacing-large);
+    background: var(--brand-light);
+    border-radius: var(--border-radius-lg);
+    border: 2px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
 }
 
 .empty-icon {
-    background: linear-gradient(135deg, 
-        rgba(255, 107, 107, 0.2) 0%, 
-        rgba(78, 205, 196, 0.2) 50%, 
-        rgba(254, 202, 87, 0.2) 100%);
-    color: #4ecdc4;
-    padding: 1.5rem;
+    background: var(--info-background);
+    color: var(--info-color);
+    padding: var(--spacing-large);
     border-radius: 50%;
-    border: 3px solid rgba(78, 205, 196, 0.3);
+    border: 3px solid var(--border-color);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 
-        0 8px 24px rgba(78, 205, 196, 0.2),
-        0 4px 12px rgba(255, 107, 107, 0.1);
+    box-shadow: var(--shadow-md);
     animation: emptyIconFloat 3s ease-in-out infinite;
 }
 
 .empty-title {
-    font-size: 1.375rem;
-    font-weight: 700;
-    color: #2c3e50;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--heading-color);
     margin: 0;
     letter-spacing: -0.025em;
 }
 
 .empty-description {
-    color: #576574;
+    color: var(--text-muted);
     max-width: 450px;
-    line-height: 1.6;
+    line-height: var(--line-height-relaxed);
     margin: 0;
-    font-size: 0.925rem;
-    font-weight: 500;
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
 }
 
 /* Responsive Design */
@@ -264,7 +254,7 @@
     .header-content {
         flex-direction: column;
         align-items: stretch;
-        gap: 1.5rem;
+        gap: var(--spacing-large);
     }
     
     .title-group {
@@ -273,16 +263,16 @@
     }
     
     .content-section {
-        padding: 1.5rem;
+        padding: var(--spacing-large);
     }
     
     .pdf-grid {
         grid-template-columns: 1fr;
-        gap: 1.25rem;
+        gap: var(--spacing-large);
     }
     
     .main-title {
-        font-size: 1.5rem;
+        font-size: var(--font-size-xl);
     }
     
     .pdf-actions {
@@ -296,27 +286,27 @@
 
 @media (max-width: 480px) {
     .header-section {
-        padding: 1.5rem;
+        padding: var(--spacing-large);
     }
     
     .main-title {
-        font-size: 1.375rem;
+        font-size: var(--font-size-xl);
     }
     
     .info-banner {
-        padding: 0.875rem 1rem;
+        padding: var(--spacing-medium) var(--spacing-large);
     }
     
     .info-text {
-        font-size: 0.8125rem;
+        font-size: var(--font-size-sm);
     }
     
     .content-section {
-        padding: 1rem;
+        padding: var(--spacing-medium);
     }
     
     .pdf-card {
-        padding: 1.25rem;
+        padding: var(--spacing-large);
     }
     
     .file-info {
@@ -326,7 +316,7 @@
 
 /* Enhanced Focus and Accessibility */
 .pdf-card:focus-within {
-    border-color: rgba(27, 150, 255, 0.4);
+    border-color: var(--brand-primary);
     box-shadow: 0 0 0 3px rgba(27, 150, 255, 0.15);
     outline: none;
 }
@@ -454,28 +444,28 @@
 /* Dark mode support */
 @media (prefers-color-scheme: dark) {
     .pdf-container {
-        background: #1a1a1a;
-        border-color: rgba(255, 255, 255, 0.1);
+        background: var(--background-color);
+        border-color: var(--border-color);
     }
     
     .pdf-card {
-        background: #2a2a2a;
-        border-color: rgba(255, 255, 255, 0.1);
+        background: var(--card-background-color);
+        border-color: var(--border-color);
     }
     
     .file-name {
-        color: #ffffff;
+        color: var(--heading-color);
     }
     
     .empty-title {
-        color: #ffffff;
+        color: var(--heading-color);
     }
     
     .file-meta {
-        color: #94a3b8;
+        color: var(--text-muted);
     }
     
     .empty-description {
-        color: #94a3b8;
+        color: var(--text-muted);
     }
 }
