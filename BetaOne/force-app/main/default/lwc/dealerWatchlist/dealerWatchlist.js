@@ -2,6 +2,7 @@ import { LightningElement, track } from 'lwc';
 import getDealerWinnersLosers from '@salesforce/apex/DealerWatchlistController.getDealerWinnersLosers';
 import getLastRegion from '@salesforce/apex/UserComponentPreferenceService.getLastRegion';
 import setLastRegion from '@salesforce/apex/UserComponentPreferenceService.setLastRegion';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 const COMPONENT_NAME = 'dealerWatchlist';
 
@@ -39,7 +40,12 @@ export default class DealerWatchlist extends LightningElement {
     
     get toggleLabel() {
         return this.isYearOverYear ? 'Year over Year' : 'Month over Month';
-    }    connectedCallback() {
+    }
+    
+    async connectedCallback() {
+        // Load unified styles
+        await loadUnifiedStyles(this);
+        
         getLastRegion({ componentName: COMPONENT_NAME })
             .then(result => {
                 if (result && this.regionOptions.some(option => option.value === result)) {

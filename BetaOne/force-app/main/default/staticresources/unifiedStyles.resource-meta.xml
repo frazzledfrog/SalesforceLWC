@@ -2,5 +2,5 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Public</cacheControl>
     <contentType>text/css</contentType>
-    <description>Shared CSS styles and design tokens for all Lightning Web Components</description>
+    <description>Unified styles system for all Lightning Web Components. Consolidates design tokens, utility classes, and component-specific styles into a single maintainable file.</description>
 </StaticResource>

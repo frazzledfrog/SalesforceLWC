@@ -1,0 +1,985 @@
+/* ==============================================
+   UNIFIED STYLES SYSTEM
+   Comprehensive CSS for All LWC Components
+   Consolidating All Component Styles Into One System
+   ============================================== */
+
+/* ==============================================
+   DESIGN TOKENS & CSS VARIABLES
+   ============================================== */
+
+:root {
+    /* ===== SLDS BRAND COLORS ===== */
+    --brand-primary: #1b96ff;                    /* PALETTE_BLUE_60 */
+    --brand-accessible: #0176d3;                /* PALETTE_BLUE_50 */
+    --brand-dark: #014486;                      /* PALETTE_BLUE_30 */
+    --brand-light: #f4f6fe;                     /* BRAND_LIGHT */
+    
+    /* ===== SLDS STATUS COLORS ===== */
+    --success-color-rgb: 69, 198, 90;
+    --success-color: rgb(var(--success-color-rgb));
+    --success-background: rgba(var(--success-color-rgb), 0.1);
+    --error-color-rgb: 234, 0, 30;
+    --error-color: rgb(var(--error-color-rgb));
+    --error-background: rgba(var(--error-color-rgb), 0.1);
+    --warning-color-rgb: 254, 147, 57;
+    --warning-color: rgb(var(--warning-color-rgb));
+    --warning-background: rgba(var(--warning-color-rgb), 0.1);
+    --info-color-rgb: 116, 116, 116;
+    --info-color: rgb(var(--info-color-rgb));
+    --info-background: rgba(var(--info-color-rgb), 0.1);
+    
+    /* ===== SLDS BACKGROUND COLORS ===== */
+    --background-color: #f3f3f3;                /* PALETTE_NEUTRAL_95 */
+    --card-background-color: #ffffff;           /* PALETTE_NEUTRAL_100 */
+    --secondary-background: var(--background-color);
+    
+    /* ===== SLDS TEXT COLORS ===== */
+    --text-color: #181818;                       /* PALETTE_NEUTRAL_10 */
+    --text-muted: #444444;                       /* PALETTE_NEUTRAL_30 */
+    --heading-color: var(--text-color);
+    
+    /* ===== SLDS BORDER COLORS ===== */
+    --border-color: #e5e5e5;                    /* PALETTE_NEUTRAL_90 */
+    --border-light: #f3f3f3;                    /* PALETTE_NEUTRAL_95 */
+    --shadow-color: rgba(0, 0, 0, 0.10);        /* SLDS Shadow tokens */
+    
+    /* ===== LEGACY COLOR SUPPORT ===== */
+    --primary-color: var(--brand-primary);
+    --primary-hover: var(--brand-accessible);
+    --secondary-color: #1de9b6; /* Keep for accent */
+    
+    /* ===== SLDS TYPOGRAPHY ===== */
+    --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+    --font-size-xs: 0.625rem;      /* FONT_SIZE_1 - 10px */
+    --font-size-sm: 0.75rem;       /* FONT_SIZE_2 - 12px */
+    --font-size-base: 0.875rem;    /* FONT_SIZE_4 - 14px */
+    --font-size-lg: 1rem;          /* FONT_SIZE_5 - 16px */
+    --font-size-xl: 1.125rem;      /* FONT_SIZE_6 - 18px */
+    --font-size-xxl: 1.25rem;      /* FONT_SIZE_7 - 20px */
+    --font-size-xxxl: 1.5rem;      /* FONT_SIZE_8 - 24px */
+    
+    /* ===== FIGMA APP EXTENDED TYPOGRAPHY ===== */
+    --text-xs: var(--font-size-xs, 0.625rem);      /* 10px */
+    --text-sm: var(--font-size-sm, 0.75rem);       /* 12px */
+    --text-base: var(--font-size-base, 0.875rem);  /* 14px */
+    --text-lg: var(--font-size-lg, 1rem);          /* 16px */
+    --text-xl: var(--font-size-xl, 1.125rem);      /* 18px */
+    --text-2xl: var(--font-size-xxl, 1.25rem);     /* 20px */
+    --text-3xl: var(--font-size-xxxl, 1.5rem);     /* 24px */
+    --text-4xl: 2.25rem;                           /* Custom larger size */
+    --text-5xl: 3rem;                              /* Custom largest size */
+    
+    /* ===== SLDS FONT WEIGHTS ===== */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* ===== SLDS LINE HEIGHTS ===== */
+    --line-height-tight: 1.25;      /* LINE_HEIGHT_HEADING */
+    --line-height-normal: 1.4;
+    --line-height-relaxed: 1.5;     /* LINE_HEIGHT_TEXT */
+    
+    /* ===== SLDS SPACING TOKENS ===== */
+    --spacing-xs: 0.25rem;           /* SPACING_XX_SMALL - 4px */
+    --spacing-small: 0.5rem;         /* SPACING_X_SMALL - 8px */
+    --spacing-medium: 1rem;          /* SPACING_MEDIUM - 16px */
+    --spacing-large: 1.5rem;         /* SPACING_LARGE - 24px */
+    --spacing-xl: 2rem;              /* SPACING_X_LARGE - 32px */
+    --spacing-xxl: 3rem;             /* SPACING_XX_LARGE - 48px */
+    
+    /* ===== SLDS BORDER RADIUS ===== */
+    --border-radius: 0.25rem;        /* BORDER_RADIUS_MEDIUM - 4px */
+    --border-radius-lg: 0.5rem;      /* BORDER_RADIUS_LARGE - 8px */
+    --border-radius-small: 0.125rem; /* BORDER_RADIUS_SMALL - 2px */
+    
+    /* ===== SLDS SHADOWS ===== */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 2px 0 rgba(0, 0, 0, 0.10);
+    --shadow-lg: 0 2px 3px 0 rgba(0, 0, 0, 0.16);
+    
+    /* ===== FIGMA APP SPECIFIC TOKENS ===== */
+    --background: var(--card-background-color, #ffffff);
+    --foreground: var(--text-color, #181818);
+    --card: var(--card-background-color, #ffffff);
+    --card-foreground: var(--text-color, #181818);
+    --popover: var(--card-background-color, #ffffff);
+    --popover-foreground: var(--text-color, #181818);
+    --primary: var(--brand-primary, #1b96ff);
+    --primary-foreground: #ffffff;
+    --secondary: var(--brand-light, #f4f6fe);
+    --secondary-foreground: var(--brand-dark, #014486);
+    --muted: var(--background-color, #f3f3f3);
+    --muted-foreground: var(--text-muted, #444444);
+    --accent: var(--brand-light, #f4f6fe);
+    --accent-foreground: var(--brand-dark, #014486);
+    --destructive: var(--error-color, #ea001e);
+    --destructive-foreground: #ffffff;
+    --border: var(--border-color, #e5e5e5);
+    --input: transparent;
+    --input-background: var(--background-color, #f3f3f3);
+    --switch-background: var(--border-color, #e5e5e5);
+    --ring: var(--brand-primary, #1b96ff);
+    --radius: var(--border-radius-lg, 0.5rem);
+    
+    /* ===== CHART COLORS ===== */
+    --chart-1: var(--brand-primary, #1b96ff);
+    --chart-2: var(--secondary-color, #1de9b6);
+    --chart-3: var(--success-color, #45c65a);
+    --chart-4: var(--warning-color, #fe9339);
+    --chart-5: var(--error-color, #ea001e);
+    
+    /* ===== SIDEBAR COLORS ===== */
+    --sidebar: var(--card-background-color, #ffffff);
+    --sidebar-foreground: var(--text-color, #181818);
+    --sidebar-primary: var(--brand-primary, #1b96ff);
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: var(--brand-light, #f4f6fe);
+    --sidebar-accent-foreground: var(--brand-dark, #014486);
+    --sidebar-border: var(--border-color, #e5e5e5);
+    --sidebar-ring: var(--brand-primary, #1b96ff);
+}
+
+/* ===== DARK MODE TOKENS ===== */
+.dark {
+    --background: oklch(0.145 0 0);
+    --foreground: oklch(0.985 0 0);
+    --card: oklch(0.145 0 0);
+    --card-foreground: oklch(0.985 0 0);
+    --popover: oklch(0.145 0 0);
+    --popover-foreground: oklch(0.985 0 0);
+    --primary: oklch(0.985 0 0);
+    --primary-foreground: oklch(0.205 0 0);
+    --secondary: oklch(0.269 0 0);
+    --secondary-foreground: oklch(0.985 0 0);
+    --muted: oklch(0.269 0 0);
+    --muted-foreground: oklch(0.708 0 0);
+    --accent: oklch(0.269 0 0);
+    --accent-foreground: oklch(0.985 0 0);
+    --destructive: oklch(0.396 0.141 25.723);
+    --destructive-foreground: oklch(0.637 0.237 25.331);
+    --border: oklch(0.269 0 0);
+    --input: oklch(0.269 0 0);
+    --ring: oklch(0.439 0 0);
+    --font-weight-medium: 500;
+    --font-weight-normal: 400;
+    --chart-1: oklch(0.488 0.243 264.376);
+    --chart-2: oklch(0.696 0.17 162.48);
+    --chart-3: oklch(0.769 0.188 70.08);
+    --chart-4: oklch(0.627 0.265 303.9);
+    --chart-5: oklch(0.645 0.246 16.439);
+    --sidebar: oklch(0.205 0 0);
+    --sidebar-foreground: oklch(0.985 0 0);
+    --sidebar-primary: oklch(0.488 0.243 264.376);
+    --sidebar-primary-foreground: oklch(0.985 0 0);
+    --sidebar-accent: oklch(0.269 0 0);
+    --sidebar-accent-foreground: oklch(0.985 0 0);
+    --sidebar-border: oklch(0.269 0 0);
+    --sidebar-ring: oklch(0.439 0 0);
+}
+
+/* ==============================================
+   BASE ELEMENT STYLING
+   ============================================== */
+
+* {
+    border-color: var(--border);
+    outline-color: var(--ring);
+}
+
+body {
+    background-color: var(--background);
+    color: var(--foreground);
+}
+
+html {
+    font-size: var(--font-size-base, 0.875rem);
+}
+
+/* ===== BASE TYPOGRAPHY ===== */
+h1 {
+    font-size: var(--text-2xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+h3 {
+    font-size: var(--text-lg);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+h4 {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+p {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+label {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+button {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-medium);
+    line-height: 1.5;
+}
+
+input {
+    font-size: var(--text-base);
+    font-weight: var(--font-weight-normal);
+    line-height: 1.5;
+}
+
+/* ==============================================
+   SHARED UTILITY CLASSES
+   ============================================== */
+
+.shared-card {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
+.shared-header {
+    background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-primary) 100%);
+    color: white;
+    padding: var(--spacing-small) var(--spacing-medium);
+}
+
+.shared-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--heading-color);
+    margin: 0;
+}
+
+.shared-text {
+    font-size: var(--font-size-base);
+    color: var(--text-color);
+    line-height: var(--line-height-normal);
+}
+
+.shared-text-muted {
+    color: var(--text-muted);
+    font-size: var(--font-size-sm);
+}
+
+.shared-button-primary {
+    background: var(--brand-accessible);
+    border: 1px solid var(--brand-accessible);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-medium);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s ease;
+}
+
+.shared-button-primary:hover {
+    background: var(--brand-dark);
+    border-color: var(--brand-dark);
+}
+
+.shared-button-secondary {
+    background: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: white;
+    padding: var(--spacing-xs) var(--spacing-medium);
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    transition: all 0.2s ease;
+}
+
+.shared-button-secondary:hover {
+    background: rgba(29, 233, 182, 0.8);
+    border-color: rgba(29, 233, 182, 0.8);
+}
+
+/* ==============================================
+   DEALER WATCHLIST COMPONENT STYLES
+   ============================================== */
+
+.watchlist-container {
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    min-height: 300px;
+    border: 1px solid #d1d5db;
+}
+
+.header-section {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    padding: 0.5rem 1rem;
+    color: white;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.header-icon {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 0.25rem;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-content {
+    flex: 1;
+}
+
+.main-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+    color: white;
+}
+
+.banner-subtitle {
+    font-size: 0.75rem;
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+}
+
+.controls-section {
+    padding: 0.5rem 1rem;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.controls-row {
+    display: flex;
+    gap: 1rem;
+    align-items: end;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 120px;
+}
+
+.control-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+}
+
+.region-selector,
+.limit-selector {
+    min-width: 140px;
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+}
+
+/* ==============================================
+   DEALER DETAIL COMPONENT STYLES
+   ============================================== */
+
+.dealer-analytics-container {
+    background: #ffffff;
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.header-search-container {
+    position: relative;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 100;
+}
+
+.header-search {
+    --slds-c-input-sizing-border: 2px solid rgb(255, 255, 255);
+    --slds-c-input-color-background: rgb(255, 255, 255);
+    --slds-c-input-color-border-focus: rgb(255, 255, 255);
+    --slds-c-input-text-color: rgb(0, 0, 0);
+    --slds-c-input-color-foreground: rgb(0, 0, 0);
+    --slds-c-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    position: relative;
+    z-index: 101;
+}
+
+.header-search lightning-input {
+    --slds-c-input-text-color: rgb(0, 0, 0);
+    --slds-c-input-color-foreground: rgb(0, 0, 0);
+    --slds-c-input-color-background: rgb(255, 255, 255);
+}
+
+.header-search input {
+    color: rgb(0, 0, 0) !important;
+    font-weight: 500 !important;
+    background: rgb(255, 255, 255) !important;
+}
+
+.header-search input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+.header-search .slds-input,
+.header-search .slds-input:focus,
+.header-search .slds-input:active,
+.header-search .slds-input:hover,
+.header-search input,
+.header-search input:focus,
+.header-search input:active,
+.header-search input:hover {
+    color: black !important;
+    background: rgb(255, 255, 255) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    z-index: 10 !important;
+}
+
+.header-search .slds-input::placeholder,
+.header-search input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.header-search lightning-input input,
+.header-search lightning-input .slds-input,
+.header-search lightning-input input:focus,
+.header-search lightning-input .slds-input:focus,
+.header-search lightning-input input[type="text"],
+.header-search lightning-input .slds-input[type="text"] {
+    color: rgb(0, 0, 0) !important;
+    background-color: rgb(255, 255, 255) !important;
+    caret-color: rgb(0, 0, 0) !important;
+}
+
+.header-search input::selection,
+.header-search .slds-input::selection {
+    background-color: rgba(37, 99, 235, 0.3) !important;
+    color: rgb(0, 0, 0) !important;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 102;
+}
+
+/* ==============================================
+   ACTIVITY TRACKER COMPONENT STYLES
+   ============================================== */
+
+.confetti-canvas {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 1rem auto;
+}
+
+.stat-number {
+    display: block;
+    font-size: var(--font-size-base, 0.875rem);
+    font-weight: var(--font-weight-semibold, 600);
+    color: var(--text-color, #212529);
+    font-family: var(--font-family, inherit);
+}
+
+.stat-number.over-goal {
+    color: var(--error-color, #ff6b35);
+}
+
+.stat-text {
+    font-size: var(--font-size-sm, 0.7rem);
+    color: var(--text-muted, #6c757d);
+    margin-top: var(--spacing-xs, 0.25rem);
+    font-family: var(--font-family, inherit);
+}
+
+.empty-text {
+    margin-top: var(--spacing-small, 0.75rem);
+    font-size: var(--font-size-base, 0.875rem);
+    color: var(--text-muted, #6c757d);
+    font-family: var(--font-family, inherit);
+}
+
+/* ==============================================
+   RESPONSIVE UTILITIES
+   ============================================== */
+
+.shared-hide-mobile {
+    display: block;
+}
+
+.shared-show-mobile {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .shared-hide-mobile {
+        display: none;
+    }
+    
+    .shared-show-mobile {
+        display: block;
+    }
+}
+
+/* ==============================================
+   TOP DEALERS COMPACT COMPONENT STYLES
+   ============================================== */
+
+.top-dealers-compact-container {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    padding: 1rem 1.5rem;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    box-sizing: border-box;
+}
+
+.compact-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.compact-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    margin: 0;
+}
+
+.region-selector-row {
+    margin-bottom: 0.75rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.region-combobox {
+    min-width: 160px;
+    max-width: 220px;
+}
+
+.dealers-table-wrapper {
+    width: 100%;
+}
+
+.dealers-table-header {
+    display: flex;
+    align-items: center;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e3a8a;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 0.25rem;
+    margin-bottom: 0.25rem;
+}
+
+.header-rank {
+    min-width: 1.5em;
+    text-align: right;
+    color: #2563eb;
+}
+
+.header-name {
+    flex: 1;
+    padding-left: 0.5em;
+}
+
+.header-metric {
+    min-width: 6em;
+    text-align: right;
+    color: #10b981;
+}
+
+.dealers-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dealer-item {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.98rem;
+}
+
+.dealer-item:last-child {
+    border-bottom: none;
+}
+
+.dealer-rank {
+    font-weight: 700;
+    color: #2563eb;
+    min-width: 1.5em;
+    text-align: right;
+    margin-right: 0.5em;
+}
+
+.dealer-name {
+    flex: 1;
+    font-weight: 600;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.dealer-metric {
+    font-weight: 700;
+    color: #10b981;
+    min-width: 6em;
+    text-align: right;
+}
+
+.no-data-message {
+    color: #6b7280;
+    font-size: 0.95rem;
+    text-align: center;
+    padding: 1rem 0;
+}
+
+/* ==============================================
+   MONTHLY GOAL COMPONENT STYLES
+   ============================================== */
+
+.chart-section {
+    padding: 0;
+    position: relative;
+    height: 320px;
+    background: white;
+    border-radius: 0 0 8px 8px;
+}
+
+.chart-container {
+    height: 100%;
+    position: relative;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.chart-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block;
+}
+
+/* ==============================================
+   GEMINI PROMPT COMPONENT STYLES
+   ============================================== */
+
+.enhanced-button {
+    background: var(--primary-color) !important;
+    border: none !important;
+    color: white !important;
+}
+
+.enhanced-button:hover:not(:disabled) {
+    box-shadow: var(--shadow-md);
+}
+
+.response-container {
+    border-radius: var(--border-radius);
+    background: var(--background-color);
+    padding: var(--spacing-medium);
+    border: 1px solid var(--border-color);
+}
+
+.response-text {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    word-wrap: break-word;
+}
+
+.custom-textarea textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.slds-notify_toast {
+    margin-bottom: 0;
+}
+
+/* ==============================================
+   ACCOUNT ASSIGNMENT VIEW COMPONENT STYLES
+   ============================================== */
+
+.assignment-group {
+    background: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.group-header {
+    background: var(--secondary-background);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.group-header h4 {
+    margin: 0;
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.account-count {
+    color: var(--text-color);
+    font-weight: 400;
+    font-size: var(--font-size-sm);
+}
+
+.account-type {
+    display: inline-block;
+    padding: var(--spacing-xs) var(--spacing-small);
+    background: var(--info-background);
+    color: var(--primary-color);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-xs);
+    font-weight: 500;
+}
+
+.slds-table td {
+    vertical-align: middle;
+}
+
+.slds-table thead th {
+    background: var(--background-color);
+    border-bottom: 2px solid var(--border-color);
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.slds-table tbody tr:hover {
+    background: var(--background-color);
+}
+
+/* ==============================================
+   DEALER ACCOUNT LINK COMPONENT STYLES
+   ============================================== */
+
+.dealer-link-text {
+    color: var(--primary-color);
+}
+
+.dealer-link-text:hover {
+    color: var(--secondary-color);
+}
+
+/* ==============================================
+   QUICK PDFS COMPONENT STYLES
+   ============================================== */
+
+.pdf-container {
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    min-height: 300px;
+    border: 1px solid var(--border-color);
+}
+
+.pdf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--spacing-medium);
+    margin-top: var(--spacing-small);
+}
+
+.pdf-card {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-medium);
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.pdf-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--brand-dark) 0%, var(--secondary-color) 100%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.pdf-card:hover::before {
+    opacity: 1;
+}
+
+.pdf-header {
+    margin-bottom: var(--spacing-medium);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 0rem;
+    width: 100%;
+}
+
+.file-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--heading-color);
+    margin: 0 0 var(--spacing-xs) 0;
+    word-break: break-word;
+    line-height: var(--line-height-tight);
+}
+
+.file-meta {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin: 0;
+    font-weight: var(--font-weight-normal);
+}
+
+.pdf-actions {
+    display: flex;
+    gap: var(--spacing-medium);
+    flex-wrap: wrap;
+    margin-top: var(--spacing-small);
+}
+
+.action-button {
+    flex: 1;
+    min-width: 110px;
+    max-width: 140px;
+    height: 36px;
+    border-radius: var(--border-radius);
+    font-weight: var(--font-weight-medium);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    font-size: var(--font-size-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+}
+
+.preview-btn {
+    --slds-c-button-brand-color-background: var(--brand-accessible);
+    --slds-c-button-brand-color-border: var(--brand-accessible);
+    background: var(--brand-accessible);
+    border: 1px solid var(--brand-accessible);
+    color: white;
+}
+
+.preview-btn:hover {
+    background: var(--brand-dark);
+    --slds-c-button-brand-color-background: var(--brand-dark);
+    --slds-c-button-brand-color-border: var(--brand-dark);
+    border: 1px solid var(--brand-dark);
+}
+
+.download-btn {
+    --slds-c-button-brand-color-background: var(--secondary-color);
+    --slds-c-button-brand-color-border: var(--secondary-color);
+    background: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
+    color: white;
+}
+
+.download-btn:hover {
+    background: rgba(29, 233, 182, 0.8);
+    border: 1px solid rgba(29, 233, 182, 0.8);
+}
+
+.info-banner {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-small);
+    background: var(--warning-background);
+    padding: var(--spacing-small) var(--spacing-medium);
+    border-radius: var(--border-radius-small);
+    border: 1px solid rgba(254, 147, 57, 0.2);
+}
+
+.info-icon {
+    color: var(--warning-color);
+    flex-shrink: 0;
+}
+
+.info-text {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-normal);
+    font-weight: var(--font-weight-normal);
+    margin: 0;
+}
+
+.content-section {
+    padding: var(--spacing-medium);
+    background: var(--card-background-color);
+}
+
+/* ==============================================
+   PLACEHOLDER FOR FUTURE COMPONENT STYLES
+   (Will be added as we process more components)
+   ============================================== */

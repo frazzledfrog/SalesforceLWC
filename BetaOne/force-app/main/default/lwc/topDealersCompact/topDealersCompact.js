@@ -1,6 +1,7 @@
 import { LightningElement, wire, track } from 'lwc';
 import getTopDealers from '@salesforce/apex/TopDealersController.getTopDealers';
 import getRegions from '@salesforce/apex/TopDealersController.getRegions';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class TopDealersCompact extends LightningElement {
     @track dealers;
@@ -8,7 +9,10 @@ export default class TopDealersCompact extends LightningElement {
     @track region = 'Ontario';
     @track regionOptions = [];
 
-    connectedCallback() {
+    async connectedCallback() {
+        // Load unified styles
+        await loadUnifiedStyles(this);
+        
         getRegions()
             .then((result) => {
                 this.regionOptions = result.map(region => ({ label: region, value: region }));

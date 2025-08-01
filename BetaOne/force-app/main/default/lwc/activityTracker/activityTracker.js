@@ -4,6 +4,7 @@ import getActivityData from '@salesforce/apex/ActivityController.getActivityData
 import getSalespeople from '@salesforce/apex/ActivityController.getSalespeople';
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
 import setLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.setLastSalesperson';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class ActivityTracker extends LightningElement {
     @track selectedSalesperson = '';
@@ -21,7 +22,9 @@ export default class ActivityTracker extends LightningElement {
     // Track previous call count to prevent confetti on navigation away
     _prevCalls = null;
 
-    connectedCallback() {
+    async connectedCallback() {
+        // Load unified styles
+        await loadUnifiedStyles(this);
         // Preference loading will happen after salespeople data is loaded
     }
 
