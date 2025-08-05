@@ -1,12 +1,16 @@
+/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, wire } from 'lwc';
 import { launchConfetti } from './confetti';
 import getActivityData from '@salesforce/apex/ActivityController.getActivityData';
 import getSalespeople from '@salesforce/apex/ActivityController.getSalespeople';
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
 import setLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.setLastSalesperson';
-import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 
-export default class ActivityTracker extends LightningElement {
+/**
+ * Displays activity metrics for selected salespeople with unified styling.
+ */
+export default class ActivityTracker extends withUnifiedStyles(LightningElement) {
     @track selectedSalesperson = '';
     @track activityData = [];
     @track salespeople = [];
@@ -22,11 +26,7 @@ export default class ActivityTracker extends LightningElement {
     // Track previous call count to prevent confetti on navigation away
     _prevCalls = null;
 
-    async connectedCallback() {
-        // Load unified styles
-        await loadUnifiedStyles(this);
-        // Preference loading will happen after salespeople data is loaded
-    }
+    // Styles are loaded automatically by withUnifiedStyles mixin
 
     get hasData() {
         return this.activityData && this.activityData.length > 0;
@@ -53,6 +53,9 @@ export default class ActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Restore the last selected salesperson from user preferences.
+     */
     loadLastSalesperson() {
         this.preferenceLoaded = true;
         getLastSalesperson({ componentName: this.componentName })
@@ -92,6 +95,9 @@ export default class ActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Fetch activity metrics for the current salesperson.
+     */
     loadActivityData() {
         if (!this.selectedSalesperson) return;
         this.isLoading = true;
@@ -160,6 +166,12 @@ export default class ActivityTracker extends LightningElement {
         return total ? total.toString() : '0';
     }
 
+    /**
+     * Calculate goal progress metrics from total calls.
+     *
+     * @param {number} total - Total calls for the period.
+     * @returns {{percentage:number,calls:number,remaining:number,isComplete:boolean,isOverGoal:boolean,overflowPercentage:number}}
+     */
     calculateGoalProgress(total) {
         const calls = total || 0;
         const baseProgress = Math.min((calls / this.dailyGoal) * 100, 100);
@@ -250,9 +262,8 @@ export default class ActivityTracker extends LightningElement {
             return '#f59e0b'; // Orange for medium progress (25-50%)
         } else if (progress.percentage > 0) {
             return '#ef4444'; // Red for low progress (1-25%)
-        } else {
-            return '#ef4444'; // Red for no progress
         }
+        return '#ef4444'; // Red for no progress
     }
 
     get nextCallOffset() {

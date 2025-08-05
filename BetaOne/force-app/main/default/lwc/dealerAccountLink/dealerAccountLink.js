@@ -1,13 +1,20 @@
 import { LightningElement, api, wire } from 'lwc';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import findAccountByDealerName from '@salesforce/apex/TopDealersController.findAccountByDealerName';
 
-export default class DealerAccountLink extends LightningElement {
+/**
+ * Finds a Salesforce Account record that matches a dealer name and exposes a link.
+ */
+export default class DealerAccountLink extends withUnifiedStyles(LightningElement) {
     @api dealerName;
     accountId;
     accountName;
     error;
 
     @wire(findAccountByDealerName, { dealerName: '$dealerName' })
+    /**
+     * Wire adapter to look up an Account by dealer name.
+     */
     wiredAccount({ error, data }) {
         if (data) {
             this.accountId = data.accountId;
@@ -20,6 +27,9 @@ export default class DealerAccountLink extends LightningElement {
         }
     }
 
+    /**
+     * Link to the matched Account record.
+     */
     get accountUrl() {
         return this.accountId ? `/lightning/r/Account/${this.accountId}/view` : null;
     }

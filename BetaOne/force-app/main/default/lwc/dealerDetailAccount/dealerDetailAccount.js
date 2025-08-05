@@ -1,5 +1,7 @@
+/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import { getRecord } from 'lightning/uiRecordApi';
 import getDealerOptions from '@salesforce/apex/DealerDetailController.getDealerOptions';
 import getDealerDetails from '@salesforce/apex/DealerDetailController.getDealerDetails';
@@ -9,7 +11,10 @@ import chartjs from '@salesforce/resourceUrl/chartjs';
 
 const ACCOUNT_FIELDS = ['Account.Name'];
 
-export default class DealerDetailAccount extends LightningElement {
+/**
+ * Shows dealer metrics on Account record pages with unified styling.
+ */
+export default class DealerDetailAccount extends withUnifiedStyles(LightningElement) {
     @api recordId; // Account ID from the record page
     @track selectedDealer = null;
     @track isLoading = true; // Start with loading state
@@ -34,6 +39,9 @@ export default class DealerDetailAccount extends LightningElement {
     ];
 
     @wire(getRecord, { recordId: '$recordId', fields: ACCOUNT_FIELDS })
+    /**
+     * Load Account info for the current record page.
+     */
     wiredAccount({ error, data }) {
         if (data) {
             this.account = { data };
@@ -48,6 +56,9 @@ export default class DealerDetailAccount extends LightningElement {
     }
 
     @wire(getDealerOptions)
+    /**
+     * Retrieve list of available dealers for selection.
+     */
     wiredDealerOptions({ error, data }) {
         if (data) {
             this.dealerOptions = data.map(dealer => ({
@@ -67,12 +78,17 @@ export default class DealerDetailAccount extends LightningElement {
         }
     }
 
-    connectedCallback() {
+    /**
+     * Initialize component after styles load and start timeout logic.
+     */
+    async connectedCallback() {
+        await super.connectedCallback();
         this.loadChartLibrary();
-        
+
         // Start loading timeout - switch to compact mode after 8 seconds
         this.loadingTimeout = setTimeout(() => {
             if (this.isLoading && !this.selectedDealer) {
+                // eslint-disable-next-line no-console
                 console.log('Loading timeout reached, switching to compact mode');
                 this.hasTimedOut = true;
                 this.isCompactMode = true;
@@ -89,6 +105,9 @@ export default class DealerDetailAccount extends LightningElement {
         }
     }
 
+    /**
+     * Attempt to match the Account record to a dealer and load details.
+     */
     findAndLoadAccountDealer() {
         // Ensure both account data and dealer options are loaded
         if (!this.account?.data?.fields?.Name?.value || !this.dealerOptions.length) {

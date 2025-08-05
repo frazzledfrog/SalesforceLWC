@@ -1,4 +1,5 @@
 import { LightningElement, track, wire } from 'lwc';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import getTalkdeskActivityData from '@salesforce/apex/TalkdeskActivityController.getTalkdeskActivityData';
 import getSalespeople from '@salesforce/apex/TalkdeskActivityController.getSalespeople';
 import getChannelOptions from '@salesforce/apex/TalkdeskActivityController.getChannelOptions';
@@ -7,7 +8,10 @@ import getPerformanceInsights from '@salesforce/apex/TalkdeskActivityController.
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
 import setLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.setLastSalesperson';
 
-export default class TalkdeskActivityTracker extends LightningElement {
+/**
+ * Presents Talkdesk call activity metrics with unified styling.
+ */
+export default class TalkdeskActivityTracker extends withUnifiedStyles(LightningElement) {
     @track selectedSalesperson = '';
     @track selectedChannel = '';
     @track selectedDirection = '';
@@ -30,7 +34,11 @@ export default class TalkdeskActivityTracker extends LightningElement {
         { label: 'This Month', value: 'month' }
     ];
 
-    connectedCallback() {
+    /**
+     * Load picklist options after styles have been applied.
+     */
+    async connectedCallback() {
+        await super.connectedCallback();
         this.loadPicklistOptions();
     }
 
@@ -81,6 +89,9 @@ export default class TalkdeskActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Retrieve channel and direction options from Apex.
+     */
     async loadPicklistOptions() {
         try {
             const [channels, directions] = await Promise.all([
@@ -149,6 +160,9 @@ export default class TalkdeskActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Fetch activity data and insights based on current filters.
+     */
     loadActivityData() {
         this.isLoading = true;
         this.error = null;
@@ -201,9 +215,8 @@ export default class TalkdeskActivityTracker extends LightningElement {
         
         if (hours > 0) {
             return `${hours}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        } else {
-            return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
         }
+        return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
     }
 
     getChannelIcon(channel) {
@@ -284,20 +297,23 @@ export default class TalkdeskActivityTracker extends LightningElement {
         if (!this.selectedSalespersonData) return '#ef4444';
         
         const progress = this.selectedSalespersonData.goalProgress;
-        
+
         if (progress.isOverGoal) {
             return '#10b981';
-        } else if (progress.percentage >= 75) {
+        }
+        if (progress.percentage >= 75) {
             return '#10b981';
-        } else if (progress.percentage >= 50) {
+        }
+        if (progress.percentage >= 50) {
             return '#84cc16';
-        } else if (progress.percentage >= 25) {
+        }
+        if (progress.percentage >= 25) {
             return '#f59e0b';
-        } else if (progress.percentage > 0) {
-            return '#ef4444';
-        } else {
+        }
+        if (progress.percentage > 0) {
             return '#ef4444';
         }
+        return '#ef4444';
     }
 
     get timeframeLabel() {
@@ -313,13 +329,14 @@ export default class TalkdeskActivityTracker extends LightningElement {
         
         if (currentCalls >= this.dailyGoal && successRate >= 70) {
             return 'excellent';
-        } else if (currentCalls >= this.dailyGoal * 0.8 && successRate >= 50) {
-            return 'good';
-        } else if (currentCalls >= this.dailyGoal * 0.5) {
-            return 'improving';
-        } else {
-            return 'needs-attention';
         }
+        if (currentCalls >= this.dailyGoal * 0.8 && successRate >= 50) {
+            return 'good';
+        }
+        if (currentCalls >= this.dailyGoal * 0.5) {
+            return 'improving';
+        }
+        return 'needs-attention';
     }
 
     get trendIcon() {

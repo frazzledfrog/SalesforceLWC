@@ -1,12 +1,16 @@
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import chartjs from '@salesforce/resourceUrl/chartjs';
 import getSalesData from '@salesforce/apex/SalesDataService.getSalesData';
 import getRegions from '@salesforce/apex/SalesDataService.getRegions';
 import getLastRegion from '@salesforce/apex/UserComponentPreferenceService.getLastRegion';
 import setLastRegion from '@salesforce/apex/UserComponentPreferenceService.setLastRegion';
 
-export default class MonthlyGoal extends LightningElement {
+/**
+ * Renders a chart showing monthly sales progress by region.
+ */
+export default class MonthlyGoal extends withUnifiedStyles(LightningElement) {
     @track selectedRegion;
     @track regionOptions = [];
     @track isLoading = true;
@@ -15,7 +19,11 @@ export default class MonthlyGoal extends LightningElement {
     chartjsInitialized = false;
     pulseInterval;
 
-    connectedCallback() {
+    /**
+     * Set up component after styles are loaded.
+     */
+    async connectedCallback() {
+        await super.connectedCallback();
         this.cardTitle = `${this.getCurrentMonth()} Target Progress`;
     }
 
@@ -23,6 +31,9 @@ export default class MonthlyGoal extends LightningElement {
         return this.regionOptions && this.regionOptions.length > 0;
     }
 
+    /**
+     * Clean up chart timers when component is destroyed.
+     */
     disconnectedCallback() {
         if (this.pulseInterval) {
             clearInterval(this.pulseInterval);
@@ -34,6 +45,9 @@ export default class MonthlyGoal extends LightningElement {
     }
 
     @wire(getRegions)
+    /**
+     * Populate region options from Apex and load last preference.
+     */
     wiredRegions({ error, data }) {
         if (data) {
             this.regionOptions = [
@@ -57,12 +71,18 @@ export default class MonthlyGoal extends LightningElement {
         }
     }
 
+    /**
+     * Initialize chart once component has rendered and region is set.
+     */
     renderedCallback() {
         if (this.selectedRegion && !this.chartjsInitialized) {
             this.initializeChartIfReady();
         }
     }
 
+    /**
+     * Load Chart.js and create chart when prerequisites are met.
+     */
     initializeChartIfReady() {
         if (this.chartjsInitialized || !this.selectedRegion) {
             return;
@@ -72,6 +92,7 @@ export default class MonthlyGoal extends LightningElement {
         loadScript(this, chartjs)
             .then(() => {
                 console.log('Chart.js loaded successfully');
+                // eslint-disable-next-line @lwc/lwc/no-async-operation
                 setTimeout(() => this.initializeChart(), 100);
             })
             .catch(error => {
@@ -80,6 +101,9 @@ export default class MonthlyGoal extends LightningElement {
             });
     }
 
+    /**
+     * Build the chart using loaded data.
+     */
     initializeChart() {
         const canvas = this.template.querySelector('canvas.chart-canvas');
         if (!canvas) {
@@ -147,15 +171,15 @@ export default class MonthlyGoal extends LightningElement {
                             maxRotation: 45,
                             minRotation: 45,
                             padding: 5,
-                            callback: function(value, index, ticks) {
-                                const dayOfMonth = this.getLabelForValue(value);
-                                const today = new Date().getDate();
-                                const monthShort = new Date().toLocaleString('en-US', { month: 'short' });
-                                if (dayOfMonth == 1 || dayOfMonth == today || (dayOfMonth - 1) % 3 === 0) {
-                                    return `${monthShort} ${dayOfMonth}`;
-                                }
-                                return '';
-                            },
+                             callback: function(value) {
+                                 const dayOfMonth = this.getLabelForValue(value);
+                                 const today = new Date().getDate();
+                                 const monthShort = new Date().toLocaleString('en-US', { month: 'short' });
+                                 if (dayOfMonth === 1 || dayOfMonth === today || (dayOfMonth - 1) % 3 === 0) {
+                                     return `${monthShort} ${dayOfMonth}`;
+                                 }
+                                 return '';
+                             },
                         },
                         grid: {
                             display: true,
@@ -247,9 +271,9 @@ export default class MonthlyGoal extends LightningElement {
                         let lastCumulativeValue = 0;
                         const cumulativeData = [];
                         for (let i = 1; i <= daysInMonth; i++) {
-                            if (data.cumulativeData.hasOwnProperty(i)) {
-                                lastCumulativeValue = data.cumulativeData[i];
-                            }
+                             if (Object.prototype.hasOwnProperty.call(data.cumulativeData, i)) {
+                                 lastCumulativeValue = data.cumulativeData[i];
+                             }
                             cumulativeData.push(i <= today ? lastCumulativeValue : null);
                         }
                         return {
@@ -303,9 +327,9 @@ export default class MonthlyGoal extends LightningElement {
                     const cumulativeData = [];
                     let lastCumulativeValue = 0;
                     for (let i = 1; i <= daysInMonth; i++) {
-                        if (data.cumulativeData.hasOwnProperty(i)) {
-                            lastCumulativeValue = data.cumulativeData[i];
-                        }
+                         if (Object.prototype.hasOwnProperty.call(data.cumulativeData, i)) {
+                             lastCumulativeValue = data.cumulativeData[i];
+                         }
                         cumulativeData.push(i <= today ? lastCumulativeValue : null);
                     }
 
@@ -360,6 +384,7 @@ export default class MonthlyGoal extends LightningElement {
         let pulseScale = 1;
         let growing = true;
 
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         this.pulseInterval = setInterval(() => {
             pulseScale = growing ? pulseScale + 0.1 : pulseScale - 0.1;
             if (pulseScale >= 2) growing = false;

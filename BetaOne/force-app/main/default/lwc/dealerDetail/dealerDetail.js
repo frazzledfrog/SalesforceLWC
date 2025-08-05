@@ -1,5 +1,7 @@
+/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import getDealerOptions from '@salesforce/apex/DealerDetailController.getDealerOptions';
 import getDealerDetails from '@salesforce/apex/DealerDetailController.getDealerDetails';
 import getDealerChartDataWithPeriod from '@salesforce/apex/DealerDetailController.getDealerChartDataWithPeriod';
@@ -8,7 +10,10 @@ import getLastDealerId from '@salesforce/apex/UserComponentPreferenceService.get
 import setLastDealerId from '@salesforce/apex/UserComponentPreferenceService.setLastDealerId';
 import chartjs from '@salesforce/resourceUrl/chartjs';
 
-export default class DealerDetail extends LightningElement {
+/**
+ * Displays detailed metrics and charts for a chosen dealer.
+ */
+export default class DealerDetail extends withUnifiedStyles(LightningElement) {
     @track selectedDealerId = '';
     @track dealerOptions = [];
     @track selectedDealer = null;
@@ -33,6 +38,9 @@ export default class DealerDetail extends LightningElement {
     ];
 
     @wire(getDealerOptions)
+    /**
+     * Populate dealer selection options from Apex.
+     */
     wiredDealerOptions({ error, data }) {
         if (data) {
             this.dealerOptions = data.map(dealer => ({
@@ -57,10 +65,17 @@ export default class DealerDetail extends LightningElement {
         }
     }
 
-    connectedCallback() {
+    /**
+     * Initialize component resources after styles load.
+     */
+    async connectedCallback() {
+        await super.connectedCallback();
         this.loadChartLibrary();
     }
 
+    /**
+     * Restore the previously viewed dealer from user preferences.
+     */
     loadLastSelectedDealer() {
         getLastDealerId({ componentName: this.componentName })
             .then(dealerId => {
@@ -114,6 +129,9 @@ export default class DealerDetail extends LightningElement {
         }, 300);
     }
 
+    /**
+     * Filter dealer list based on search term.
+     */
     filterDealers() {
         try {
             if (!this.searchTerm || this.searchTerm.length < 1) {
