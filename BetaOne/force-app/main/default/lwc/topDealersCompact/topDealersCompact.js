@@ -1,18 +1,22 @@
 import { LightningElement, wire, track } from 'lwc';
 import getTopDealers from '@salesforce/apex/TopDealersController.getTopDealers';
 import getRegions from '@salesforce/apex/TopDealersController.getRegions';
-import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 
-export default class TopDealersCompact extends LightningElement {
+/**
+ * Compact table listing top dealers by region.
+ */
+export default class TopDealersCompact extends withUnifiedStyles(LightningElement) {
     @track dealers;
     @track error;
     @track region = 'Ontario';
     @track regionOptions = [];
 
+    /**
+     * Load available regions after styles have loaded.
+     */
     async connectedCallback() {
-        // Load unified styles
-        await loadUnifiedStyles(this);
-        
+        await super.connectedCallback();
         getRegions()
             .then((result) => {
                 this.regionOptions = result.map(region => ({ label: region, value: region }));
@@ -47,10 +51,16 @@ export default class TopDealersCompact extends LightningElement {
         }
     }
 
+    /**
+     * Respond to region picklist changes.
+     */
     handleRegionChange(event) {
         this.region = event.detail.value;
     }
 
+    /**
+     * Format numeric amounts as USD currency.
+     */
     formatCurrency(amount) {
         if (amount === null || amount === undefined) return '';
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(amount);

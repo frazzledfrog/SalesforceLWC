@@ -1,13 +1,17 @@
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import chartjs from '@salesforce/resourceUrl/chartjs';
 import getSalesData from '@salesforce/apex/SalesDataService.getSalesData';
 import getRegions from '@salesforce/apex/SalesDataService.getRegions';
 import getLastRegion from '@salesforce/apex/UserComponentPreferenceService.getLastRegion';
 import setLastRegion from '@salesforce/apex/UserComponentPreferenceService.setLastRegion';
 
-export default class MonthlyGoal extends LightningElement {
+/**
+ * Renders a chart showing monthly sales progress by region.
+ */
+export default class MonthlyGoal extends withUnifiedStyles(LightningElement) {
     @track selectedRegion;
     @track regionOptions = [];
     @track isLoading = true;
@@ -15,9 +19,9 @@ export default class MonthlyGoal extends LightningElement {
     chart;
     chartjsInitialized = false;
     pulseInterval;
-
     async connectedCallback() {
         await loadUnifiedStyles(this);
+        Unified-Styles---Codex
         this.cardTitle = `${this.getCurrentMonth()} Target Progress`;
     }
 
@@ -25,6 +29,9 @@ export default class MonthlyGoal extends LightningElement {
         return this.regionOptions && this.regionOptions.length > 0;
     }
 
+    /**
+     * Clean up chart timers when component is destroyed.
+     */
     disconnectedCallback() {
         if (this.pulseInterval) {
             clearInterval(this.pulseInterval);
@@ -36,6 +43,9 @@ export default class MonthlyGoal extends LightningElement {
     }
 
     @wire(getRegions)
+    /**
+     * Populate region options from Apex and load last preference.
+     */
     wiredRegions({ error, data }) {
         if (data) {
             this.regionOptions = [
@@ -59,12 +69,18 @@ export default class MonthlyGoal extends LightningElement {
         }
     }
 
+    /**
+     * Initialize chart once component has rendered and region is set.
+     */
     renderedCallback() {
         if (this.selectedRegion && !this.chartjsInitialized) {
             this.initializeChartIfReady();
         }
     }
 
+    /**
+     * Load Chart.js and create chart when prerequisites are met.
+     */
     initializeChartIfReady() {
         if (this.chartjsInitialized || !this.selectedRegion) {
             return;
@@ -83,6 +99,9 @@ export default class MonthlyGoal extends LightningElement {
             });
     }
 
+    /**
+     * Build the chart using loaded data.
+     */
     initializeChart() {
         const canvas = this.template.querySelector('canvas.chart-canvas');
         if (!canvas) {

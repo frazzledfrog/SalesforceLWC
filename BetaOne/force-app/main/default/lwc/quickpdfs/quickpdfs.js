@@ -1,5 +1,5 @@
 import { LightningElement } from 'lwc';
-import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 import VIN_Amendment from '@salesforce/resourceUrl/VIN_Amendment';
 import Trustee_Form from '@salesforce/resourceUrl/Trustee_Form';
 import RecSheetPDF from '@salesforce/resourceUrl/RecSheetPDF';
@@ -7,7 +7,10 @@ import Dealer_Sign_Up_Package_ENG from '@salesforce/resourceUrl/Dealer_Sign_Up_P
 import Dealer_Sign_Up_Package_FR from '@salesforce/resourceUrl/Dealer_Sign_Up_Package_FR';
 import Proof_of_Insurance_Form from '@salesforce/resourceUrl/Proof_of_Insurance_Form';
 
-export default class QuickPdfs extends LightningElement {
+/**
+ * Provides quick access to frequently used PDF resources.
+ */
+export default class QuickPdfs extends withUnifiedStyles(LightningElement) {
     pdfFiles = [
         {
             id: 'vin_amendment',
@@ -45,6 +48,9 @@ export default class QuickPdfs extends LightningElement {
         return this.pdfFiles && this.pdfFiles.length > 0;
     }
 
+    /**
+     * Open the selected PDF in a new browser tab.
+     */
     handlePreview(event) {
         const fileId = event.target.dataset.fileId;
         const file = this.pdfFiles.find(f => f.id === fileId);
@@ -54,6 +60,9 @@ export default class QuickPdfs extends LightningElement {
         }
     }
 
+    /**
+     * Download the selected PDF file to the user's device.
+     */
     handleDownload(event) {
         const fileId = event.target.dataset.fileId;
         const file = this.pdfFiles.find(f => f.id === fileId);
@@ -68,16 +77,4 @@ export default class QuickPdfs extends LightningElement {
         }
     }
 
-    async connectedCallback() {
-        // Load unified styles
-        await loadUnifiedStyles(this);
-
-        console.log('PDF Files loaded:', this.pdfFiles);
-        console.log('VIN_Amendment URL:', VIN_Amendment);
-        console.log('Trustee_Form URL:', Trustee_Form);
-        console.log('RecSheetPDF URL:', RecSheetPDF);
-        console.log('Dealer_Sign_Up_Package_ENG URL:', Dealer_Sign_Up_Package_ENG);
-        console.log('Dealer_Sign_Up_Package_FR URL:', Dealer_Sign_Up_Package_FR);
-        console.log('Proof_of_Insurance_Form URL:', Proof_of_Insurance_Form);
-    }
 }

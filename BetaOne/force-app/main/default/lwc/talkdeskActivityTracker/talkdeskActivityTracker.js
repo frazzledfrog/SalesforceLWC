@@ -1,5 +1,6 @@
 import { LightningElement, track, wire } from 'lwc';
 import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import getTalkdeskActivityData from '@salesforce/apex/TalkdeskActivityController.getTalkdeskActivityData';
 import getSalespeople from '@salesforce/apex/TalkdeskActivityController.getSalespeople';
 import getChannelOptions from '@salesforce/apex/TalkdeskActivityController.getChannelOptions';
@@ -8,7 +9,10 @@ import getPerformanceInsights from '@salesforce/apex/TalkdeskActivityController.
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
 import setLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.setLastSalesperson';
 
-export default class TalkdeskActivityTracker extends LightningElement {
+/**
+ * Presents Talkdesk call activity metrics with unified styling.
+ */
+export default class TalkdeskActivityTracker extends withUnifiedStyles(LightningElement) {
     @track selectedSalesperson = '';
     @track selectedChannel = '';
     @track selectedDirection = '';
@@ -33,6 +37,7 @@ export default class TalkdeskActivityTracker extends LightningElement {
 
     async connectedCallback() {
         await loadUnifiedStyles(this);
+        Unified-Styles---Codex
         this.loadPicklistOptions();
     }
 
@@ -83,6 +88,9 @@ export default class TalkdeskActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Retrieve channel and direction options from Apex.
+     */
     async loadPicklistOptions() {
         try {
             const [channels, directions] = await Promise.all([
@@ -151,6 +159,9 @@ export default class TalkdeskActivityTracker extends LightningElement {
         }
     }
 
+    /**
+     * Fetch activity data and insights based on current filters.
+     */
     loadActivityData() {
         this.isLoading = true;
         this.error = null;

@@ -31,7 +31,7 @@ We've successfully consolidated **ALL** CSS styles from individual component fil
    - ✅ FIGMA app styles (globals.css merged)
 
 4. **Updated Component JavaScript Files**
-   - Added `loadUnifiedStyles()` import and call in `connectedCallback()`
+   - Added `withUnifiedStyles` mixin to automatically load shared styles
    - Updated key components: dealerWatchlist, activityTracker, topDealersCompact, figma, quickpdfs
 
 5. **Cleanup Completed**
@@ -60,13 +60,15 @@ We've successfully consolidated **ALL** CSS styles from individual component fil
 
 ### 🔧 How Components Now Work:
 
-Each component imports unified styles with just:
+Components now import the mixin and call `super.connectedCallback()` when additional initialization is needed:
 ```javascript
-import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 
-async connectedCallback() {
-    await loadUnifiedStyles(this);
-    // rest of component logic
+export default class MyComponent extends withUnifiedStyles(LightningElement) {
+    async connectedCallback() {
+        await super.connectedCallback();
+        // rest of component logic
+    }
 }
 ```
 

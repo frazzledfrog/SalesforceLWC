@@ -7,6 +7,7 @@ export default class StaticResourceViewer extends LightningElement {
         await loadUnifiedStyles(this);
     }
 
+    Unified-Styles---Codex
     get pdfUrl() {
         return recrateSheetResource;
     }

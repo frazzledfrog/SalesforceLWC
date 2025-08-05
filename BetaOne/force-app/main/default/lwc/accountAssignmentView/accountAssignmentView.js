@@ -1,20 +1,30 @@
 import { LightningElement, track } from 'lwc';
+
 import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import getSalesReps from '@salesforce/apex/AccountAssignmentViewController.getSalesReps';
 import getAccountsByAssignmentNumber from '@salesforce/apex/AccountAssignmentViewController.getAccountsByAssignmentNumber';
 
-export default class AccountAssignmentView extends LightningElement {
+/**
+ * Displays accounts grouped by assignment for a selected sales representative.
+ */
+export default class AccountAssignmentView extends withUnifiedStyles(LightningElement) {
     @track selectedSalesRep = '';
     @track salesRepOptions = [];
     @track groupedAccounts = [];
     @track error;
     @track isLoading = false;
 
+
     async connectedCallback() {
         await loadUnifiedStyles(this);
+    Unified-Styles---Codex
         this.loadSalesReps();
     }
 
+    /**
+     * Retrieve sales representative options for the picklist.
+     */
     loadSalesReps() {
         getSalesReps()
             .then(result => {
@@ -34,11 +44,19 @@ export default class AccountAssignmentView extends LightningElement {
             });
     }
 
+    /**
+     * Handle changes to the selected sales representative.
+     *
+     * @param {Event} event - Change event from the picklist.
+     */
     handleSalesRepChange(event) {
         this.selectedSalesRep = event.detail.value;
         this.loadAccountsForSalesRep();
     }
 
+    /**
+     * Load accounts for the currently selected sales representative.
+     */
     loadAccountsForSalesRep() {
         if (!this.selectedSalesRep) return;
 
@@ -64,10 +82,16 @@ export default class AccountAssignmentView extends LightningElement {
             });
     }
 
+    /**
+     * Whether any account groups exist for rendering.
+     */
     get hasAccounts() {
         return this.groupedAccounts && this.groupedAccounts.length > 0;
     }
 
+    /**
+     * Friendly label for the currently selected sales representative.
+     */
     get selectedSalesRepName() {
         const selectedRep = this.salesRepOptions.find(rep => rep.value === this.selectedSalesRep);
         return selectedRep ? selectedRep.label : '';

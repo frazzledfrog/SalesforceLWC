@@ -1,10 +1,7 @@
 import { LightningElement } from 'lwc';
-import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+import { withUnifiedStyles } from 'c/unifiedStylesHelper';
 
-export default class Figma extends LightningElement {
-    
-    async connectedCallback() {
-        // Load unified styles
-        await loadUnifiedStyles(this);
-    }
-}
+/**
+ * Container component for embedding Figma designs using shared styles.
+ */
+export default class Figma extends withUnifiedStyles(LightningElement) {}
