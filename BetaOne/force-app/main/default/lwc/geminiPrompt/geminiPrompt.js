@@ -1,5 +1,6 @@
 import { LightningElement } from 'lwc';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import getGeminiResponse from '@salesforce/apex/GeminiApiService.getGeminiResponse';
 
 const INITIAL_PROMPT = 'Enter your prompt here...';
@@ -12,10 +13,11 @@ export default class GeminiPrompt extends withUnifiedStyles(LightningElement) {
     apiResponse = '';
     apiError = '';
     isLoading = false;
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
+    }
 
-    /**
-     * Track changes to the prompt textarea.
-     */
+    Unified-Styles---Codex
     handlePromptChange(event) {
         this.prompt = event.target.value;
     }

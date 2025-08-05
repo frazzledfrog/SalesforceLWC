@@ -1,7 +1,9 @@
 /* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import { getRecord } from 'lightning/uiRecordApi';
 import getDealerOptions from '@salesforce/apex/DealerDetailController.getDealerOptions';
 import getDealerDetails from '@salesforce/apex/DealerDetailController.getDealerDetails';
@@ -78,11 +80,9 @@ export default class DealerDetailAccount extends withUnifiedStyles(LightningElem
         }
     }
 
-    /**
-     * Initialize component after styles load and start timeout logic.
-     */
     async connectedCallback() {
-        await super.connectedCallback();
+        await loadUnifiedStyles(this);
+        Unified-Styles---Codex
         this.loadChartLibrary();
 
         // Start loading timeout - switch to compact mode after 8 seconds

@@ -1,5 +1,6 @@
 import { LightningElement, track, wire } from 'lwc';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import getTalkdeskActivityData from '@salesforce/apex/TalkdeskActivityController.getTalkdeskActivityData';
 import getSalespeople from '@salesforce/apex/TalkdeskActivityController.getSalespeople';
 import getChannelOptions from '@salesforce/apex/TalkdeskActivityController.getChannelOptions';
@@ -34,11 +35,9 @@ export default class TalkdeskActivityTracker extends withUnifiedStyles(Lightning
         { label: 'This Month', value: 'month' }
     ];
 
-    /**
-     * Load picklist options after styles have been applied.
-     */
     async connectedCallback() {
-        await super.connectedCallback();
+        await loadUnifiedStyles(this);
+        Unified-Styles---Codex
         this.loadPicklistOptions();
     }
 

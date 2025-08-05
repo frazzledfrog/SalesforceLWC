@@ -1,6 +1,7 @@
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import chartjs from '@salesforce/resourceUrl/chartjs';
 import getSalesData from '@salesforce/apex/SalesDataService.getSalesData';
 import getRegions from '@salesforce/apex/SalesDataService.getRegions';
@@ -18,12 +19,9 @@ export default class MonthlyGoal extends withUnifiedStyles(LightningElement) {
     chart;
     chartjsInitialized = false;
     pulseInterval;
-
-    /**
-     * Set up component after styles are loaded.
-     */
     async connectedCallback() {
-        await super.connectedCallback();
+        await loadUnifiedStyles(this);
+        Unified-Styles---Codex
         this.cardTitle = `${this.getCurrentMonth()} Target Progress`;
     }
 

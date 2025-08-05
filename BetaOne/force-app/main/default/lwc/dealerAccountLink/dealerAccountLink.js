@@ -1,5 +1,6 @@
 import { LightningElement, api, wire } from 'lwc';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import findAccountByDealerName from '@salesforce/apex/TopDealersController.findAccountByDealerName';
 
 /**
@@ -10,6 +11,10 @@ export default class DealerAccountLink extends withUnifiedStyles(LightningElemen
     accountId;
     accountName;
     error;
+
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
+    }
 
     @wire(findAccountByDealerName, { dealerName: '$dealerName' })
     /**

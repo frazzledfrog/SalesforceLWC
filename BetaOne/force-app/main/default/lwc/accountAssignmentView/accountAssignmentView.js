@@ -1,5 +1,7 @@
 import { LightningElement, track } from 'lwc';
-import { withUnifiedStyles } from 'c/unifiedStylesHelper';
+
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
+Unified-Styles---Codex
 import getSalesReps from '@salesforce/apex/AccountAssignmentViewController.getSalesReps';
 import getAccountsByAssignmentNumber from '@salesforce/apex/AccountAssignmentViewController.getAccountsByAssignmentNumber';
 
@@ -13,11 +15,10 @@ export default class AccountAssignmentView extends withUnifiedStyles(LightningEl
     @track error;
     @track isLoading = false;
 
-    /**
-     * Initialize component after styles load.
-     */
+
     async connectedCallback() {
-        await super.connectedCallback();
+        await loadUnifiedStyles(this);
+    Unified-Styles---Codex
         this.loadSalesReps();
     }
 
