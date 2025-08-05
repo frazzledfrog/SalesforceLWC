@@ -1,4 +1,5 @@
-import { LightningElement, track, wire } from 'lwc';
+import { LightningElement, track } from 'lwc';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import getSalesReps from '@salesforce/apex/AccountAssignmentViewController.getSalesReps';
 import getAccountsByAssignmentNumber from '@salesforce/apex/AccountAssignmentViewController.getAccountsByAssignmentNumber';
 
@@ -9,7 +10,8 @@ export default class AccountAssignmentView extends LightningElement {
     @track error;
     @track isLoading = false;
 
-    connectedCallback() {
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
         this.loadSalesReps();
     }
 

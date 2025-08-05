@@ -1,4 +1,5 @@
 import { LightningElement } from 'lwc';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import getGeminiResponse from '@salesforce/apex/GeminiApiService.getGeminiResponse';
 
 const INITIAL_PROMPT = 'Enter your prompt here...';
@@ -8,6 +9,10 @@ export default class GeminiPrompt extends LightningElement {
     apiResponse = '';
     apiError = '';
     isLoading = false;
+
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
+    }
 
     handlePromptChange(event) {
         this.prompt = event.target.value;

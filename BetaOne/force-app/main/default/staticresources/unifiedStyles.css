@@ -980,6 +980,394 @@ input {
 }
 
 /* ==============================================
+   STATIC RESOURCE VIEWER COMPONENT STYLES
+   ============================================== */
+
+.pdf-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ==============================================
+   TALKDESK ACTIVITY TRACKER COMPONENT STYLES
+   ============================================== */
+
+.summary-card {
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+    border: 1px solid var(--border-light);
+    margin-bottom: var(--spacing-large);
+}
+
+.activity-card {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-medium);
+    margin-bottom: var(--spacing-small);
+    transition: all 0.2s ease;
+}
+
+.activity-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+}
+
+.metric-large {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    line-height: 1;
+}
+
+.metric-medium {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--heading-color);
+    line-height: 1.2;
+}
+
+.metric-small {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: var(--heading-color);
+    line-height: 1.3;
+}
+
+.filter-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-medium);
+    align-items: end;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    flex-shrink: 0;
+}
+
+.calls-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--heading-color);
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.salesperson-name {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--heading-color);
+}
+
+.activity-header {
+    margin-bottom: 1rem;
+}
+
+.activity-type {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.account-info {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.account-name {
+    font-weight: 500;
+}
+
+.channel-icon,
+.direction-icon {
+    color: #6b7280;
+}
+
+.channel-text,
+.direction-text {
+    font-size: 0.875rem;
+    text-transform: capitalize;
+}
+
+.activity-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+}
+
+.metric {
+    text-align: center;
+}
+
+.metric-label {
+    display: block;
+    font-size: 0.75rem;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    margin-bottom: 0.25rem;
+}
+
+.metric-value {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.no-data-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.no-data-icon {
+    color: #9ca3af;
+    margin-bottom: 1rem;
+}
+
+.no-data-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.no-data-message {
+    color: #6b7280;
+    font-size: 0.875rem;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .summary-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .summary-stats {
+        grid-template-columns: repeat(3, 1fr);
+        width: 100%;
+    }
+
+    .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
+
+/* ==============================================
+   DEALER DETAIL ACCOUNT COMPONENT STYLES
+   ============================================== */
+
+.dealer-analytics-container {
+    background: #ffffff;
+    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.header-search-container {
+    position: relative;
+    min-width: 300px;
+    max-width: 400px;
+    z-index: 100;
+}
+
+.header-search {
+    --slds-c-input-sizing-border: 2px solid rgb(255, 255, 255);
+    --slds-c-input-color-background: rgb(255, 255, 255);
+    --slds-c-input-color-border-focus: rgb(255, 255, 255);
+    --slds-c-input-text-color: rgb(0, 0, 0);
+    --slds-c-input-color-foreground: rgb(0, 0, 0);
+    --slds-c-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.4);
+    position: relative;
+    z-index: 101;
+}
+
+.header-search lightning-input {
+    --slds-c-input-text-color: rgb(0, 0, 0);
+    --slds-c-input-color-foreground: rgb(0, 0, 0);
+    --slds-c-input-color-background: rgb(255, 255, 255);
+}
+
+.header-search input {
+    color: rgb(0, 0, 0) !important;
+    font-weight: 500 !important;
+    background: rgb(255, 255, 255) !important;
+}
+
+.header-search input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+    font-weight: 400 !important;
+}
+
+.header-search .slds-input,
+.header-search .slds-input:focus,
+.header-search .slds-input:active,
+.header-search .slds-input:hover,
+.header-search input,
+.header-search input:focus,
+.header-search input:active,
+.header-search input:hover {
+    color: black !important;
+    background: rgb(255, 255, 255) !important;
+    border-color: rgba(255, 255, 255, 0.6) !important;
+    z-index: 10 !important;
+}
+
+.header-search .slds-input::placeholder,
+.header-search input::placeholder {
+    color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.header-search lightning-input input,
+.header-search lightning-input .slds-input,
+.header-search lightning-input input:focus,
+.header-search lightning-input .slds-input:focus,
+.header-search lightning-input input[type="text"],
+.header-search lightning-input .slds-input[type="text"] {
+    color: rgb(0, 0, 0) !important;
+    background-color: rgb(255, 255, 255) !important;
+    caret-color: rgb(0, 0, 0) !important;
+}
+
+.header-search input::selection,
+.header-search .slds-input::selection {
+    background-color: rgba(37, 99, 235, 0.3) !important;
+    color: rgb(0, 0, 0) !important;
+}
+
+.search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    border-radius: 6px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    margin-top: 4px;
+}
+
+.search-result-item {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.search-result-item:hover {
+    background: #f1f5f9;
+    border-left: 3px solid #2563eb;
+    padding-left: calc(1rem - 3px);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.dealer-result-name {
+    font-weight: 700;
+    color: #111827;
+    font-size: 0.875rem;
+    margin-bottom: 2px;
+}
+
+.dealer-result-region {
+    font-size: 0.75rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.loading-container,
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    gap: 1rem;
+}
+
+.loading-text,
+.error-text {
+    color: #4b5563;
+    font-size: 0.875rem;
+    text-align: center;
+    font-weight: 500;
+}
+
+.error-container {
+    flex-direction: row;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.error-icon {
+    color: #ef4444;
+    margin-right: 0.5rem;
+}
+
+.error-text {
+    color: #dc2626;
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-icon {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.empty-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 0.5rem 0;
+}
+
+.empty-description {
+    color: #4b5563;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+/* ==============================================
    PLACEHOLDER FOR FUTURE COMPONENT STYLES
    (Will be added as we process more components)
    ============================================== */
