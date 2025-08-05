@@ -1,8 +1,0 @@
-/* Clean dealer account link styles */
-.dealer-link-text {
-    color: var(--primary-color);
-}
-
-.dealer-link-text:hover {
-    color: var(--secondary-color);
-}

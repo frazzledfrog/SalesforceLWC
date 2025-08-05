@@ -1,5 +1,7 @@
+/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import getDealerOptions from '@salesforce/apex/DealerDetailController.getDealerOptions';
 import getDealerDetails from '@salesforce/apex/DealerDetailController.getDealerDetails';
 import getDealerChartDataWithPeriod from '@salesforce/apex/DealerDetailController.getDealerChartDataWithPeriod';
@@ -57,7 +59,8 @@ export default class DealerDetail extends LightningElement {
         }
     }
 
-    connectedCallback() {
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
         this.loadChartLibrary();
     }
 
