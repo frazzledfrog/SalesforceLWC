@@ -1,50 +1,54 @@
 <template>
+  <div class="container">
+    <lightning-card title={cardTitle}>
+      <div class="content-wrapper">
+        <div class="main-content">
+          <!-- Header with improved layout -->
+          <div class="metric-header slds-m-bottom_large">
+            <div class="controls-section">
+              <template if:true={showDropdown}>
+                <lightning-combobox
+                  name="region"
+                  label="Region"
+                  value={selectedRegion}
+                  placeholder="Select Region"
+                  options={regionOptions}
+                  onchange={handleRegionChange}
+                  disabled={isLoading}
+                  variant="label-hidden"
+                  class="slds-col_bump-left"
+                >
+                </lightning-combobox>
+              </template>
+              <template if:false={showDropdown}>
+                <div class="slds-grid slds-gutters_small slds-text-color_weak">
+                  <lightning-spinner size="x-small"></lightning-spinner>
+                  <span>Loading regions...</span>
+                </div>
+              </template>
+            </div>
+          </div>
 
-    <div class="container">
-        <lightning-card title={cardTitle}>
-            <div class="content-wrapper">
-                <div class="main-content">
-                    <!-- Header with improved layout -->
-                    <div class="metric-header slds-m-bottom_large">
-                        <div class="controls-section">
-                <template if:true={showDropdown}>
-                    <lightning-combobox
-                        name="region"
-                        label="Region"
-                        value={selectedRegion}
-                        placeholder="Select Region"
-                        options={regionOptions}
-                        onchange={handleRegionChange}
-                        disabled={isLoading}
-                        variant="label-hidden"
-                        class="slds-col_bump-left">
-                    </lightning-combobox>
-                </template>
-                <template if:false={showDropdown}>
-                    <div class="slds-grid slds-gutters_small slds-text-color_weak">
-                        <lightning-spinner size="x-small"></lightning-spinner>
-                        <span>Loading regions...</span>
-                    </div>
-                        </div>
-                    </template>
-                </div>
-            </div>
+          <!-- Chart Section with improved styling -->
+          <div class="chart-section" style={chartSectionStyle}>
+            <template if:true={isLoading}>
+              <div class="slds-text-align_center slds-p-around_x-large">
+                <lightning-spinner
+                  size="medium"
+                  alternative-text="Loading chart data..."
+                ></lightning-spinner>
+                <p class="slds-text-color_weak slds-m-top_small">
+                  Loading chart data...
+                </p>
+              </div>
+            </template>
 
-            <!-- Chart Section with improved styling -->
-            <div class="chart-section">
-                <template if:true={isLoading}>
-                    <div class="slds-text-align_center slds-p-around_x-large">
-                        <lightning-spinner size="medium" alternative-text="Loading chart data..."></lightning-spinner>
-                        <p class="slds-text-color_weak slds-m-top_small">Loading chart data...</p>
-                    </div>
-                </template>
-                
-                <div class="chart-container">
-                    <canvas class="chart-canvas" lwc:dom="manual"></canvas>
-                </div>
+            <div class="chart-container">
+              <canvas class="chart-canvas" lwc:dom="manual"></canvas>
             </div>
-                </div>
-            </div>
-        </lightning-card>
-    </div>
+          </div>
+        </div>
+      </div>
+    </lightning-card>
+  </div>
 </template>
