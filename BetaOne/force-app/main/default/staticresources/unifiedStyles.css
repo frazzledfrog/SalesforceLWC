@@ -317,12 +317,26 @@ input {
    Standard padding for top-level app wrappers
    ============================================== */
 
+
+/* ==============================================
+   UNIFIED APP CONTAINER
+   ============================================== */
+.app-container {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    font-family: var(--font-family);
+    border-radius: var(--border-radius);
+}
+
+/* Maintain spacing for common container classes */
 .container,
 .dealer-analytics-container,
 .pdf-container,
 .figma-container,
 .watchlist-container,
-.top-dealers-compact-container {
+.top-dealers-compact-container,
+.app-container {
     padding: var(--spacing-medium);
     margin-bottom: var(--spacing-medium);
 }
@@ -332,12 +346,12 @@ input {
    ============================================== */
 
 .watchlist-container {
-    background: #ffffff;
-    border-radius: 4px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
     overflow: hidden;
     min-height: 300px;
-    border: 1px solid #d1d5db;
+    border: 1px solid var(--border-color);
 }
 
 .header-section {
@@ -591,14 +605,14 @@ input {
    ============================================== */
 
 .top-dealers-compact-container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    padding: 1rem 1.5rem;
+    background: var(--card-background-color);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-medium) var(--spacing-large);
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    font-family: 'Salesforce Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: var(--font-family);
     box-sizing: border-box;
 }
 

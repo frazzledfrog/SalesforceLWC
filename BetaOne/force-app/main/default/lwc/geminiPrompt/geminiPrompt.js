@@ -1,5 +1,6 @@
 // Gemini Prompt component handles UI logic and data interactions
 import { LightningElement } from 'lwc';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import getGeminiResponse from '@salesforce/apex/GeminiApiService.getGeminiResponse';
 
 const INITIAL_PROMPT = 'Enter your prompt here...';
@@ -47,5 +48,9 @@ export default class GeminiPrompt extends LightningElement {
         this.apiResponse = '';
         this.apiError = '';
         this.isLoading = false;
+    }
+
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
     }
 }
