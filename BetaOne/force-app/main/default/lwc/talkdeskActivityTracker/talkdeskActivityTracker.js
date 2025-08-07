@@ -1,3 +1,4 @@
+// Talkdesk Activity Tracker component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import getTalkdeskActivityData from '@salesforce/apex/TalkdeskActivityController.getTalkdeskActivityData';
 import getSalespeople from '@salesforce/apex/TalkdeskActivityController.getSalespeople';

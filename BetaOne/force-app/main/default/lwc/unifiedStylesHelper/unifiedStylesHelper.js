@@ -1,3 +1,4 @@
+// Unified Styles Helper component handles UI logic and data interactions
 import { loadStyle } from 'lightning/platformResourceLoader';
 import unifiedStyles from '@salesforce/resourceUrl/unifiedStyles';
 

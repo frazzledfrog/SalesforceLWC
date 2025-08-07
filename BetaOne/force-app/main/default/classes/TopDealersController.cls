@@ -1,3 +1,4 @@
+// Top Dealers controller handling server-side operations
 public with sharing class TopDealersController {
     @AuraEnabled(cacheable=true)
     public static List<AccountWrapper> getTopDealers(String region) {

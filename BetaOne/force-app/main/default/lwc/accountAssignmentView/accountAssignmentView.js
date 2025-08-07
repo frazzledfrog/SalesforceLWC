@@ -1,3 +1,4 @@
+// Account Assignment View component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import getSalesReps from '@salesforce/apex/AccountAssignmentViewController.getSalesReps';
 import getAccountsByAssignmentNumber from '@salesforce/apex/AccountAssignmentViewController.getAccountsByAssignmentNumber';

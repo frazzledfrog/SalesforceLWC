@@ -1,3 +1,4 @@
+// Activity Tracker component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import { launchConfetti } from './confetti';
 import getActivityData from '@salesforce/apex/ActivityController.getActivityData';

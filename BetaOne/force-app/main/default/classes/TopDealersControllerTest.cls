@@ -1,3 +1,4 @@
+// Test class for Top Dealers Controller
 @isTest
 private class TopDealersControllerTest {
     @isTest static void testGetTopDealers() {

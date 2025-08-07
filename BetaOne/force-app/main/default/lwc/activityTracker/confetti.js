@@ -1,3 +1,4 @@
+// Utility module Confetti for celebratory animations
 // Confetti utility for LWC (vanilla JS, no dependencies)
 // Usage: import and call launchConfetti(this.template) when you want to trigger confetti
 export function launchConfetti(root) {

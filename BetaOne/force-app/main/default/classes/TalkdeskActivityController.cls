@@ -1,3 +1,4 @@
+// Talkdesk Activity controller handling server-side operations
 public with sharing class TalkdeskActivityController {
     
     public class SalespersonInfo {

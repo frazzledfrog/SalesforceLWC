@@ -1,3 +1,4 @@
+// Dealer Watchlist controller handling server-side operations
 public with sharing class DealerWatchlistController {    // --- WINNERS AND LOSERS OVERHAUL ---
     @AuraEnabled
     public static List<RegionWinnersLosers> getDealerWinnersLosers(Integer maxResults, String comparisonType) {

@@ -1,3 +1,4 @@
+// Quickpdfs component handles UI logic and data interactions
 import { LightningElement } from 'lwc';
 import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import VIN_Amendment from '@salesforce/resourceUrl/VIN_Amendment';

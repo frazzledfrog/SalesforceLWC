@@ -1,3 +1,4 @@
+// Test class for Dealer Watchlist Controller
 @isTest
 private class DealerWatchlistControllerTest {
     

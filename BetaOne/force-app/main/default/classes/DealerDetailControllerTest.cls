@@ -1,3 +1,4 @@
+// Test class for Dealer Detail Controller
 @isTest
 public class DealerDetailControllerTest {
     
