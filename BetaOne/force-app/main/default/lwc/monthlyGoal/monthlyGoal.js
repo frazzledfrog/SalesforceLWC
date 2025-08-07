@@ -1,3 +1,4 @@
+// Monthly Goal component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import chartjs from '@salesforce/resourceUrl/chartjs';

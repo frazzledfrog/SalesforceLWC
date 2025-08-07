@@ -1,3 +1,4 @@
+// Dealer Detail component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import getDealerOptions from '@salesforce/apex/DealerDetailController.getDealerOptions';

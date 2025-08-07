@@ -1,3 +1,4 @@
+// Test class for Activity Controller
 @isTest
 public class ActivityControllerTest {
     

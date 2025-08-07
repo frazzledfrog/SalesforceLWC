@@ -1,3 +1,4 @@
+// User Component Preference service providing reusable logic
 public with sharing class UserComponentPreferenceService {
     @AuraEnabled(cacheable=true)
     public static String getLastRegion(String componentName) {

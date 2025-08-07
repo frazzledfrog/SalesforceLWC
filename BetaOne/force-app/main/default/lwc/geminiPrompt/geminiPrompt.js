@@ -1,3 +1,4 @@
+// Gemini Prompt component handles UI logic and data interactions
 import { LightningElement } from 'lwc';
 import getGeminiResponse from '@salesforce/apex/GeminiApiService.getGeminiResponse';
 

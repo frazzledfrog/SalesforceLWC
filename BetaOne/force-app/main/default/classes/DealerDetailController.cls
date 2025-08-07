@@ -1,3 +1,4 @@
+// Dealer Detail controller handling server-side operations
 public with sharing class DealerDetailController {
     
     @AuraEnabled(cacheable=true)

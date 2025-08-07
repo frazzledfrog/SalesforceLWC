@@ -1,3 +1,4 @@
+// Sales Data service providing reusable logic
 public with sharing class SalesDataService {
 
     @AuraEnabled(cacheable=true)

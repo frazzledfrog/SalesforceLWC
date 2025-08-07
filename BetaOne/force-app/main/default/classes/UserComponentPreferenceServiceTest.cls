@@ -1,3 +1,4 @@
+// Test class for User Component Preference Service
 @isTest
 private class UserComponentPreferenceServiceTest {
     @isTest 

@@ -1,3 +1,4 @@
+// Helper class for Account Assignment
 /**
  * @description Helper class for the AccountAssignmentTrigger. Contains the logic to assign a number
  * from 1 to 20 to an Account based on the least used number for a given owner.

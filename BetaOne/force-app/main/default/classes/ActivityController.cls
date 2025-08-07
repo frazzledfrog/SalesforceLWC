@@ -1,3 +1,4 @@
+// Activity controller handling server-side operations
 public with sharing class ActivityController {
     
     public class SalespersonInfo {

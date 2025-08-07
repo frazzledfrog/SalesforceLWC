@@ -1,3 +1,4 @@
+// Dealer Watchlist component handles UI logic and data interactions
 import { LightningElement, track } from 'lwc';
 import getDealerWinnersLosers from '@salesforce/apex/DealerWatchlistController.getDealerWinnersLosers';
 import getLastRegion from '@salesforce/apex/UserComponentPreferenceService.getLastRegion';

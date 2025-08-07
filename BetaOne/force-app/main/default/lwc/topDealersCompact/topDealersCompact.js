@@ -1,3 +1,4 @@
+// Top Dealers Compact component handles UI logic and data interactions
 import { LightningElement, wire, track } from 'lwc';
 import getTopDealers from '@salesforce/apex/TopDealersController.getTopDealers';
 import getRegions from '@salesforce/apex/TopDealersController.getRegions';

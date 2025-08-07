@@ -1,3 +1,4 @@
+// Dealer Account Link component handles UI logic and data interactions
 import { LightningElement, api, wire } from 'lwc';
 import findAccountByDealerName from '@salesforce/apex/TopDealersController.findAccountByDealerName';
 

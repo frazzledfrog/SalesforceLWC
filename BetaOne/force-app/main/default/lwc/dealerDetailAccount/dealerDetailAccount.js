@@ -1,3 +1,4 @@
+// Dealer Detail Account component handles UI logic and data interactions
 import { LightningElement, track, api, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
 import { getRecord } from 'lightning/uiRecordApi';
