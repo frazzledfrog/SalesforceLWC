@@ -39,7 +39,6 @@ export default class DealerDetailAccount extends LightningElement {
     wiredAccount({ error, data }) {
         if (data) {
             this.account = { data };
-            console.log('Account loaded:', data.fields.Name.value);
             // Call findAndLoadAccountDealer with a small delay to ensure other wire methods have executed
             setTimeout(() => this.findAndLoadAccountDealer(), 100);
         } else if (error) {
@@ -59,7 +58,6 @@ export default class DealerDetailAccount extends LightningElement {
                 name: dealer.name,
                 region: dealer.region
             }));
-            console.log('Dealer options loaded:', this.dealerOptions.length, 'dealers');
             // Call findAndLoadAccountDealer with a small delay to ensure other wire methods have executed
             setTimeout(() => this.findAndLoadAccountDealer(), 100);
         } else if (error) {
@@ -76,7 +74,6 @@ export default class DealerDetailAccount extends LightningElement {
         // Start loading timeout - switch to compact mode after 8 seconds
         this.loadingTimeout = setTimeout(() => {
             if (this.isLoading && !this.selectedDealer) {
-                console.log('Loading timeout reached, switching to compact mode');
                 this.hasTimedOut = true;
                 this.isCompactMode = true;
                 this.isLoading = false;
@@ -95,16 +92,10 @@ export default class DealerDetailAccount extends LightningElement {
     findAndLoadAccountDealer() {
         // Ensure both account data and dealer options are loaded
         if (!this.account?.data?.fields?.Name?.value || !this.dealerOptions.length) {
-            console.log('Waiting for data...', {
-                hasAccount: !!this.account?.data?.fields?.Name?.value,
-                hasDealerOptions: this.dealerOptions.length > 0,
-                accountName: this.account?.data?.fields?.Name?.value
-            });
             return;
         }
 
         const accountName = this.account.data.fields.Name.value;
-        console.log('Attempting to match account:', accountName, 'with dealers:', this.dealerOptions.length);
         
         // Try multiple matching strategies
         let matchingDealer = null;
@@ -145,12 +136,8 @@ export default class DealerDetailAccount extends LightningElement {
         }
 
         if (matchingDealer) {
-            console.log('Found matching dealer:', matchingDealer.name);
             this.loadDealerDetails(matchingDealer.id);
         } else {
-            console.log('No matching dealer found for:', accountName);
-            console.log('Available dealers:', this.dealerOptions.map(d => d.name));
-            
             // Set compact mode and stop loading after a short delay
             setTimeout(() => {
                 if (!this.selectedDealer) {
@@ -169,7 +156,6 @@ export default class DealerDetailAccount extends LightningElement {
         );
 
         if (matchingDealer) {
-            console.log('Found matching dealer on retry:', matchingDealer.name);
             this.loadDealerDetails(matchingDealer.id);
         } else {
             this.error = `No dealer data found for account: ${accountName}. Available dealers: ${this.dealerOptions.map(d => d.name).join(', ')}`;
@@ -230,11 +216,9 @@ export default class DealerDetailAccount extends LightningElement {
             this.chart = null;
         }
         
-        console.log('Loading dealer details for ID:', dealerId);
         
         getDealerDetails({ dealerId: dealerId })
             .then(result => {
-                console.log('Dealer details loaded successfully:', result);
                 this.selectedDealer = {
                     ...result,
                     totalFinancedAmount: this.formatCurrency(result.totalFinancedAmount),
@@ -311,7 +295,6 @@ export default class DealerDetailAccount extends LightningElement {
                 return;
             }
 
-            console.log('Canvas found, rendering chart with data:', data);
 
             if (this.chart) {
                 this.chart.destroy();

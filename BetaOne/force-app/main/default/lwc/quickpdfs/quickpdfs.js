@@ -73,12 +73,5 @@ export default class QuickPdfs extends LightningElement {
         // Load unified styles
         await loadUnifiedStyles(this);
 
-        console.log('PDF Files loaded:', this.pdfFiles);
-        console.log('VIN_Amendment URL:', VIN_Amendment);
-        console.log('Trustee_Form URL:', Trustee_Form);
-        console.log('RecSheetPDF URL:', RecSheetPDF);
-        console.log('Dealer_Sign_Up_Package_ENG URL:', Dealer_Sign_Up_Package_ENG);
-        console.log('Dealer_Sign_Up_Package_FR URL:', Dealer_Sign_Up_Package_FR);
-        console.log('Proof_of_Insurance_Form URL:', Proof_of_Insurance_Form);
     }
 }

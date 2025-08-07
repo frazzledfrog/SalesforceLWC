@@ -22,6 +22,8 @@ export default class ActivityTracker extends LightningElement {
     _confettiShownFor = '';
     // Track previous call count to prevent confetti on navigation away
     _prevCalls = null;
+    // Cache computed salesperson summary to avoid repeated calculations
+    _selectedSalespersonData = null;
 
     async connectedCallback() {
         // Load unified styles
@@ -105,9 +107,7 @@ export default class ActivityTracker extends LightningElement {
         };
 
         // Store previous calls before loading new data
-        const prevCalls = this.selectedSalespersonData && this.selectedSalespersonData.goalProgress
-            ? this.selectedSalespersonData.goalProgress.calls
-            : null;
+        const prevCalls = this.selectedSalespersonData?.goalProgress?.calls || null;
 
         getActivityData(params)
             .then(result => {
@@ -117,6 +117,7 @@ export default class ActivityTracker extends LightningElement {
                     averagePerDay: this.calculateAveragePerDay(item.totalActivities),
                     goalProgress: this.calculateGoalProgress(item.totalActivities)
                 }));
+                this.computeSelectedSalespersonData();
                 this.isLoading = false;
 
                 // Confetti logic: only show if previous calls < goal and new calls >= goal
@@ -177,29 +178,38 @@ export default class ActivityTracker extends LightningElement {
         };
     }
 
-    get selectedSalespersonData() {
+    computeSelectedSalespersonData() {
         if (this.activityData.length > 0) {
-            // Sum totalActivities across all items for the selected salesperson
-            const total = this.activityData.reduce((sum, item) => sum + (item.totalActivities || 0), 0);
+            const total = this.activityData.reduce(
+                (sum, item) => sum + (item.totalActivities || 0),
+                0
+            );
             const salespersonName = this.activityData[0].salespersonName;
-            return {
+            this._selectedSalespersonData = {
                 salespersonName,
                 goalProgress: this.calculateGoalProgress(total)
             };
+            return;
         }
 
-        // Create default data when no activity data exists but salesperson is selected
         if (this.selectedSalesperson && this.salespeople.length > 0) {
-            const selectedPerson = this.salespeople.find(p => p.value === this.selectedSalesperson);
+            const selectedPerson = this.salespeople.find(
+                p => p.value === this.selectedSalesperson
+            );
             if (selectedPerson) {
-                return {
+                this._selectedSalespersonData = {
                     salespersonName: selectedPerson.label,
                     goalProgress: this.calculateGoalProgress(0)
                 };
+                return;
             }
         }
 
-        return null;
+        this._selectedSalespersonData = null;
+    }
+
+    get selectedSalespersonData() {
+        return this._selectedSalespersonData;
     }
 
     get progressOffset() {
@@ -208,9 +218,6 @@ export default class ActivityTracker extends LightningElement {
         const progress = Math.min(this.selectedSalespersonData.goalProgress.percentage, 100);
         const circumference = 282.74; // 2 * PI * 45
         const offset = circumference - (progress / 100) * circumference;
-        
-        // Debug logging
-        console.log('Progress:', progress, 'Offset:', offset, 'Circumference:', circumference);
         
         // Ensure we never return exactly the full circumference for any progress > 0
         if (progress > 0 && offset >= circumference) {
