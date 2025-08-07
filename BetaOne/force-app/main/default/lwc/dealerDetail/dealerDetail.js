@@ -10,6 +10,8 @@ import getLastDealerId from '@salesforce/apex/UserComponentPreferenceService.get
 import setLastDealerId from '@salesforce/apex/UserComponentPreferenceService.setLastDealerId';
 import chartjs from '@salesforce/resourceUrl/chartjs';
 
+/* eslint-disable @lwc/lwc/no-async-operation */
+
 export default class DealerDetail extends LightningElement {
     @track selectedDealerId = '';
     @track dealerOptions = [];
@@ -288,14 +290,14 @@ export default class DealerDetail extends LightningElement {
                         data: {
                             labels: months,
                             datasets: [{
-                                label: 'Number of Deals',
+                                label: '# of Deals',
                                 data: deals,
                                 backgroundColor: '#0066CC80',
                                 borderColor: '#0066CC',
                                 borderWidth: 1,
                                 yAxisID: 'y'
                             }, {
-                                label: 'Amount Financed ($)',
+                                label: 'Amount Financed',
                                 data: amounts,
                                 type: 'line',
                                 borderColor: '#FF8A00',
@@ -314,12 +316,19 @@ export default class DealerDetail extends LightningElement {
                                 y: {
                                     beginAtZero: true,
                                     position: 'left',
-                                    title: { display: true, text: 'Deals' }
+                                    title: { display: true, text: '# of Deals' },
+                                    ticks: {
+                                        precision: 0,
+                                        stepSize: 1,
+                                        callback: function(value) {
+                                            return Number(value).toFixed(0);
+                                        }
+                                    }
                                 },
                                 y1: {
                                     beginAtZero: true,
                                     position: 'right',
-                                    title: { display: true, text: 'Amount ($)' },
+                                    title: { display: true, text: 'Amount Financed' },
                                     grid: { drawOnChartArea: false },
                                     ticks: {
                                         callback: function(value) {

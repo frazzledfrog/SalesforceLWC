@@ -48,9 +48,18 @@ private class SalesDataServiceTest {
 
         insert records;
 
-        // Create Monthly_Goal__c record with only writeable fields
-        // The Region_Target_*__c fields appear to be formula fields that will auto-calculate
-        Monthly_Goal__c goal = new Monthly_Goal__c();
+
+        // Remove any existing monthly goal records to satisfy unique record validation
+        delete [SELECT Id FROM Monthly_Goal__c];
+
+        Monthly_Goal__c goal = new Monthly_Goal__c(
+            Region_Target_Alberta__c = 1000,
+            Region_Target_Quebec__c = 2000,
+            Region_Target_Eastern__c = 3000,
+            Region_Target_Ontario__c = 4000,
+            Region_Target_Western__c = 5000
+        );
+
         insert goal;
     }
 
