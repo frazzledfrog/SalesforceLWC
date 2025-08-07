@@ -43,7 +43,7 @@
     /* Legacy color support for backward compatibility */
     --primary-color: var(--brand-primary);
     --primary-hover: var(--brand-accessible);
-    --secondary-color: #1de9b6; /* Keep for accent */
+    --secondary-color: #ff6b35; /* Orange color for secondary buttons */
     
     /* SLDS Typography - Matching Lightning Design System */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
@@ -103,7 +103,7 @@
 .shared-title {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
-    color: var(--heading-color);
+    color: white;
     margin: 0;
 }
 
@@ -144,8 +144,8 @@
 }
 
 .shared-button-secondary:hover {
-    background: rgba(29, 233, 182, 0.8);
-    border-color: rgba(29, 233, 182, 0.8);
+    background: #e55a2b;
+    border-color: #e55a2b;
 }
 
 /* Responsive utilities */
