@@ -30,7 +30,12 @@ export default class DealerWatchlist extends LightningElement {
     { label: "Top 25", value: 25 }
   ];
 
-  // New getter for comparison type toggle
+  comparisonOptions = [
+    { label: "Month over Month", value: "MonthOverMonth" },
+    { label: "Year over Year", value: "YearOverYear" }
+  ];
+
+  // Getter for comparison type
   get isYearOverYear() {
     return this.comparisonType === "YearOverYear";
   }
@@ -40,10 +45,6 @@ export default class DealerWatchlist extends LightningElement {
       ? "YTD vs 2024 Comparison"
       : "Month over Month Comparison";
     return `Winners & Losers • Recreational Business Line • ${comparison}`;
-  }
-
-  get toggleLabel() {
-    return this.isYearOverYear ? "Year over Year" : "Month over Month";
   }
 
   async connectedCallback() {
@@ -85,10 +86,8 @@ export default class DealerWatchlist extends LightningElement {
     this.fetchWatchlistData();
   }
 
-  handleComparisonToggle(event) {
-    this.comparisonType = event.target.checked
-      ? "YearOverYear"
-      : "MonthOverMonth";
+  handleComparisonChange(event) {
+    this.comparisonType = event.detail.value;
     this.fetchWatchlistData();
   }
 
