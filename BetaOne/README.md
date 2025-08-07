@@ -13,7 +13,7 @@ This release introduces a comprehensive suite of Lightning Web Components (LWC) 
 
 ##### **1. Top Dealers Component (`topDealers`)**
 - Regional dealer performance tracking with dynamic data visualization
-- Real-time filtering by region (Ontario, Alberta, Eastern, Western)
+ - Real-time filtering by region (National, Ontario, Alberta, Quebec, Atlantic, Western)
 - Integration with Account records for seamless navigation
 - User preference persistence for region selection
 - Rolling 120-day performance metrics
@@ -89,7 +89,7 @@ This release introduces a comprehensive suite of Lightning Web Components (LWC) 
 
 ### 📊 Key Metrics & Features
 - **Rolling Period Analysis**: 120-day rolling window for performance tracking
-- **Regional Support**: Ontario, Alberta, Eastern, Western regions
+- **Regional Support**: National, Ontario, Alberta, Quebec, Atlantic, Western regions
 - **Year-over-Year Comparisons**: Historical performance analysis
 - **Real-time Data**: Live data updates and synchronization
 - **User Preferences**: Persistent component state across sessions

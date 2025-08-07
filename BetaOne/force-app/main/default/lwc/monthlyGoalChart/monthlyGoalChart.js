@@ -17,7 +17,10 @@ export default class MonthlyGoalChart extends LightningElement {
   @wire(getRegions)
   wiredRegions({ error, data }) {
     if (data) {
-      this.regionOptions = data.map((r) => ({ label: r, value: r }));
+      this.regionOptions = [
+        { label: "National", value: "National" },
+        ...data.map((r) => ({ label: r, value: r }))
+      ];
       this.selectedRegion = this.regionOptions[0]?.value;
     } else if (error) {
       // eslint-disable-next-line no-console
@@ -117,8 +120,12 @@ export default class MonthlyGoalChart extends LightningElement {
           return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
         });
         let runningTotal = 0;
+        const today = now.getDate();
         const cumulativeData = Array.from({ length: daysInMonth }, (_, i) => {
           const day = i + 1;
+          if (day > today) {
+            return null;
+          }
           runningTotal += volume[day] || 0;
           return runningTotal;
         });

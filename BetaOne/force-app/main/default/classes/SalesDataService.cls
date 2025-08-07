@@ -43,7 +43,14 @@ public with sharing class SalesDataService {
         if (!goals.isEmpty() && region != null) {
             Monthly_Goal__c firstGoal = goals[0];
             String regionLower = region != null ? region.toLowerCase() : '';
-            if (regionLower.contains('alberta')) {
+            if (regionLower.contains('national')) {
+                monthlyGoal =
+                    (firstGoal.Region_Target_Alberta__c != null ? firstGoal.Region_Target_Alberta__c : 0) +
+                    (firstGoal.Region_Target_Quebec__c != null ? firstGoal.Region_Target_Quebec__c : 0) +
+                    (firstGoal.Region_Target_Eastern__c != null ? firstGoal.Region_Target_Eastern__c : 0) +
+                    (firstGoal.Region_Target_Ontario__c != null ? firstGoal.Region_Target_Ontario__c : 0) +
+                    (firstGoal.Region_Target_Western__c != null ? firstGoal.Region_Target_Western__c : 0);
+            } else if (regionLower.contains('alberta')) {
                 monthlyGoal = firstGoal.Region_Target_Alberta__c;
             } else if (regionLower.contains('quebec')) {
                 monthlyGoal = firstGoal.Region_Target_Quebec__c;
@@ -67,29 +74,33 @@ public with sharing class SalesDataService {
     @AuraEnabled(cacheable=true)
     public static List<String> getRegions() {
         return new List<String>{
+            'National',
             'Ontario',
-            'Alberta', 
+            'Alberta',
             'Quebec',
             'Atlantic',
             'Western'
         };
     }
-    
+
     private static Set<String> getProvincesForRegion(String region) {
         Set<String> provinces = new Set<String>();
-        
-        if (region == 'Ontario') {
+        String regionLower = region != null ? region.toLowerCase() : '';
+
+        if (regionLower == 'national') {
+            provinces.addAll(new Set<String>{'ON','AB','QC','NB','NS','PE','NL','BC','SK','MB'});
+        } else if (regionLower == 'ontario') {
             provinces.add('ON');
-        } else if (region == 'Alberta') {
+        } else if (regionLower == 'alberta') {
             provinces.add('AB');
-        } else if (region == 'Quebec') {
+        } else if (regionLower == 'quebec') {
             provinces.add('QC');
-        } else if (region == 'Atlantic') {
+        } else if (regionLower == 'atlantic') {
             provinces.addAll(new Set<String>{'NB', 'NS', 'PE', 'NL'});
-        } else if (region == 'Western') {
+        } else if (regionLower == 'western' || regionLower == 'british columbia' || regionLower == 'saskatchewan' || regionLower == 'manitoba') {
             provinces.addAll(new Set<String>{'BC', 'SK', 'MB'});
         }
-        
+
         return provinces;
     }
 }
