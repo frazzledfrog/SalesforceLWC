@@ -860,7 +860,7 @@ input {
 
 .pdf-container {
     background: var(--card-background-color);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     min-height: 300px;
