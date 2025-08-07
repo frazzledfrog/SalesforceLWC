@@ -1,46 +1,64 @@
 <template>
     <div class="top-dealers-compact-container app-container">
-        <div class="compact-header">
-            <h3 class="compact-title">Top 5 Largest Dealers</h3>
-        </div>
-        <div class="region-selector-row">
-            <lightning-combobox
-                name="region"
-                label="Region"
-                value={region}
-                options={regionOptions}
-                onchange={handleRegionChange}
-                class="region-combobox"
-                variant="label-hidden">
-            </lightning-combobox>
-        </div>
-        <template if:true={dealers}>
-            <div class="dealers-table-wrapper">
-                <div class="dealers-table-header">
-                    <span class="header-rank">#</span>
-                    <span class="header-name">Dealer Name</span>
-                    <span class="header-metric">Amount Financed (MTD)</span>
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-group">
+                    <div class="header-icon">
+                        <lightning-icon icon-name="standard:account" size="medium"></lightning-icon>
+                    </div>
+                    <h2 class="main-title">Top 5 Largest Dealers</h2>
                 </div>
-                <ul class="dealers-list">
-                    <template for:each={dealers} for:item="dealer">
-                        <li key={dealer.rank} class="dealer-item">
-                            <span class="dealer-rank">{dealer.rank}</span>
-                            <span class="dealer-name" title={dealer.Name}>
-                                <template if:true={dealer.accountLink}>
-                                    <a href={dealer.accountLink} target="_blank" class="dealer-link-text">{dealer.Name}</a>
-                                </template>
-                                <template if:false={dealer.accountLink}>
-                                    {dealer.Name}
-                                </template>
-                            </span>
-                            <span class="dealer-metric">{dealer.MetricFormatted}</span>
-                        </li>
-                    </template>
-                </ul>
             </div>
-        </template>
-        <template if:false={dealers}>
-            <div class="no-data-message">No dealer data available.</div>
-        </template>
+            <div class="info-banner">
+                <div class="info-icon">
+                    <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                </div>
+                <p class="info-text">View leading dealers by amount financed</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="controls-section">
+                <lightning-combobox
+                    name="region"
+                    label="Region"
+                    value={region}
+                    options={regionOptions}
+                    onchange={handleRegionChange}
+                    class="region-combobox"
+                    variant="label-hidden">
+                </lightning-combobox>
+            </div>
+
+            <template if:true={dealers}>
+                <div class="dealers-table-wrapper">
+                    <div class="dealers-table-header">
+                        <span class="header-rank">#</span>
+                        <span class="header-name">Dealer Name</span>
+                        <span class="header-metric">Amount Financed (MTD)</span>
+                    </div>
+                    <ul class="dealers-list">
+                        <template for:each={dealers} for:item="dealer">
+                            <li key={dealer.rank} class="dealer-item">
+                                <span class="dealer-rank">{dealer.rank}</span>
+                                <span class="dealer-name" title={dealer.Name}>
+                                    <template if:true={dealer.accountLink}>
+                                        <a href={dealer.accountLink} target="_blank" class="dealer-link-text">{dealer.Name}</a>
+                                    </template>
+                                    <template if:false={dealer.accountLink}>
+                                        {dealer.Name}
+                                    </template>
+                                </span>
+                                <span class="dealer-metric">{dealer.MetricFormatted}</span>
+                            </li>
+                        </template>
+                    </ul>
+                </div>
+            </template>
+
+            <template if:false={dealers}>
+                <div class="no-data-message">No dealer data available.</div>
+            </template>
+        </div>
     </div>
 </template>
