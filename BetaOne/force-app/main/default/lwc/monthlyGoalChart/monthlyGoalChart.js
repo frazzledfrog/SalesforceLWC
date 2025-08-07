@@ -17,9 +17,12 @@ export default class MonthlyGoalChart extends LightningElement {
   @wire(getRegions)
   wiredRegions({ error, data }) {
     if (data) {
+      const uniqueRegions = data.filter(
+        (r) => r.toLowerCase() !== "national"
+      );
       this.regionOptions = [
         { label: "National", value: "National" },
-        ...data.map((r) => ({ label: r, value: r }))
+        ...uniqueRegions.map((r) => ({ label: r, value: r }))
       ];
       this.selectedRegion = this.regionOptions[0]?.value;
     } else if (error) {
@@ -51,16 +54,18 @@ export default class MonthlyGoalChart extends LightningElement {
                 backgroundColor: "rgba(0,102,204,0.2)",
                 fill: true,
                 tension: 0.4,
-                pointRadius: 0
+                pointRadius: 0,
+                stack: "sales"
               },
               {
-                label: "Goal",
+                label: "Remaining",
                 data: [],
                 borderColor: "#FF8A00",
-                borderDash: [5, 5],
-                fill: false,
+                backgroundColor: "rgba(255,138,0,0.2)",
+                fill: true,
                 pointRadius: 0,
-                borderWidth: 2
+                borderWidth: 2,
+                stack: "sales"
               }
             ]
           },
@@ -70,6 +75,7 @@ export default class MonthlyGoalChart extends LightningElement {
             plugins: {
               legend: { position: "bottom" }
             },
+            interaction: { mode: "index", intersect: false },
             scales: {
               x: {
                 ticks: {
@@ -78,6 +84,7 @@ export default class MonthlyGoalChart extends LightningElement {
                 }
               },
               y: {
+                stacked: true,
                 ticks: {
                   callback: (value) =>
                     "$" + new Intl.NumberFormat("en-US").format(value)
@@ -129,9 +136,12 @@ export default class MonthlyGoalChart extends LightningElement {
           runningTotal += volume[day] || 0;
           return runningTotal;
         });
+        const remainingData = cumulativeData.map((v) =>
+          (v === null ? null : Math.max(goal - v, 0))
+        );
         this.chart.data.labels = labels;
         this.chart.data.datasets[0].data = cumulativeData;
-        this.chart.data.datasets[1].data = Array(daysInMonth).fill(goal);
+        this.chart.data.datasets[1].data = remainingData;
         this.chart.update();
       })
       .catch((error) => {
