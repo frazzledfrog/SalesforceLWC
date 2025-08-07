@@ -1,7 +1,24 @@
 <template>
     <!-- Modern Dealer Analytics Component -->
     <div class="dealer-analytics-container">
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-group">
+                    <div class="header-icon">
+                        <lightning-icon icon-name="standard:account" size="medium"></lightning-icon>
+                    </div>
+                    <h2 class="main-title">Dealer Detail</h2>
+                </div>
+            </div>
+            <div class="info-banner">
+                <div class="info-icon">
+                    <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                </div>
+                <p class="info-text">Search and analyze dealer performance metrics</p>
+            </div>
+        </div>
 
+        <div class="content-section">
         <!-- Loading State -->
         <template if:true={isLoading}>
             <div class="loading-container">
@@ -198,5 +215,6 @@
 
             </div>
         </template>
+        </div>
     </div>
 </template>
