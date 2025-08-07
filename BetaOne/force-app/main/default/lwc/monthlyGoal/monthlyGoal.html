@@ -1,12 +1,24 @@
 <template>
+    <div class="pdf-container app-container">
+        <div class="header-section">
+            <div class="header-content">
+                <div class="title-group">
+                    <div class="header-icon">
+                        <lightning-icon icon-name="utility:target" size="medium"></lightning-icon>
+                    </div>
+                    <h2 class="main-title">{cardTitle}</h2>
+                </div>
+            </div>
+            <div class="info-banner">
+                <div class="info-icon">
+                    <lightning-icon icon-name="utility:info" size="x-small"></lightning-icon>
+                </div>
+                <p class="info-text">Track progress toward monthly goals</p>
+            </div>
+        </div>
 
-    <div class="container">
-        <lightning-card title={cardTitle}>
-            <div class="content-wrapper">
-                <div class="main-content">
-                    <!-- Header with improved layout -->
-                    <div class="metric-header slds-m-bottom_large">
-                        <div class="controls-section">
+        <div class="content-section">
+            <div class="controls-section">
                 <template if:true={showDropdown}>
                     <lightning-combobox
                         name="region"
@@ -25,12 +37,9 @@
                         <lightning-spinner size="x-small"></lightning-spinner>
                         <span>Loading regions...</span>
                     </div>
-                        </div>
-                    </template>
-                </div>
+                </template>
             </div>
 
-            <!-- Chart Section with improved styling -->
             <div class="chart-section">
                 <template if:true={isLoading}>
                     <div class="slds-text-align_center slds-p-around_x-large">
@@ -38,13 +47,11 @@
                         <p class="slds-text-color_weak slds-m-top_small">Loading chart data...</p>
                     </div>
                 </template>
-                
+
                 <div class="chart-container">
                     <canvas class="chart-canvas" lwc:dom="manual"></canvas>
                 </div>
             </div>
-                </div>
-            </div>
-        </lightning-card>
+        </div>
     </div>
 </template>
