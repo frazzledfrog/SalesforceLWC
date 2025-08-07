@@ -11,6 +11,7 @@
 :root {
     /* ===== SLDS BRAND COLORS ===== */
     --brand-primary: #1b96ff;                    /* PALETTE_BLUE_60 */
+    --brand-secondary: #ffa41b;                    /* PALETTE_BLUE_60 */
     --brand-accessible: #0176d3;                /* PALETTE_BLUE_50 */
     --brand-dark: #014486;                      /* PALETTE_BLUE_30 */
     --brand-light: #f4f6fe;                     /* BRAND_LIGHT */
@@ -267,7 +268,7 @@ input {
 .shared-title {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
-    color: var(--heading-color);
+    color: white;
     margin: 0;
 }
 
@@ -298,8 +299,8 @@ input {
 }
 
 .shared-button-secondary {
-    background: var(--secondary-color);
-    border: 1px solid var(--secondary-color);
+    background: var(--brand-secondary);
+    border: 1px solid var(--brand-secondary);
     color: white;
     padding: var(--spacing-xs) var(--spacing-medium);
     border-radius: var(--border-radius);
