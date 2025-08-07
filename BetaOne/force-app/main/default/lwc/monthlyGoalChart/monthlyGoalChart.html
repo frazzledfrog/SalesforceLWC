@@ -1,0 +1,22 @@
+<template>
+  <lightning-card title="Monthly Goal">
+    <div class="slds-p-around_medium">
+      <template if:true={regionOptions}>
+        <lightning-combobox
+          class="region-picker"
+          variant="label-hidden"
+          value={selectedRegion}
+          options={regionOptions}
+          onchange={handleRegionChange}
+        >
+        </lightning-combobox>
+      </template>
+      <div class="chart-container">
+        <template if:true={isLoading}>
+          <lightning-spinner size="medium"></lightning-spinner>
+        </template>
+        <canvas class="goal-chart" lwc:dom="manual"></canvas>
+      </div>
+    </div>
+  </lightning-card>
+</template>
