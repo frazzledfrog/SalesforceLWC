@@ -40,7 +40,7 @@ export default class MonthlyGoal extends LightningElement {
     wiredRegions({ error, data }) {
         if (data) {
             this.regionOptions = [
-                { label: 'Total', value: 'Total' },
+                { label: 'National', value: 'National' },
                 ...data.map(region => ({ label: region, value: region }))
             ];
             getLastRegion({ componentName: 'MonthlyGoal' })
@@ -231,8 +231,8 @@ export default class MonthlyGoal extends LightningElement {
         }
         this.isLoading = true;
 
-        if (this.selectedRegion === 'Total') {
-            const regionNames = this.regionOptions.filter(opt => opt.value !== 'Total').map(opt => opt.value);
+        if (this.selectedRegion === 'National') {
+            const regionNames = this.regionOptions.filter(opt => opt.value !== 'National').map(opt => opt.value);
             Promise.all(regionNames.map(region => getSalesData({ region })))
                 .then(allData => {
                     const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
@@ -270,7 +270,7 @@ export default class MonthlyGoal extends LightningElement {
                     });
                     const totalGoal = allData.reduce((sum, d) => sum + (d.monthlyGoal || 0), 0);
                     datasets.push({
-                        label: 'Total Goal',
+                        label: 'National Goal',
                         data: Array(daysInMonth).fill(totalGoal),
                         borderColor: '#FF8A00',
                         borderDash: [5, 5],
@@ -286,7 +286,7 @@ export default class MonthlyGoal extends LightningElement {
                         this.chart.options.scales.y.stacked = true;
                         this.chart.options.scales.x.stacked = true;
                         this.chart.update();
-                        console.log('Chart updated successfully (Total view)');
+                        console.log('Chart updated successfully (National view)');
                     } catch (updateError) {
                         console.error('Error updating chart:', updateError);
                     }
@@ -358,7 +358,7 @@ export default class MonthlyGoal extends LightningElement {
             clearInterval(this.pulseInterval);
         }
 
-        if (this.selectedRegion === 'Total') return;
+        if (this.selectedRegion === 'National') return;
 
         let pulseScale = 1;
         let growing = true;
