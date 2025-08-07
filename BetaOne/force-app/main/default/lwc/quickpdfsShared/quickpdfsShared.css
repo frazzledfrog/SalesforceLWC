@@ -1,0 +1,40 @@
+:host {
+    display: block;
+    font-family: var(--font-family);
+    color: var(--text-color);
+}
+
+.container {
+    padding: var(--spacing-medium);
+}
+
+.header {
+    margin-bottom: var(--spacing-medium);
+}
+
+.pdf-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.pdf-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-small) 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.pdf-item:last-child {
+    border-bottom: none;
+}
+
+.file-name {
+    font-size: var(--font-size-base);
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-small);
+}

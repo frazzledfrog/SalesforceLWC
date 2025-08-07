@@ -1,0 +1,23 @@
+<template>
+    <div class="container shared-card">
+        <div class="header shared-header">
+            <h2 class="shared-title">Quick PDFs</h2>
+        </div>
+        <template if:true={hasPdfFiles}>
+            <ul class="pdf-list">
+                <template for:each={pdfFiles} for:item="file">
+                    <li key={file.id} class="pdf-item">
+                        <span class="file-name" title={file.name}>{file.name}</span>
+                        <div class="actions">
+                            <button class="shared-button-primary" data-file-id={file.id} onclick={handlePreview}>Preview</button>
+                            <button class="shared-button-secondary" data-file-id={file.id} onclick={handleDownload}>Download</button>
+                        </div>
+                    </li>
+                </template>
+            </ul>
+        </template>
+        <template if:false={hasPdfFiles}>
+            <p class="shared-text-muted">No PDFs available.</p>
+        </template>
+    </div>
+</template>
