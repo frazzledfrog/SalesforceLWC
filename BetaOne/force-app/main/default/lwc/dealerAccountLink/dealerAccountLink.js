@@ -1,6 +1,7 @@
 // Dealer Account Link component handles UI logic and data interactions
 import { LightningElement, api, wire } from 'lwc';
 import findAccountByDealerName from '@salesforce/apex/TopDealersController.findAccountByDealerName';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class DealerAccountLink extends LightningElement {
     @api dealerName;
@@ -23,5 +24,9 @@ export default class DealerAccountLink extends LightningElement {
 
     get accountUrl() {
         return this.accountId ? `/lightning/r/Account/${this.accountId}/view` : null;
+    }
+
+    connectedCallback() {
+        loadUnifiedStyles(this);
     }
 }

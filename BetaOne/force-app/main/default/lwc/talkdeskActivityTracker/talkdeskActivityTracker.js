@@ -7,6 +7,7 @@ import getDirectionOptions from '@salesforce/apex/TalkdeskActivityController.get
 import getPerformanceInsights from '@salesforce/apex/TalkdeskActivityController.getPerformanceInsights';
 import getLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.getLastSalesperson';
 import setLastSalesperson from '@salesforce/apex/UserComponentPreferenceService.setLastSalesperson';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class TalkdeskActivityTracker extends LightningElement {
     @track selectedSalesperson = '';
@@ -31,7 +32,8 @@ export default class TalkdeskActivityTracker extends LightningElement {
         { label: 'This Month', value: 'month' }
     ];
 
-    connectedCallback() {
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
         this.loadPicklistOptions();
     }
 

@@ -2,6 +2,7 @@
 import { LightningElement, track, wire } from 'lwc';
 import getSalesReps from '@salesforce/apex/AccountAssignmentViewController.getSalesReps';
 import getAccountsByAssignmentNumber from '@salesforce/apex/AccountAssignmentViewController.getAccountsByAssignmentNumber';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class AccountAssignmentView extends LightningElement {
     @track selectedSalesRep = '';
@@ -10,7 +11,8 @@ export default class AccountAssignmentView extends LightningElement {
     @track error;
     @track isLoading = false;
 
-    connectedCallback() {
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
         this.loadSalesReps();
     }
 
