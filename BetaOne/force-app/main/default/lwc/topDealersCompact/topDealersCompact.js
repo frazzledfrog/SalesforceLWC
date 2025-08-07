@@ -2,6 +2,7 @@
 import { LightningElement, wire, track } from 'lwc';
 import getTopDealers from '@salesforce/apex/TopDealersController.getTopDealers';
 import getRegions from '@salesforce/apex/TopDealersController.getRegions';
+import findAccountByDealerName from '@salesforce/apex/TopDealersController.findAccountByDealerName';
 import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class TopDealersCompact extends LightningElement {
@@ -32,20 +33,40 @@ export default class TopDealersCompact extends LightningElement {
     }
 
     @wire(getTopDealers, { region: '$region' })
-    wiredDealers({ error, data }) {
+    async wiredDealers({ error, data }) {
         if (data) {
-            this.dealers = data.map((dealer, idx) => ({
-                ...dealer,
-                rank: idx + 1,
-                Name: dealer.accountName,
-                Metric: dealer.totalAmount,
-                MetricFormatted: this.formatCurrency(dealer.totalAmount)
-            }));
+            await this.populateDealers(data);
             this.error = undefined;
         } else if (error) {
             this.error = error;
             this.dealers = undefined;
         }
+    }
+
+    async populateDealers(data) {
+        const dealersWithLinks = await Promise.all(
+            data.map(async (dealer, idx) => {
+                let accountLink;
+                try {
+                    const account = await findAccountByDealerName({ dealerName: dealer.accountName });
+                    if (account && account.accountId) {
+                        accountLink = `/lightning/r/Account/${account.accountId}/view`;
+                    }
+                } catch (e) {
+                    // ignore errors and leave link undefined
+                }
+
+                return {
+                    ...dealer,
+                    rank: idx + 1,
+                    Name: dealer.accountName,
+                    Metric: dealer.totalAmount,
+                    MetricFormatted: this.formatCurrency(dealer.totalAmount),
+                    accountLink
+                };
+            })
+        );
+        this.dealers = dealersWithLinks;
     }
 
     handleRegionChange(event) {
