@@ -949,6 +949,8 @@ input {
 .download-btn:hover {
     background: rgba(29, 233, 182, 0.8);
     border: 1px solid rgba(29, 233, 182, 0.8);
+    --slds-c-button-brand-color-background: rgba(29, 233, 182, 0.8);
+    --slds-c-button-brand-color-border: rgba(29, 233, 182, 0.8);
 }
 
 .info-banner {
