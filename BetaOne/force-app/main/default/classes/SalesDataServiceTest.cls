@@ -45,8 +45,17 @@ private class SalesDataServiceTest {
             Applications_Last_Amount_To_Finance_Sum__c = 800,
             Applications_Dealer_Province__c = 'NB'
         )        );
-        
+
         insert records;
+
+        Monthly_Goal__c goal = new Monthly_Goal__c(
+            Region_Target_Alberta__c = 1000,
+            Region_Target_Quebec__c = 2000,
+            Region_Target_Eastern__c = 3000,
+            Region_Target_Ontario__c = 4000,
+            Region_Target_Western__c = 5000
+        );
+        insert goal;
     }
 
     @isTest
@@ -112,6 +121,16 @@ private class SalesDataServiceTest {
     }
 
     @isTest
+    static void testGetSalesDataNational() {
+        Test.startTest();
+        Map<String, Object> result = SalesDataService.getSalesData('National');
+        Test.stopTest();
+
+        Decimal monthlyGoal = (Decimal)result.get('monthlyGoal');
+        System.assertEquals(1000 + 2000 + 3000 + 4000 + 5000, monthlyGoal, 'National goal should sum all regions');
+    }
+
+    @isTest
     static void testGetSalesDataBritishColumbia() {
         Test.startTest();
         Map<String, Object> result = SalesDataService.getSalesData('British Columbia');
@@ -173,7 +192,8 @@ private class SalesDataServiceTest {
         Test.stopTest();
 
         System.assertNotEquals(null, regions, 'Regions should not be null');
-        System.assertEquals(5, regions.size(), 'Should return 5 regions');
+        System.assertEquals(6, regions.size(), 'Should return 6 regions');
+        System.assert(regions.contains('National'), 'Should contain National');
         System.assert(regions.contains('Ontario'), 'Should contain Ontario');
         System.assert(regions.contains('Alberta'), 'Should contain Alberta');
         System.assert(regions.contains('Quebec'), 'Should contain Quebec');
