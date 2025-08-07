@@ -42,13 +42,6 @@ export default class MonthlyGoalChart extends LightningElement {
             labels: [],
             datasets: [
               {
-                label: "Volume",
-                data: [],
-                type: "bar",
-                backgroundColor: "#90caf9",
-                borderColor: "#90caf9"
-              },
-              {
                 label: "Cumulative",
                 data: [],
                 borderColor: "#0066CC",
@@ -75,6 +68,12 @@ export default class MonthlyGoalChart extends LightningElement {
               legend: { position: "bottom" }
             },
             scales: {
+              x: {
+                ticks: {
+                  maxRotation: 45,
+                  minRotation: 45
+                }
+              },
               y: {
                 ticks: {
                   callback: (value) =>
@@ -106,7 +105,6 @@ export default class MonthlyGoalChart extends LightningElement {
     getSalesData({ region: this.selectedRegion })
       .then((result) => {
         const volume = result.volumeData || {};
-        const cumulative = result.cumulativeData || {};
         const goal = result.monthlyGoal || 0;
         const now = new Date();
         const daysInMonth = new Date(
@@ -114,13 +112,19 @@ export default class MonthlyGoalChart extends LightningElement {
           now.getMonth() + 1,
           0
         ).getDate();
-        const labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-        const volumeData = labels.map((day) => volume[day] || 0);
-        const cumulativeData = labels.map((day) => cumulative[day] || null);
+        const labels = Array.from({ length: daysInMonth }, (_, i) => {
+          const date = new Date(now.getFullYear(), now.getMonth(), i + 1);
+          return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+        });
+        let runningTotal = 0;
+        const cumulativeData = Array.from({ length: daysInMonth }, (_, i) => {
+          const day = i + 1;
+          runningTotal += volume[day] || 0;
+          return runningTotal;
+        });
         this.chart.data.labels = labels;
-        this.chart.data.datasets[0].data = volumeData;
-        this.chart.data.datasets[1].data = cumulativeData;
-        this.chart.data.datasets[2].data = Array(daysInMonth).fill(goal);
+        this.chart.data.datasets[0].data = cumulativeData;
+        this.chart.data.datasets[1].data = Array(daysInMonth).fill(goal);
         this.chart.update();
       })
       .catch((error) => {
