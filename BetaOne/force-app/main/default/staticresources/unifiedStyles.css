@@ -847,11 +847,11 @@ input {
    ============================================== */
 
 .dealer-link-text {
-    color: var(--primary-color);
+    color: var(--primary-color, #1b96ff);
 }
 
 .dealer-link-text:hover {
-    color: var(--secondary-color);
+    color: var(--secondary-color, #ffa41b);
 }
 
 /* ==============================================
@@ -1018,10 +1018,10 @@ input {
 
 /* Dealer link text */
 .dealer-link-text {
-    color: var(--primary-color);
+    color: var(--primary-color, #1b96ff);
 }
 .dealer-link-text:hover {
-    color: var(--secondary-color);
+    color: var(--secondary-color, #ffa41b);
 }
 
 /* Static resource viewer image */
