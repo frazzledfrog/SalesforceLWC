@@ -1,6 +1,7 @@
 // Monthly Goal component handles UI logic and data interactions
 import { LightningElement, track, wire } from 'lwc';
 import { loadScript } from 'lightning/platformResourceLoader';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import chartjs from '@salesforce/resourceUrl/chartjs';
 import getSalesData from '@salesforce/apex/SalesDataService.getSalesData';
 import getRegions from '@salesforce/apex/SalesDataService.getRegions';
@@ -16,7 +17,8 @@ export default class MonthlyGoal extends LightningElement {
     chartjsInitialized = false;
     pulseInterval;
 
-    connectedCallback() {
+    async connectedCallback() {
+        await loadUnifiedStyles(this);
         this.cardTitle = `${this.getCurrentMonth()} Target Progress`;
     }
 
