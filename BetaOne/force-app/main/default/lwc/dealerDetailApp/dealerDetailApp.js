@@ -9,6 +9,13 @@ export default class DealerDetailApp extends LightningElement {
     @track dealerOptions = [];
     selectedDealerId = '';
     @track selectedDealer;
+    selectedMonths = '12';
+    timescaleOptions = [
+        { label: '3 Months', value: '3' },
+        { label: '6 Months', value: '6' },
+        { label: '12 Months', value: '12' },
+        { label: '24 Months', value: '24' }
+    ];
     chart;
     chartJsInitialized = false;
 
@@ -48,18 +55,34 @@ export default class DealerDetailApp extends LightningElement {
         getDealerDetails({ dealerId: this.selectedDealerId })
             .then((result) => {
                 this.selectedDealer = result;
-                return getDealerChartDataWithPeriod({
-                    dealerId: this.selectedDealerId,
-                    monthsBack: 12
-                });
-            })
-            .then((chartData) => {
-                this.renderChart(chartData);
+                return this.loadChartData();
             })
             .catch((error) => {
                 // eslint-disable-next-line no-console
                 console.error('Error loading dealer details', error);
                 this.selectedDealer = undefined;
+            });
+    }
+
+    handleTimescaleChange(event) {
+        this.selectedMonths = event.detail.value;
+        this.loadChartData();
+    }
+
+    loadChartData() {
+        if (!this.selectedDealerId) {
+            return Promise.resolve();
+        }
+        return getDealerChartDataWithPeriod({
+            dealerId: this.selectedDealerId,
+            monthsBack: parseInt(this.selectedMonths, 10)
+        })
+            .then((chartData) => {
+                this.renderChart(chartData);
+            })
+            .catch((error) => {
+                // eslint-disable-next-line no-console
+                console.error('Error loading chart data', error);
             });
     }
 

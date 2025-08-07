@@ -11,13 +11,29 @@
         </div>
         <template if:true={selectedDealer}>
             <div class="slds-p-around_medium">
-                <p class="slds-text-heading_small">
-                    {selectedDealer.dealerName} - {selectedDealer.region}
-                </p>
-                <p>Total Deals: {selectedDealer.totalDeals}</p>
-                <p>
-                    Total Financed: {formattedTotalFinanced}
-                </p>
+                <div class="summary-grid">
+                    <div class="summary-item">
+                        <p class="summary-label">Dealer</p>
+                        <p class="summary-value">{selectedDealer.dealerName} - {selectedDealer.region}</p>
+                    </div>
+                    <div class="summary-item">
+                        <p class="summary-label">Total Deals</p>
+                        <p class="summary-value">{selectedDealer.totalDeals}</p>
+                    </div>
+                    <div class="summary-item">
+                        <p class="summary-label">Total Financed</p>
+                        <p class="summary-value">{formattedTotalFinanced}</p>
+                    </div>
+                </div>
+                <div class="controls">
+                    <lightning-combobox
+                        name="timescale"
+                        label="Timescale"
+                        value={selectedMonths}
+                        options={timescaleOptions}
+                        onchange={handleTimescaleChange}
+                    ></lightning-combobox>
+                </div>
                 <div class="chart-container">
                     <canvas class="chart-canvas"></canvas>
                 </div>

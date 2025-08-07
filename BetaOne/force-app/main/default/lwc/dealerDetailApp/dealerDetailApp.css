@@ -1,3 +1,32 @@
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.summary-item {
+    background: var(--lwc-colorBackgroundAlt, #f3f3f3);
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    text-align: center;
+}
+
+.summary-label {
+    font-size: 0.75rem;
+    color: var(--lwc-colorTextWeak, #666);
+    margin-bottom: 0.25rem;
+}
+
+.summary-value {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.controls {
+    margin-bottom: 1rem;
+}
+
 .chart-container {
     height: 300px;
 }
