@@ -56,13 +56,16 @@ private class SalesDataServiceTest {
         Test.stopTest();
 
         Map<Integer, Decimal> cumulativeData = (Map<Integer, Decimal>)result.get('cumulativeData');
+        Map<Integer, Decimal> volumeData = (Map<Integer, Decimal>)result.get('volumeData');
         Decimal monthlyGoal = (Decimal)result.get('monthlyGoal');
-        
+
         System.assertNotEquals(null, cumulativeData, 'Cumulative data should not be null');
+        System.assertNotEquals(null, volumeData, 'Volume data should not be null');
         System.assertNotEquals(null, monthlyGoal, 'Monthly goal should not be null');
-        
+
         // Check that cumulative data includes Ontario records
         System.assert(cumulativeData.size() > 0, 'Should have cumulative data for Ontario');
+        System.assert(volumeData.size() > 0, 'Should have volume data for Ontario');
     }
 
     @isTest
@@ -143,11 +146,14 @@ private class SalesDataServiceTest {
         Test.stopTest();
 
         Map<Integer, Decimal> cumulativeData = (Map<Integer, Decimal>)result.get('cumulativeData');
+        Map<Integer, Decimal> volumeData = (Map<Integer, Decimal>)result.get('volumeData');
         Decimal monthlyGoal = (Decimal)result.get('monthlyGoal');
-        
+
         System.assertNotEquals(null, cumulativeData, 'Cumulative data should not be null');
+        System.assertNotEquals(null, volumeData, 'Volume data should not be null');
         System.assertEquals(0, monthlyGoal, 'Unknown region should have 0 monthly goal');
         System.assertEquals(0, cumulativeData.size(), 'Unknown region should have no cumulative data');
+        System.assertEquals(0, volumeData.size(), 'Unknown region should have no volume data');
     }
 
     @isTest

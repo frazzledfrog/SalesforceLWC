@@ -8,6 +8,9 @@ export default class MonthlyGoalChart extends LightningElement {
   @track regionOptions = [];
   @track selectedRegion;
   @track isLoading = true;
+  @track cardTitle = `Monthly Goal - ${new Date().toLocaleString("en-US", {
+    month: "long"
+  })}`;
   chart;
   chartJsInitialized = false;
 
@@ -38,6 +41,13 @@ export default class MonthlyGoalChart extends LightningElement {
           data: {
             labels: [],
             datasets: [
+              {
+                label: "Volume",
+                data: [],
+                type: "bar",
+                backgroundColor: "#90caf9",
+                borderColor: "#90caf9"
+              },
               {
                 label: "Cumulative",
                 data: [],
@@ -95,6 +105,7 @@ export default class MonthlyGoalChart extends LightningElement {
     this.isLoading = true;
     getSalesData({ region: this.selectedRegion })
       .then((result) => {
+        const volume = result.volumeData || {};
         const cumulative = result.cumulativeData || {};
         const goal = result.monthlyGoal || 0;
         const now = new Date();
@@ -104,10 +115,12 @@ export default class MonthlyGoalChart extends LightningElement {
           0
         ).getDate();
         const labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+        const volumeData = labels.map((day) => volume[day] || 0);
         const cumulativeData = labels.map((day) => cumulative[day] || null);
         this.chart.data.labels = labels;
-        this.chart.data.datasets[0].data = cumulativeData;
-        this.chart.data.datasets[1].data = Array(daysInMonth).fill(goal);
+        this.chart.data.datasets[0].data = volumeData;
+        this.chart.data.datasets[1].data = cumulativeData;
+        this.chart.data.datasets[2].data = Array(daysInMonth).fill(goal);
         this.chart.update();
       })
       .catch((error) => {

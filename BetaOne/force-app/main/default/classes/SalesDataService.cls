@@ -23,12 +23,14 @@ public with sharing class SalesDataService {
         ];
 
         Map<Integer, Decimal> cumulativeData = new Map<Integer, Decimal>();
+        Map<Integer, Decimal> volumeData = new Map<Integer, Decimal>();
         Decimal cumulativeTotal = 0;
         for (AggregateResult ar : results) {
             Integer day = (Integer) ar.get('day');
             Decimal total = (Decimal) ar.get('total');
             cumulativeTotal += total;
             cumulativeData.put(day, cumulativeTotal);
+            volumeData.put(day, total);
         }
 
         Decimal monthlyGoal = 0;
@@ -56,6 +58,7 @@ public with sharing class SalesDataService {
 
         Map<String, Object> data = new Map<String, Object>();
         data.put('cumulativeData', cumulativeData);
+        data.put('volumeData', volumeData);
         data.put('monthlyGoal', monthlyGoal);
 
         return data;
