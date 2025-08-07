@@ -172,7 +172,7 @@ I've implemented a comprehensive visual canvas system for your Salesforce Lightn
 ## 🔍 File Changes Summary
 
 ### Enhanced Files:
-- `sharedStyles.css` - Complete visual canvas system
+- `unifiedStyles.css` - Complete visual canvas system
 - `dealerDetail.html` - Professional dashboard layout
 - `topDealers.html` - Enhanced performance visualization
 - `monthlyGoal.html` - Improved goal tracking interface
