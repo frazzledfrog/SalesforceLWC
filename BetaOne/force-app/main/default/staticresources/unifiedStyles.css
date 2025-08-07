@@ -493,7 +493,6 @@ input {
     color: black !important;
     background: rgb(255, 255, 255) !important;
     border-color: rgba(255, 255, 255, 0.6) !important;
-    z-index: 10 !important;
 }
 
 .header-search .slds-input::placeholder,
@@ -529,7 +528,7 @@ input {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     max-height: 300px;
     overflow-y: auto;
-    z-index: 102;
+    z-index: 1050;
 }
 
 /* ==============================================
@@ -704,7 +703,7 @@ input {
 .dealer-name {
     flex: 1;
     font-weight: 600;
-    color: #111827;
+    color: #1f2937;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -715,6 +714,7 @@ input {
     color: #10b981;
     min-width: 6em;
     text-align: right;
+    font-size: 1.05rem;
 }
 
 .no-data-message {
@@ -1097,7 +1097,6 @@ input {
     color: black !important;
     background: rgb(255, 255, 255) !important;
     border-color: rgba(255, 255, 255, 0.6) !important;
-    z-index: 10 !important;
 }
 
 .header-search .slds-input::placeholder,
@@ -1135,7 +1134,7 @@ input {
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
     max-height: 300px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 1050;
     margin-top: 4px;
 }
 
