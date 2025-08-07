@@ -43,19 +43,17 @@
           </lightning-combobox>
         </div>
 
-        <!-- Comparison Type Toggle -->
+        <!-- Comparison Type Selector -->
         <div class="control-group">
           <label class="control-label">Comparison</label>
-          <div class="toggle-container">
-            <lightning-input
-              type="toggle"
-              label={toggleLabel}
-              checked={isYearOverYear}
-              onchange={handleComparisonToggle}
-              class="comparison-toggle"
-            >
-            </lightning-input>
-          </div>
+          <lightning-combobox
+            name="comparison"
+            value={comparisonType}
+            options={comparisonOptions}
+            onchange={handleComparisonChange}
+            class="comparison-selector"
+          >
+          </lightning-combobox>
         </div>
       </div>
     </div>

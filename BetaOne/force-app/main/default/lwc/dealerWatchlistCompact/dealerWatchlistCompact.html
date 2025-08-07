@@ -23,13 +23,15 @@
                 class="limit-combobox"
                 variant="label-hidden">
             </lightning-combobox>
-            <lightning-input
-                type="toggle"
-                label={toggleLabel}
-                checked={isYearOverYear}
-                onchange={handleComparisonToggle}
-                class="comparison-toggle">
-            </lightning-input>
+            <lightning-combobox
+                name="comparison"
+                label="Comparison"
+                value={comparisonType}
+                options={comparisonOptions}
+                onchange={handleComparisonChange}
+                class="comparison-combobox"
+                variant="label-hidden">
+            </lightning-combobox>
         </div>
         <template if:true={isLoading}>
             <div class="loading-container">
