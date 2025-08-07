@@ -1,195 +1,257 @@
 <template>
-    <div class="watchlist-container app-container">
-        <!-- Modern Header Section -->
-        <div class="header-section">
-            <div class="header-content">
-                <div class="title-group">
-                    <div class="title-content">
-                        <h2 class="main-title">Dealer Watchlist</h2>
-                        <p class="banner-subtitle">{bannerSubtitle}</p>
-                    </div>
-                </div>
-            </div>
+  <div class="watchlist-container app-container">
+    <!-- Modern Header Section -->
+    <div class="header-section">
+      <div class="header-content">
+        <div class="title-group">
+          <div class="title-content">
+            <h2 class="main-title">Dealer Watchlist</h2>
+            <p class="banner-subtitle">{bannerSubtitle}</p>
+          </div>
         </div>
-
-        <!-- Controls Section -->
-        <div class="controls-section">
-            <div class="controls-row">
-                <!-- Region Filter -->
-                <div class="control-group">
-                    <label class="control-label">Region</label>
-                    <lightning-combobox
-                        name="region"
-                        value={selectedRegion}
-                        placeholder="Select Region"
-                        options={regionOptions}
-                        onchange={handleRegionChange}
-                        class="region-selector">
-                    </lightning-combobox>
-                </div>
-
-                <!-- Limit Filter -->
-                <div class="control-group">
-                    <label class="control-label">Results</label>
-                    <lightning-combobox
-                        name="limit"
-                        value={selectedLimit}
-                        placeholder="Select Limit"
-                        options={limitOptions}
-                        onchange={handleLimitChange}
-                        class="limit-selector">
-                    </lightning-combobox>
-                </div>
-
-                <!-- Comparison Type Toggle -->
-                <div class="control-group">
-                    <label class="control-label">Comparison</label>
-                    <div class="toggle-container">
-                        <lightning-input
-                            type="toggle"
-                            label={toggleLabel}
-                            checked={isYearOverYear}
-                            onchange={handleComparisonToggle}
-                            class="comparison-toggle">
-                        </lightning-input>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Content Section -->
-        <div class="content-section">
-            <!-- Loading Spinner -->
-            <template if:true={isLoading}>
-                <div class="loading-container">
-                    <lightning-spinner alternative-text="Loading dealer data..." size="medium"></lightning-spinner>
-                    <p class="loading-text">Loading dealer performance data...</p>
-                </div>
-            </template>
-
-            <!-- Main Content -->
-            <template if:false={isLoading}>
-                <!-- No Data State -->
-                <template if:true={hasNoData}>
-                    <div class="empty-state">
-                        <div class="empty-icon">
-                            <lightning-icon icon-name="utility:ban" size="large"></lightning-icon>
-                        </div>
-                        <h3 class="empty-title">No Performance Data Available</h3>
-                        <p class="empty-description">
-                            No dealer performance data is available for the selected region and comparison period.
-                            Try adjusting your filters or check back later.
-                        </p>
-                    </div>
-                </template>
-
-                <!-- Data Content -->
-                <template if:false={hasNoData}>
-                    <div class="performance-container">
-                        <div class="performance-grid">
-                            <!-- Winners Section -->
-                            <div class="performance-section winners-section">
-                                <div class="section-header winners-header">
-                                    <lightning-icon icon-name="utility:up" size="small" class="winners-icon"></lightning-icon>
-                                    <h4 class="section-title">Top Performers</h4>
-                                    <span class="section-count">({winnersCount})</span>
-                                </div>
-                                
-                                <template if:true={hasWinners}>
-                                    <div class="table-container">
-                                        <table class="dealer-table winners-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Dealer Name</th>
-                                                    <th class="text-right">{currentPeriodLabel}</th>
-                                                    <th class="text-right">{previousPeriodLabel}</th>
-                                                    <th class="text-right">Change</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <template for:each={winners} for:item="dealer" for:index="index">
-                                                    <tr key={dealer.name} class="dealer-row">
-                                                        <td class="dealer-name-cell">
-                                                            <div class="rank-number">{dealer.rank}</div>
-                                                            <span class="dealer-name" title={dealer.name}>
-                                                                {dealer.name}
-                                                            </span>
-                                                        </td>
-                                                        <td class="metric-cell text-right">{dealer.mtdText}</td>
-                                                        <td class="metric-cell text-right">{dealer.prevText}</td>
-                                                        <td class="delta-cell text-right">
-                                                            <span class="delta-value positive-delta">
-                                                                <lightning-icon icon-name="utility:up" size="xx-small"></lightning-icon>
-                                                                {dealer.deltaText}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                </template>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </template>
-
-                                <template if:false={hasWinners}>
-                                    <div class="no-data-message">
-                                        <p>No top performers available</p>
-                                    </div>
-                                </template>
-                            </div>
-
-                            <!-- Losers Section -->
-                            <div class="performance-section losers-section">
-                                <div class="section-header losers-header">
-                                    <lightning-icon icon-name="utility:down" size="small" class="losers-icon"></lightning-icon>
-                                    <h4 class="section-title">Underperformers</h4>
-                                    <span class="section-count">({losersCount})</span>
-                                </div>
-                                
-                                <template if:true={hasLosers}>
-                                    <div class="table-container">
-                                        <table class="dealer-table losers-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Dealer Name</th>
-                                                    <th class="text-right">{currentPeriodLabel}</th>
-                                                    <th class="text-right">{previousPeriodLabel}</th>
-                                                    <th class="text-right">Change</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <template for:each={losers} for:item="dealer" for:index="index">
-                                                    <tr key={dealer.name} class="dealer-row">
-                                                        <td class="dealer-name-cell">
-                                                            <div class="rank-number">{dealer.rank}</div>
-                                                            <span class="dealer-name" title={dealer.name}>
-                                                                {dealer.name}
-                                                            </span>
-                                                        </td>
-                                                        <td class="metric-cell text-right">{dealer.mtdText}</td>
-                                                        <td class="metric-cell text-right">{dealer.prevText}</td>
-                                                        <td class="delta-cell text-right">
-                                                            <span class="delta-value negative-delta">
-                                                                <lightning-icon icon-name="utility:down" size="xx-small"></lightning-icon>
-                                                                {dealer.deltaText}
-                                                            </span>
-                                                        </td>
-                                                    </tr>
-                                                </template>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </template>
-
-                                <template if:false={hasLosers}>
-                                    <div class="no-data-message">
-                                        <p>No underperformers available</p>
-                                    </div>
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-                </template>
-            </template>
-        </div>
+      </div>
     </div>
+
+    <!-- Controls Section -->
+    <div class="controls-section">
+      <div class="controls-row">
+        <!-- Region Filter -->
+        <div class="control-group">
+          <label class="control-label">Region</label>
+          <lightning-combobox
+            name="region"
+            value={selectedRegion}
+            placeholder="Select Region"
+            options={regionOptions}
+            onchange={handleRegionChange}
+            class="region-selector"
+          >
+          </lightning-combobox>
+        </div>
+
+        <!-- Limit Filter -->
+        <div class="control-group">
+          <label class="control-label">Results</label>
+          <lightning-combobox
+            name="limit"
+            value={selectedLimit}
+            placeholder="Select Limit"
+            options={limitOptions}
+            onchange={handleLimitChange}
+            class="limit-selector"
+          >
+          </lightning-combobox>
+        </div>
+
+        <!-- Comparison Type Toggle -->
+        <div class="control-group">
+          <label class="control-label">Comparison</label>
+          <div class="toggle-container">
+            <lightning-input
+              type="toggle"
+              label={toggleLabel}
+              checked={isYearOverYear}
+              onchange={handleComparisonToggle}
+              class="comparison-toggle"
+            >
+            </lightning-input>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="content-section">
+      <!-- Loading Spinner -->
+      <template if:true={isLoading}>
+        <div class="loading-container">
+          <lightning-spinner
+            alternative-text="Loading dealer data..."
+            size="medium"
+          ></lightning-spinner>
+          <p class="loading-text">Loading dealer performance data...</p>
+        </div>
+      </template>
+
+      <!-- Main Content -->
+      <template if:false={isLoading}>
+        <!-- No Data State -->
+        <template if:true={hasNoData}>
+          <div class="empty-state">
+            <div class="empty-icon">
+              <lightning-icon
+                icon-name="utility:ban"
+                size="large"
+              ></lightning-icon>
+            </div>
+            <h3 class="empty-title">No Performance Data Available</h3>
+            <p class="empty-description">
+              No dealer performance data is available for the selected region
+              and comparison period. Try adjusting your filters or check back
+              later.
+            </p>
+          </div>
+        </template>
+
+        <!-- Data Content -->
+        <template if:false={hasNoData}>
+          <div class="performance-container">
+            <div class="performance-grid">
+              <!-- Winners Section -->
+              <div class="performance-section winners-section">
+                <div class="section-header winners-header">
+                  <lightning-icon
+                    icon-name="utility:up"
+                    size="small"
+                    class="winners-icon"
+                  ></lightning-icon>
+                  <h4 class="section-title">Top Performers</h4>
+                  <span class="section-count">({winnersCount})</span>
+                </div>
+
+                <template if:true={hasWinners}>
+                  <div class="table-container">
+                    <table class="dealer-table winners-table">
+                      <thead>
+                        <tr>
+                          <th>Dealer Name</th>
+                          <th class="text-right">{currentPeriodLabel}</th>
+                          <th class="text-right">{previousPeriodLabel}</th>
+                          <th class="text-right">Change</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template
+                          for:each={winners}
+                          for:item="dealer"
+                          for:index="index"
+                        >
+                          <tr key={dealer.name} class="dealer-row">
+                            <td class="dealer-name-cell">
+                              <div class="rank-number">{dealer.rank}</div>
+                              <template if:true={dealer.accountUrl}>
+                                <a
+                                  href={dealer.accountUrl}
+                                  target="_blank"
+                                  class="dealer-name"
+                                  title={dealer.name}
+                                  >{dealer.name}</a
+                                >
+                              </template>
+                              <template if:false={dealer.accountUrl}>
+                                <span class="dealer-name" title={dealer.name}
+                                  >{dealer.name}</span
+                                >
+                              </template>
+                            </td>
+                            <td class="metric-cell text-right">
+                              {dealer.mtdText}
+                            </td>
+                            <td class="metric-cell text-right">
+                              {dealer.prevText}
+                            </td>
+                            <td class="delta-cell text-right">
+                              <span class="delta-value positive-delta">
+                                <lightning-icon
+                                  icon-name="utility:up"
+                                  size="xx-small"
+                                ></lightning-icon>
+                                {dealer.deltaText}
+                              </span>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+
+                <template if:false={hasWinners}>
+                  <div class="no-data-message">
+                    <p>No top performers available</p>
+                  </div>
+                </template>
+              </div>
+
+              <!-- Losers Section -->
+              <div class="performance-section losers-section">
+                <div class="section-header losers-header">
+                  <lightning-icon
+                    icon-name="utility:down"
+                    size="small"
+                    class="losers-icon"
+                  ></lightning-icon>
+                  <h4 class="section-title">Underperformers</h4>
+                  <span class="section-count">({losersCount})</span>
+                </div>
+
+                <template if:true={hasLosers}>
+                  <div class="table-container">
+                    <table class="dealer-table losers-table">
+                      <thead>
+                        <tr>
+                          <th>Dealer Name</th>
+                          <th class="text-right">{currentPeriodLabel}</th>
+                          <th class="text-right">{previousPeriodLabel}</th>
+                          <th class="text-right">Change</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <template
+                          for:each={losers}
+                          for:item="dealer"
+                          for:index="index"
+                        >
+                          <tr key={dealer.name} class="dealer-row">
+                            <td class="dealer-name-cell">
+                              <div class="rank-number">{dealer.rank}</div>
+                              <template if:true={dealer.accountUrl}>
+                                <a
+                                  href={dealer.accountUrl}
+                                  target="_blank"
+                                  class="dealer-name"
+                                  title={dealer.name}
+                                  >{dealer.name}</a
+                                >
+                              </template>
+                              <template if:false={dealer.accountUrl}>
+                                <span class="dealer-name" title={dealer.name}
+                                  >{dealer.name}</span
+                                >
+                              </template>
+                            </td>
+                            <td class="metric-cell text-right">
+                              {dealer.mtdText}
+                            </td>
+                            <td class="metric-cell text-right">
+                              {dealer.prevText}
+                            </td>
+                            <td class="delta-cell text-right">
+                              <span class="delta-value negative-delta">
+                                <lightning-icon
+                                  icon-name="utility:down"
+                                  size="xx-small"
+                                ></lightning-icon>
+                                {dealer.deltaText}
+                              </span>
+                            </td>
+                          </tr>
+                        </template>
+                      </tbody>
+                    </table>
+                  </div>
+                </template>
+
+                <template if:false={hasLosers}>
+                  <div class="no-data-message">
+                    <p>No underperformers available</p>
+                  </div>
+                </template>
+              </div>
+            </div>
+          </div>
+        </template>
+      </template>
+    </div>
+  </div>
 </template>
