@@ -1,0 +1,95 @@
+.watchlist-compact-container {
+    background: var(--card-background-color);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.compact-header {
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.compact-title {
+    color: var(--brand-primary);
+    margin: 0;
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-semibold);
+}
+
+.compact-subtitle {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: var(--text-sm);
+}
+
+.controls-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.lists-grid {
+    display: flex;
+    gap: 1rem;
+}
+
+.list-section {
+    flex: 1;
+    background: var(--secondary-background);
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}
+
+.section-header {
+    font-weight: var(--font-weight-semibold);
+    color: var(--brand-secondary);
+    margin-bottom: 0.5rem;
+}
+
+.dealer-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.dealer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+
+.dealer-row:last-child {
+    border-bottom: none;
+}
+
+.rank {
+    width: 1.5rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--brand-secondary);
+}
+
+.name {
+    flex: 1;
+    margin-left: 0.25rem;
+}
+
+.delta {
+    font-weight: var(--font-weight-semibold);
+}
+
+.delta-positive {
+    color: var(--success-color);
+}
+
+.delta-negative {
+    color: var(--error-color);
+}
+
+.no-data-message {
+    text-align: center;
+    color: var(--text-muted);
+}
