@@ -1,0 +1,103 @@
+<template>
+    <div class="dashboard app-container">
+        <div class="dashboard-container">
+            <div class="header">
+                <div class="header-content">
+                    <div class="title">
+                        <div class="icon-wrapper">
+                            <lightning-icon icon-name="utility:target" size="small" class="icon-white"></lightning-icon>
+                        </div>
+                        <div class="title-text">
+                            <h1>Daily Call Goal</h1>
+                            <p>Monitor daily calls against your goal</p>
+                        </div>
+                    </div>
+                    <div class="user-select">
+                        <button class="user-button">
+                            <lightning-icon icon-name="utility:user" size="x-small"></lightning-icon>
+                            <span>Ricky Palmero</span>
+                            <lightning-icon icon-name="utility:chevrondown" size="x-small"></lightning-icon>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main">
+                <div class="content-grid">
+                    <div class="progress-circle">
+                        <div class="circle-wrapper">
+                            <svg viewBox="0 0 200 200">
+                                <circle cx="100" cy="100" r="85" stroke-width="12" class="circle-bg"></circle>
+                                <circle cx="100" cy="100" r="85" stroke-width="12" class="circle-progress" style={progressStyle}></circle>
+                                <defs>
+                                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#f97316" />
+                                        <stop offset="100%" stop-color="#f59e0b" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="circle-center">
+                                <div class="calls-count">{completedCalls}</div>
+                                <div class="calls-label">calls</div>
+                                <div class="calls-total">of {totalCalls}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-cards">
+                        <div class="stat-card progress-card">
+                            <div class="stat-content">
+                                <div class="stat-header">
+                                    <lightning-icon icon-name="utility:trending" size="small" class="progress-icon"></lightning-icon>
+                                    <span>Progress</span>
+                                </div>
+                                <div class="stat-value">{percentage}%</div>
+                                <div class="stat-desc">Complete</div>
+                            </div>
+                            <div class="stat-emoji">📈</div>
+                        </div>
+
+                        <div class="stat-card remaining-card">
+                            <div class="stat-content">
+                                <div class="stat-header">
+                                    <lightning-icon icon-name="utility:call" size="small" class="remaining-icon"></lightning-icon>
+                                    <span>Remaining</span>
+                                </div>
+                                <div class="stat-value">{remaining}</div>
+                                <div class="stat-desc">Calls left</div>
+                            </div>
+                            <div class="stat-emoji">🎯</div>
+                        </div>
+
+                        <div class="motivation-card">
+                            <div class="motivation-message">
+                                <div class="motivation-title">
+                                    <template if:true={percentageGreaterEqual50}>Great progress!</template>
+                                    <template if:false={percentageGreaterEqual50}>Keep going!</template>
+                                </div>
+                                <div class="motivation-text">
+                                    <template if:true={percentageGreaterEqual50}>
+                                        You're over halfway to your daily goal! {remaining} calls to go.
+                                    </template>
+                                    <template if:false={percentageGreaterEqual50}>
+                                        You've got this! Just {remaining} more calls to reach your target.
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bottom-progress">
+                    <div class="progress-label">
+                        <span>Daily Progress</span>
+                        <span>{percentage}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style={progressBarStyle}></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
