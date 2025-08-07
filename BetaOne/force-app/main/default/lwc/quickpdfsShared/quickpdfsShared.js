@@ -1,7 +1,6 @@
-// QuickpdfsShared component uses shared style colors for a simple PDF list
+// QuickpdfsShared component uses unified style colors for a simple PDF list
 import { LightningElement } from 'lwc';
-import { loadStyle } from 'lightning/platformResourceLoader';
-import sharedStyles from '@salesforce/resourceUrl/sharedStyles';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 import VIN_Amendment from '@salesforce/resourceUrl/VIN_Amendment';
 import Trustee_Form from '@salesforce/resourceUrl/Trustee_Form';
 import RecSheetPDF from '@salesforce/resourceUrl/RecSheetPDF';
@@ -24,7 +23,7 @@ export default class QuickpdfsShared extends LightningElement {
     }
 
     connectedCallback() {
-        loadStyle(this, sharedStyles);
+        loadUnifiedStyles(this);
     }
 
     handlePreview(event) {
