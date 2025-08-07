@@ -25,7 +25,14 @@
                     <template for:each={dealers} for:item="dealer">
                         <li key={dealer.rank} class="dealer-item">
                             <span class="dealer-rank">{dealer.rank}</span>
-                            <span class="dealer-name" title={dealer.Name}>{dealer.Name}</span>
+                            <span class="dealer-name" title={dealer.Name}>
+                                <template if:true={dealer.accountLink}>
+                                    <a href={dealer.accountLink} target="_blank" class="dealer-link-text">{dealer.Name}</a>
+                                </template>
+                                <template if:false={dealer.accountLink}>
+                                    {dealer.Name}
+                                </template>
+                            </span>
                             <span class="dealer-metric">{dealer.MetricFormatted}</span>
                         </li>
                     </template>
