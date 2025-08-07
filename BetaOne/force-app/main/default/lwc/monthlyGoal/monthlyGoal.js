@@ -74,7 +74,6 @@ export default class MonthlyGoal extends LightningElement {
         this.chartjsInitialized = true;
         loadScript(this, chartjs)
             .then(() => {
-                console.log('Chart.js loaded successfully');
                 setTimeout(() => this.initializeChart(), 100);
             })
             .catch(error => {
@@ -200,14 +199,12 @@ export default class MonthlyGoal extends LightningElement {
             },
         });
         
-        console.log('Chart created successfully');
         
         try {
             this.chart.data.labels = ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5'];
             this.chart.data.datasets[0].data = [1000, 2000, 3000, 4000, 5000];
             this.chart.data.datasets[1].data = [10000, 10000, 10000, 10000, 10000];
             this.chart.update();
-            console.log('Test chart rendered successfully');
         } catch (testError) {
             console.error('Error rendering test chart:', testError);
         }
@@ -226,7 +223,6 @@ export default class MonthlyGoal extends LightningElement {
 
     updateChart() {
         if (!this.selectedRegion || !this.chart) {
-            console.log('Chart or region not ready for update');
             return;
         }
         this.isLoading = true;
@@ -286,7 +282,6 @@ export default class MonthlyGoal extends LightningElement {
                         this.chart.options.scales.y.stacked = true;
                         this.chart.options.scales.x.stacked = true;
                         this.chart.update();
-                        console.log('Chart updated successfully (National view)');
                     } catch (updateError) {
                         console.error('Error updating chart:', updateError);
                     }
@@ -339,7 +334,6 @@ export default class MonthlyGoal extends LightningElement {
                         this.chart.options.scales.y.stacked = false;
                         this.chart.options.scales.x.stacked = false;
                         this.chart.update();
-                        console.log('Chart updated successfully (Single region view)');
                         this.setupPulseAnimation(today - 1);
                     } catch (updateError) {
                         console.error('Error updating chart:', updateError);
