@@ -313,6 +313,21 @@ input {
 }
 
 /* ==============================================
+   APPLICATION CONTAINERS
+   Standard padding for top-level app wrappers
+   ============================================== */
+
+.container,
+.dealer-analytics-container,
+.pdf-container,
+.figma-container,
+.watchlist-container,
+.top-dealers-compact-container {
+    padding: var(--spacing-medium);
+    margin-bottom: var(--spacing-medium);
+}
+
+/* ==============================================
    DEALER WATCHLIST COMPONENT STYLES
    ============================================== */
 
