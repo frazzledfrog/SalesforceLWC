@@ -48,6 +48,9 @@ private class SalesDataServiceTest {
 
         insert records;
 
+        // Remove any existing monthly goal records to satisfy unique record validation
+        delete [SELECT Id FROM Monthly_Goal__c];
+
         Monthly_Goal__c goal = new Monthly_Goal__c(
             Region_Target_Alberta__c = 1000,
             Region_Target_Quebec__c = 2000,
