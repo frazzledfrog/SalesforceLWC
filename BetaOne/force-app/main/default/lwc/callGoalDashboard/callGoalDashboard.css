@@ -38,7 +38,7 @@
     backdrop-filter: blur(4px);
 }
 
-.icon-white lightning-icon {
+.icon-white {
     --sds-c-icon-color-foreground-default: #ffffff;
 }
 
@@ -185,6 +185,19 @@
     display: flex;
     align-items: center;
     margin-bottom: 0.5rem;
+}
+
+.progress-card .stat-header lightning-icon,
+.remaining-card .stat-header lightning-icon {
+    margin-right: 0.5rem;
+}
+
+.progress-card .stat-header lightning-icon {
+    --sds-c-icon-color-foreground-default: #166534;
+}
+
+.remaining-card .stat-header lightning-icon {
+    --sds-c-icon-color-foreground-default: #1e3a8a;
 }
 
 .progress-card .stat-header span {
