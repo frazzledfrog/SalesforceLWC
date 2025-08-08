@@ -14,3 +14,80 @@
     display: flex;
     flex-direction: column;
 }
+
+/* Enhanced styling for activity tracker */
+.metric-card {
+    background: var(--card-background-color);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-large);
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.chart-svg {
+    width: 100%;
+    height: 100%;
+}
+
+.chart-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.calls-number {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    color: var(--heading-color);
+}
+
+.calls-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
+
+.goal-text {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-large);
+    text-align: center;
+    margin-top: var(--spacing-large);
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-small);
+}
+
+.stat-number {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--heading-color);
+}
+
+.stat-number.complete {
+    color: var(--success-color);
+}
+
+.stat-number.over-goal {
+    color: var(--warning-color);
+}
+
+.stat-text {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+}
