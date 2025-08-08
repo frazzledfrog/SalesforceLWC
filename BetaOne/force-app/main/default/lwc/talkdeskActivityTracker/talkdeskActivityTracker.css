@@ -212,3 +212,28 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Prevent dropdowns from being clipped by parents */
+.container,
+.metric-card,
+.details-section,
+.chart-wrapper {
+    overflow: visible;
+}
+
+/* Ensure the combobox sits above neighbors and its menu can escape */
+lightning-combobox {
+    position: relative;
+    z-index: 5;
+}
+
+/* Reduce extra space under the app for this component */
+.container {
+    padding: var(--spacing-medium);
+    margin-bottom: 0; /* override shared .container margin-bottom */
+}
+
+/* Optional: tighten bottom spacing on last section */
+.details-section {
+    margin-bottom: 0;
+}
