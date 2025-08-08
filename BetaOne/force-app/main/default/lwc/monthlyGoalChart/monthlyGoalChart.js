@@ -33,7 +33,7 @@ export default class MonthlyGoalChart extends LightningElement {
   }
 
   renderedCallback() {
-    if (this.chartJsInitialized) {
+    if (this.chartJsInitialized || !this.selectedRegion) {
       return;
     }
     this.chartJsInitialized = true;
@@ -54,18 +54,16 @@ export default class MonthlyGoalChart extends LightningElement {
                 backgroundColor: "rgba(0,102,204,0.2)",
                 fill: true,
                 tension: 0.4,
-                pointRadius: 0,
-                stack: "sales"
+                pointRadius: 0
               },
               {
-                label: "Remaining",
+                label: "Monthly Goal",
                 data: [],
                 borderColor: "#FF8A00",
-                backgroundColor: "rgba(255,138,0,0.2)",
-                fill: true,
+                borderDash: [5, 5],
+                fill: false,
                 pointRadius: 0,
-                borderWidth: 2,
-                stack: "sales"
+                borderWidth: 2
               }
             ]
           },
@@ -84,7 +82,6 @@ export default class MonthlyGoalChart extends LightningElement {
                 }
               },
               y: {
-                stacked: true,
                 ticks: {
                   callback: (value) =>
                     "$" + new Intl.NumberFormat("en-US").format(value)
@@ -136,12 +133,10 @@ export default class MonthlyGoalChart extends LightningElement {
           runningTotal += volume[day] || 0;
           return runningTotal;
         });
-        const remainingData = cumulativeData.map((v) =>
-          (v === null ? null : Math.max(goal - v, 0))
-        );
+        const goalLineData = Array.from({ length: daysInMonth }, () => goal);
         this.chart.data.labels = labels;
         this.chart.data.datasets[0].data = cumulativeData;
-        this.chart.data.datasets[1].data = remainingData;
+        this.chart.data.datasets[1].data = goalLineData;
         this.chart.update();
       })
       .catch((error) => {
