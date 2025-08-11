@@ -1,18 +1,25 @@
 :host {
     display: block;
+    height: 100%; /* allow parent region height to propagate */
 }
 
 .dashboard {
-    min-height: auto; /* was 100vh */
+    /* was min-height:auto */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(to bottom right, #f8fafc, #eff6ff);
-    padding: 1.5rem;
-    padding-bottom: 0.75rem; /* tighten bottom space */
+    padding: 1.5rem 1.5rem 0.75rem;
 }
 
 .dashboard-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
     max-width: 64rem;
     margin: 0 auto;
-    overflow: visible; /* allow menus to escape */
+    overflow: visible;
+    width: 100%;
 }
 
 .header {
@@ -92,30 +99,41 @@
     padding: 2rem;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
     margin-bottom: 0;
+    flex: 1; /* take remaining vertical space */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* allow inner grid to shrink */
 }
 
 .content-grid {
+    flex: 1;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2.5rem;
+    align-items: stretch;
+    min-height: 0; /* for proper flex/grid interaction */
 }
 
 @media (min-width: 1024px) {
     .content-grid {
         grid-template-columns: 1fr 1fr;
-        align-items: center;
+        align-items: stretch;
     }
 }
 
 .progress-circle {
     display: flex;
+    align-items: center;
     justify-content: center;
+    min-height: 0;
 }
 
 .circle-wrapper {
     position: relative;
-    width: 16rem;
-    height: 16rem;
+    width: 100%;
+    max-width: 420px; /* cap size so it doesn’t get absurdly large */
+    aspect-ratio: 1 / 1; /* responsive square */
+    height: auto;
 }
 
 .circle-wrapper svg {
@@ -164,7 +182,14 @@
 .stats-cards {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    justify-content: space-between;
+}
+
+@media (min-width: 1024px) {
+    .stats-cards {
+        align-self: stretch;
+    }
 }
 
 .stat-card {
@@ -295,8 +320,8 @@
 }
 
 .bottom-progress {
-    margin-top: 3rem;
-    padding-top: 1.5rem;
+    margin-top: auto; /* push to bottom of card */
+    padding-top: 1.25rem;
     border-top: 1px solid #f3f4f6;
 }
 

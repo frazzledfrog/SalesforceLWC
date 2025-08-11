@@ -15,7 +15,12 @@
         <template if:true={isLoading}>
           <lightning-spinner size="medium"></lightning-spinner>
         </template>
-        <canvas class="goal-chart" lwc:dom="manual"></canvas>
+        <canvas class="goal-chart" lwc:dom="manual" aria-label="Monthly sales performance chart"></canvas>
+        <template if:true={selectedRegion}>
+          <p class="chart-hint slds-text-color_weak slds-m-top_x-small">
+            <template if:true={isNationalView}>Stacked areas show daily regional contribution. Solid line overlays cumulative national total; dashed line is monthly goal.</template>
+          </p>
+        </template>
       </div>
     </div>
   </lightning-card>

@@ -5,5 +5,11 @@
 
 .chart-container {
   position: relative;
-  height: 300px;
+  height: 320px;
 }
+
+:host([data-national='true']) .chart-container {
+  height: 380px; /* slightly taller when stacking multiple regions */
+}
+
+.chart-hint { font-size: 0.65rem; line-height: 1.1; }
