@@ -1,6 +1,6 @@
 <template>
-  <div class="app-container app-container--flush shared-card-bg monthly-goal-chart-container">
-    <div class="header shared-header monthly-goal-chart-header">
+  <div class="app-container shared-card-bg monthly-goal-chart-container app-container--flush">
+    <div class="header shared-header">
       <h2 class="shared-title">{cardTitle}</h2>
       <div class="header-controls">
         <template if:true={regionOptions}>
@@ -14,7 +14,8 @@
         </template>
       </div>
     </div>
-    <div class="chart-container">
+    <div class="content-section">
+      <div class="chart-container">
       <template if:true={isLoading}>
         <lightning-spinner size="medium"></lightning-spinner>
       </template>
@@ -24,6 +25,7 @@
           <template if:true={isNationalView}>Stacked areas show daily regional contribution. Solid line overlays cumulative national total; dashed line is monthly goal.</template>
         </p>
       </template>
+      </div>
     </div>
   </div>
 </template>

@@ -15,14 +15,17 @@
 .monthly-goal-chart-header .region-picker::placeholder { color: rgba(0,0,0,0.55); }
 
 /* Match right-side breathing room pattern */
-.monthly-goal-chart-container { padding-right: .75rem; box-sizing: border-box; }
+.monthly-goal-chart-container { padding-right: 0; box-sizing: border-box; }
+
+/* Wrap inner content to mirror other compact component structure */
+.content-section { box-sizing: border-box; }
 
 .chart-container {
   position: relative;
   min-height: clamp(340px, 40vh, 640px);
   height: 100%;
   max-height: 640px; /* cap normal view height */
-  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+  padding-top: 0.5rem;
   box-sizing: border-box;
 }
 

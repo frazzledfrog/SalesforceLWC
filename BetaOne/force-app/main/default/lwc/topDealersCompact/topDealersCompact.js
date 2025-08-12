@@ -74,7 +74,7 @@ export default class TopDealersCompact extends LightningElement {
                     rank: idx + 1,
                     Name: dealer.accountName,
                     Metric: dealer.totalAmount,
-                    MetricFormatted: this.abbreviateCurrency(dealer.totalAmount),
+                    MetricFormatted: this.formatCurrency(dealer.totalAmount),
                     MetricFull: this.formatCurrency(dealer.totalAmount),
                     SharePercent: shareFixed,
                     ShareTooltip: shareFixed + '% of region total',
@@ -102,4 +102,5 @@ export default class TopDealersCompact extends LightningElement {
         if (amount === null || amount === undefined) return '';
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(amount);
     }
+
 }
