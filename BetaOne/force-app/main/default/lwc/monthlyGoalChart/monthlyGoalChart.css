@@ -1,7 +1,21 @@
-.region-picker {
-  max-width: 200px;
-  margin: 0;
+/* Consistent combobox width akin to other compact components */
+.region-picker { width: 10rem; margin: 0; }
+
+/* Ensure combobox text is visible inside blue gradient header */
+.monthly-goal-chart-header .region-picker {
+  --slds-c-input-text-color: #000; /* selected value */
+  --slds-c-input-color-background: #ffffff; /* input background */
+  --slds-c-input-color-border: rgba(255,255,255,0.6);
+  --slds-c-input-color-border-focus: #ffffff;
+  --slds-c-input-shadow-focus: 0 0 0 2px rgba(255,255,255,0.45);
+  --slds-c-input-font-weight: 500;
 }
+
+/* Placeholder color (when nothing selected) */
+.monthly-goal-chart-header .region-picker::placeholder { color: rgba(0,0,0,0.55); }
+
+/* Match right-side breathing room pattern */
+.monthly-goal-chart-container { padding-right: .75rem; box-sizing: border-box; }
 
 .chart-container {
   position: relative;

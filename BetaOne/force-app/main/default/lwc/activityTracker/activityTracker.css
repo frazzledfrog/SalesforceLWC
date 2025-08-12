@@ -4,6 +4,8 @@
     height: 100%;
 }
 
+.activity-tracker-bg { background: var(--card-background-color); }
+
 .container.app-container {
     flex: 1;
     display: flex;
@@ -103,6 +105,16 @@
 
 .salesperson-combobox {
     max-width: 280px;
+}
+
+/* Ensure combobox text is visible inside blue header */
+.header.shared-header .salesperson-combobox {
+    --slds-c-input-text-color: #000;
+    --slds-c-input-color-background: #ffffff;
+    --slds-c-input-color-border: rgba(255,255,255,0.6);
+    --slds-c-input-color-border-focus: #ffffff;
+    --slds-c-input-shadow-focus: 0 0 0 2px rgba(255,255,255,0.45);
+    --slds-c-input-font-weight: 500;
 }
 
 /* Remove legacy large bottom margin class if still applied */

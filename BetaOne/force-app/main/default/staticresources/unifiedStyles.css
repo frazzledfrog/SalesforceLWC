@@ -259,6 +259,13 @@ input {
     box-shadow: var(--shadow-md);
 }
 
+/* New: background-only variant (no border/trace) */
+.shared-card-bg {
+    background: var(--card-background-color);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-md);
+}
+
 .shared-header {
     background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-primary) 100%);
     color: white;

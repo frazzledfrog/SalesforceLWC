@@ -1,5 +1,6 @@
 /* Root container now uses shared-card + app-container classes */
 .watchlist-compact-container { padding-right: .75rem; box-sizing: border-box; }
+.watchlist-bg { background: var(--card-background-color); }
 
 .compact-header {
     display: flex;

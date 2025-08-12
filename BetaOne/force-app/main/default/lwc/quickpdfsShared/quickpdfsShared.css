@@ -12,6 +12,9 @@
     margin-bottom: 0;
 }
 
+/* Ensure white card background even inside themed regions */
+.quickpdfs-bg { background: var(--card-background-color); }
+
 .pdf-list {
     list-style: none;
     margin: 0;

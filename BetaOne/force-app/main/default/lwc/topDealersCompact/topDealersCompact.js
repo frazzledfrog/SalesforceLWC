@@ -98,15 +98,6 @@ export default class TopDealersCompact extends LightningElement {
         }
     }
 
-    abbreviateCurrency(amount) {
-        if (amount === null || amount === undefined) return '';
-        const abs = Math.abs(amount);
-        if (abs >= 1_000_000_000) return (amount / 1_000_000_000).toFixed(1) + 'B';
-        if (abs >= 1_000_000) return (amount / 1_000_000).toFixed(1) + 'M';
-        if (abs >= 1_000) return (amount / 1_000).toFixed(1) + 'k';
-        return this.formatCurrency(amount);
-    }
-
     formatCurrency(amount) {
         if (amount === null || amount === undefined) return '';
         return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(amount);
