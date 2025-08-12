@@ -1,0 +1,29 @@
+/* topDealersCompact.css */
+
+/* Keep the two comboboxes on one line */
+.controls-section {
+  display: flex;
+  align-items: center;
+  gap: .5rem; /* space between the two dropdowns */
+  margin-bottom: .5rem;
+  flex-wrap: wrap; /* wrap gracefully on narrow widths */
+}
+
+/* Optional: consistent widths */
+.region-combobox,
+.view-combobox {
+  width: 10rem;
+}
+
+/* Right-side breathing room so metric column text isn't flush */
+/* Applying to the whole container inside the flush wrapper */
+.top-dealers-compact-container {
+  padding-right: .75rem;
+  box-sizing: border-box;
+}
+
+/* If future internal padding conflicts occur, you can instead scope to .content-section */
+.content-section { padding: 0 0.75rem 0.25rem 0.75rem; box-sizing: border-box; }
+/* .content-section { padding-right: .75rem; box-sizing: border-box; } */
+
+.dealers-table-wrapper { padding-right:0.25rem; }

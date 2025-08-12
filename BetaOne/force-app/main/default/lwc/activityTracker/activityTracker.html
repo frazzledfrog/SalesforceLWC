@@ -1,25 +1,24 @@
 <template>
 
-    <div class="app-container activity-tracker-container app-container--flush">
+    <div class="activity-tracker app-container activity-tracker-container app-container--flush">
+        <div class="header shared-header">
+            <h2 class="shared-title">Daily Call Activity</h2>
+            <template if:true={selectedSalespersonData}>
+                <lightning-combobox
+                    name="salesperson"
+                    value={selectedSalesperson}
+                    placeholder="Choose Salesperson"
+                    options={salespeople}
+                    onchange={handleSalespersonChange}
+                    variant="label-hidden"
+                    class="salesperson-combobox">
+                </lightning-combobox>
+            </template>
+        </div>
         <div class="content-section">
-            <div class="metric-header slds-m-bottom_large">
-                <!-- Salesperson Dropdown -->
-                <template if:true={selectedSalespersonData}>
-                    <lightning-combobox
-                        name="salesperson"
-                        value={selectedSalesperson}
-                        placeholder="Choose Salesperson"
-                        options={salespeople}
-                        onchange={handleSalespersonChange}
-                        variant="label-hidden"
-                        class="slds-col_bump-left">
-                    </lightning-combobox>
-                </template>
-            </div>
-
             <!-- Loading State -->
             <template if:true={isLoading}>
-                <div class="slds-text-align_center slds-p-around_x-large">
+                <div class="slds-text-align_center slds-p-around_large">
                     <lightning-spinner size="medium"></lightning-spinner>
                     <p class="slds-text-color_weak slds-m-top_small">Loading activity data...</p>
                 </div>
@@ -37,95 +36,66 @@
             <template if:true={selectedSalespersonData}>
                 <div class="metric-card">
                     <div class="chart-wrapper">
+                        <!-- ...existing code... -->
                         <svg viewBox="0 0 120 120" class="chart-svg">
-                        <defs>
-                            <!-- Circular gradient that follows the arc -->
-                            <linearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1"/>
-                                <stop offset="25%" style="stop-color:#84cc16;stop-opacity:1"/>
-                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
-                                <stop offset="75%" style="stop-color:#f97316;stop-opacity:1"/>
-                                <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1"/>
-                            </linearGradient>
-                            <!-- Gold gradient for overflow -->
-                            <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1"/>
-                                <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
-                                <stop offset="100%" style="stop-color:#d97706;stop-opacity:1"/>
-                            </linearGradient>
-                        </defs>
-
-                        <!-- Background circle -->
-                        <circle cx="60" cy="60" r="45"
-                                fill="none"
-                                stroke="#e5e7eb"
-                                stroke-width="12"/>
-
-                        <!-- Progress circle -->
-                        <circle cx="60" cy="60" r="45"
-                                fill="none"
-                                stroke={progressColor}
-                                stroke-width="14"
-                                stroke-linecap="round"
-                                stroke-dasharray="282.74"
-                                stroke-dashoffset={progressOffset}
-                                transform="rotate(-90 60 60)"
-                                style="transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.3s ease-in-out;"/>
-
-                        <!-- Overflow circle -->
-                        <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
-                            <circle cx="60" cy="60" r="45"
-                                    fill="none"
-                                    stroke="url(#goldGradient)"
-                                    stroke-width="13"
-                                    stroke-linecap="round"
-                                    stroke-dasharray="282.74"
-                                    stroke-dashoffset={overflowOffset}
-                                    transform="rotate(-90 60 60)"
-                                    style="transition: stroke-dashoffset 0.5s ease-in-out;"/>
+                            <defs>
+                                <linearGradient id="progressGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#10b981;stop-opacity:1"/>
+                                    <stop offset="25%" style="stop-color:#84cc16;stop-opacity:1"/>
+                                    <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                    <stop offset="75%" style="stop-color:#f97316;stop-opacity:1"/>
+                                    <stop offset="100%" style="stop-color:#ef4444;stop-opacity:1"/>
+                                </linearGradient>
+                                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1"/>
+                                    <stop offset="50%" style="stop-color:#f59e0b;stop-opacity:1"/>
+                                    <stop offset="100%" style="stop-color:#d97706;stop-opacity:1"/>
+                                </linearGradient>
+                            </defs>
+                            <circle cx="60" cy="60" r="45" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                            <circle cx="60" cy="60" r="45" fill="none" stroke={progressColor} stroke-width="14" stroke-linecap="round" stroke-dasharray="282.74" stroke-dashoffset={progressOffset} transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.5s ease-in-out, stroke 0.3s ease-in-out;"/>
+                            <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
+                                <circle cx="60" cy="60" r="45" fill="none" stroke="url(#goldGradient)" stroke-width="13" stroke-linecap="round" stroke-dasharray="282.74" stroke-dashoffset={overflowOffset} transform="rotate(-90 60 60)" style="transition: stroke-dashoffset 0.5s ease-in-out;"/>
+                            </template>
+                        </svg>
+                        <div class="chart-center">
+                            <div class="calls-number">{selectedSalespersonData.goalProgress.calls}</div>
+                            <div class="calls-text">calls</div>
+                            <div class="goal-text">of {dailyGoal}</div>
+                        </div>
+                    </div>
+                    <div class="stats-row">
+                        <div class="stat">
+                            <span class="stat-number complete">{selectedSalespersonData.goalProgress.percentage}%</span>
+                            <div class="stat-text">Complete</div>
+                        </div>
+                        <template if:false={selectedSalespersonData.goalProgress.isOverGoal}>
+                            <div class="stat">
+                                <span class="stat-number">{selectedSalespersonData.goalProgress.remaining}</span>
+                                <div class="stat-text">Remaining</div>
+                            </div>
                         </template>
-                    </svg>
-
-                    <!-- Chart Center Content -->
-                    <div class="chart-center">
-                        <div class="calls-number">{selectedSalespersonData.goalProgress.calls}</div>
-                        <div class="calls-text">calls</div>
-                        <div class="goal-text">of {dailyGoal}</div>
+                        <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
+                            <div class="stat">
+                                <span class="stat-number over-goal">+{overGoalCalls}</span>
+                                <div class="stat-text">Over Goal</div>
+                            </div>
+                        </template>
                     </div>
                 </div>
-
-                <div class="stats-row">
-                    <div class="stat">
-                        <span class="stat-number complete">{selectedSalespersonData.goalProgress.percentage}%</span>
-                        <div class="stat-text">Complete</div>
-                    </div>
-                    <template if:false={selectedSalespersonData.goalProgress.isOverGoal}>
-                        <div class="stat">
-                            <span class="stat-number">{selectedSalespersonData.goalProgress.remaining}</span>
-                            <div class="stat-text">Remaining</div>
-                        </div>
-                    </template>
-                    <template if:true={selectedSalespersonData.goalProgress.isOverGoal}>
-                        <div class="stat">
-                            <span class="stat-number over-goal">+{overGoalCalls}</span>
-                            <div class="stat-text">Over Goal</div>
-                        </div>
-                    </template>
-                </div>
-            </div>
             </template>
 
-        <!-- Empty State -->
-        <template if:false={selectedSalespersonData}>
-            <template if:false={isLoading}>
-                <template if:false={error}>
-                    <div class="empty-state slds-text-align_center slds-p-around_x-large">
-                        <div class="empty-text slds-text-heading_small slds-text-color_weak">No calls logged today</div>
-                        <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">Start making calls to track your progress toward your daily goal.</p>
-                    </div>
+            <!-- Empty State -->
+            <template if:false={selectedSalespersonData}>
+                <template if:false={isLoading}>
+                    <template if:false={error}>
+                        <div class="empty-state slds-text-align_center slds-p-around_large">
+                            <div class="empty-text slds-text-heading_small slds-text-color_weak">No calls logged today</div>
+                            <p class="slds-text-body_small slds-text-color_weak slds-m-top_small">Start making calls to track your progress toward your daily goal.</p>
+                        </div>
+                    </template>
                 </template>
             </template>
-        </template>
         </div>
     </div>
 </template>

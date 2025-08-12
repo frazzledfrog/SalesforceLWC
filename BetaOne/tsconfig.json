@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ES2020",
+    "moduleResolution": "Node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "baseUrl": "./force-app/main/default/lwc",
+    "paths": { "c/*": ["*"], "@salesforce/*": ["*"], "@*": ["node_modules/@*" ] },
+    "typeRoots": ["./node_modules/@types", "./.sfdx/typings/lwc"],
+    "noEmit": true
+  },
+  "include": [
+    "force-app/main/default/lwc/**/*.ts",
+    "force-app/main/default/lwc/**/*.js",
+    "**/*.d.ts"
+  ],
+  "exclude": ["node_modules", "coverage", "jest.config.js"]
+}

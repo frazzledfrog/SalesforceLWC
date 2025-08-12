@@ -615,11 +615,15 @@ input {
     border-radius: var(--border-radius-lg);
     box-shadow: var(--shadow-lg);
     padding: var(--spacing-medium) var(--spacing-large);
+    /* Add a little extra breathing room on the right edge without affecting left alignment */
+    padding-right: calc(var(--spacing-large) + 0.5rem);
     width: 100%;
     min-width: 0;
     max-width: 100%;
     font-family: var(--font-family);
     box-sizing: border-box;
+    /* right breathing room tweak */
+    margin-right: 0.5rem;
 }
 
 .compact-header {
@@ -721,6 +725,16 @@ input {
     min-width: 6em;
     text-align: right;
     font-size: 1.05rem;
+    position: relative;
+    padding-left: 0.4rem;
+}
+
+.dealer-metric:before {
+    content: '$';
+    position: absolute;
+    left: 0;
+    color: #10b981;
+    font-weight: 700;
 }
 
 .no-data-message {
@@ -854,3 +868,12 @@ input {
    PLACEHOLDER FOR FUTURE COMPONENT STYLES
    (Will be added as we process more components)
    ============================================== */
+.header-share { min-width:4em; text-align:right; color:#64748b; font-weight:700; }
+.dealer-share { min-width:4em; text-align:right; font-weight:600; color:#64748b; font-size:0.9rem; }
+.view-combobox { margin-left:0.75rem; min-width:120px; max-width:140px; }
+.top-dealers-compact-container .controls-section .region-combobox,
+.top-dealers-compact-container .controls-section .view-combobox,
+.top-dealers-compact-container .controls-section lightning-combobox {
+  width: auto !important;
+  flex: 0 0 auto;
+}

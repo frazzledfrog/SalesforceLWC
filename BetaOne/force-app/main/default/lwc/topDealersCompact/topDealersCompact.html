@@ -14,6 +14,15 @@
                     class="region-combobox"
                     variant="label-hidden">
                 </lightning-combobox>
+                <lightning-combobox
+                    name="view"
+                    label="View"
+                    value={viewLimitDisplay}
+                    options={viewOptions}
+                    onchange={handleViewChange}
+                    class="view-combobox"
+                    variant="label-hidden">
+                </lightning-combobox>
             </div>
 
             <template if:true={dealers}>
@@ -22,6 +31,7 @@
                         <span class="header-rank">#</span>
                         <span class="header-name">Dealer Name</span>
                         <span class="header-metric">Amount Financed (MTD)</span>
+                        <span class="header-share">Share</span>
                     </div>
                     <ul class="dealers-list">
                         <template for:each={dealers} for:item="dealer">
@@ -35,7 +45,8 @@
                                         {dealer.Name}
                                     </template>
                                 </span>
-                                <span class="dealer-metric">{dealer.MetricFormatted}</span>
+                                <span class="dealer-metric" title={dealer.MetricFull}>{dealer.MetricFormatted}</span>
+                                <span class="dealer-share" title={dealer.ShareTooltip}>{dealer.SharePercent}%</span>
                             </li>
                         </template>
                     </ul>

@@ -13,6 +13,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding: var(--spacing-large);
 }
 
 /* Enhanced styling for activity tracker */
@@ -21,6 +22,7 @@
     border: 1px solid var(--border-light);
     border-radius: var(--border-radius);
     padding: var(--spacing-large);
+    margin-top: 0;
 }
 
 .chart-wrapper {
@@ -90,4 +92,21 @@
 .stat-text {
     font-size: var(--font-size-sm);
     color: var(--text-muted);
+}
+
+.header.shared-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.salesperson-combobox {
+    max-width: 280px;
+}
+
+/* Remove legacy large bottom margin class if still applied */
+.metric-header,
+.slds-m-bottom_large {
+    margin-bottom: 0 !important;
 }

@@ -5,11 +5,13 @@
   "description": "Salesforce App",
   "scripts": {
     "lint": "eslint **/{aura,lwc}/**/*.js",
+  "lint:ts": "eslint --ext .ts,.js **/{aura,lwc}/**/*.{ts,js}",
     "test": "npm run test:unit",
     "test:unit": "sfdx-lwc-jest",
     "test:unit:watch": "sfdx-lwc-jest --watch",
     "test:unit:debug": "sfdx-lwc-jest --debug",
     "test:unit:coverage": "sfdx-lwc-jest --coverage",
+  "typecheck": "tsc --noEmit -p tsconfig.json",
     "prettier": "prettier --write \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "prettier:verify": "prettier --check \"**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}\"",
     "postinstall": "husky install",
@@ -22,6 +24,9 @@
     "@salesforce/eslint-plugin-aura": "^2.0.0",
     "@salesforce/eslint-plugin-lightning": "^1.0.0",
     "@salesforce/sfdx-lwc-jest": "^7.0.1",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
+    "typescript": "^5.4.0",
     "eslint": "8.57.1",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^28.8.1",
@@ -34,7 +39,7 @@
     "**/*.{cls,cmp,component,css,html,js,json,md,page,trigger,xml,yaml,yml}": [
       "prettier --write"
     ],
-    "**/{aura,lwc}/**/*.js": [
+    "**/{aura,lwc}/**/*.{js,ts}": [
       "eslint"
     ]
   }

@@ -117,3 +117,34 @@ This release introduces a comprehensive suite of Lightning Web Components (LWC) 
 
 *This release establishes the foundation for a comprehensive sales analytics platform with room for future enhancements and additional AI-powered features.*
 
+---
+
+## TypeScript Support (Added)
+
+The repository is configured for optional TypeScript in LWC components.
+
+What was added:
+* `tsconfig.json` with strict type checking (noEmit) so TS acts as a type layer.
+* Dev deps: `typescript`, `@types/node`, `@types/jest`.
+* Scripts: `npm run typecheck` (TS), `npm run lint:ts` (JS + TS).
+* ESLint config extended to handle `.ts` files via `.eslintrc.cjs`.
+* Ambient types file `force-app/main/default/lwc/global.d.ts` for custom / Apex module typings.
+
+How to migrate a component:
+1. Rename `<component>.js` to `<component>.ts` (keep the HTML & meta XML unchanged).
+2. Fix any type errors reported by `npm run typecheck`.
+3. (Interim) If a deployment requires a `.js`, create a thin JS re-export:
+  ```js
+  import C from './myComponent';
+  export default C;
+  ```
+  (Salesforce currently only processes `.js` source. Full TS transpile step can be added later.)
+
+Utility tips:
+* Put shared interfaces/types in `global.d.ts` or a `types/` folder with `*.d.ts` files.
+* Use union types & optional chaining to eliminate many runtime guards.
+* Add specific Apex method type declarations to improve IntelliSense.
+
+Future enhancement option:
+Add a build step (e.g., using `tsc --emitDeclarationOnly` + a simple copy or Rollup) to auto-generate the `.js` counterparts so manual re-export files aren’t needed.
+

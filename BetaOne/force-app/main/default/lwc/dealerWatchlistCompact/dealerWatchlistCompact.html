@@ -1,86 +1,91 @@
 <template>
-    <div class="watchlist-compact-container app-container app-container--flush">
-        <div class="compact-header">
-            <h3 class="compact-title">Dealer Watchlist</h3>
-            <lightning-combobox
-                name="region"
-                label="Region"
-                value={selectedRegion}
-                options={regionOptions}
-                onchange={handleRegionChange}
-                class="region-combobox"
-                variant="label-hidden">
-            </lightning-combobox>
-            <lightning-combobox
-                name="limit"
-                label="Results"
-                value={selectedLimit}
-                options={limitOptions}
-                onchange={handleLimitChange}
-                class="limit-combobox"
-                variant="label-hidden">
-            </lightning-combobox>
-            <lightning-combobox
-                name="comparison"
-                label="Comparison"
-                value={comparisonType}
-                options={comparisonOptions}
-                onchange={handleComparisonChange}
-                class="comparison-combobox"
-                variant="label-hidden">
-            </lightning-combobox>
+    <div class="container app-container watchlist-compact-container app-container--flush">
+        <div class="header shared-header">
+            <h2 class="shared-title">Dealer Watchlist</h2>
         </div>
-        <template if:true={isLoading}>
-            <div class="loading-container">
-                <lightning-spinner alternative-text="Loading dealer data..." size="small"></lightning-spinner>
+        <div class="content-section">
+            <div class="controls-section">
+                <lightning-combobox
+                    name="region"
+                    label="Region"
+                    value={selectedRegion}
+                    options={regionOptions}
+                    onchange={handleRegionChange}
+                    class="region-combobox"
+                    variant="label-hidden">
+                </lightning-combobox>
+                <lightning-combobox
+                    name="limit"
+                    label="Results"
+                    value={selectedLimit}
+                    options={limitOptions}
+                    onchange={handleLimitChange}
+                    class="limit-combobox"
+                    variant="label-hidden">
+                </lightning-combobox>
+                <lightning-combobox
+                    name="comparison"
+                    label="Comparison"
+                    value={comparisonType}
+                    options={comparisonOptions}
+                    onchange={handleComparisonChange}
+                    class="comparison-combobox"
+                    variant="label-hidden">
+                </lightning-combobox>
             </div>
-        </template>
-        <template if:false={isLoading}>
-            <template if:true={hasNoData}>
-                <div class="no-data-message">No dealer data available.</div>
-            </template>
-            <template if:false={hasNoData}>
-                <div class="lists-grid">
-                    <div class="list-section winners">
-                        <div class="section-header">Top Performers ({winnersCount})</div>
-                        <ul class="dealer-list">
-                            <template for:each={winners} for:item="dealer">
-                                <li key={dealer.name} class="dealer-row">
-                                    <span class="rank">{dealer.rank}</span>
-                                    <span class="name">
-                                        <template if:true={dealer.accountUrl}>
-                                            <a href={dealer.accountUrl} target="_blank" class="dealer-link-text">{dealer.name}</a>
-                                        </template>
-                                        <template if:false={dealer.accountUrl}>
-                                            {dealer.name}
-                                        </template>
-                                    </span>
-                                    <span class="delta {dealer.deltaClass}">{dealer.deltaText}</span>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
-                    <div class="list-section losers">
-                        <div class="section-header">Underperformers ({losersCount})</div>
-                        <ul class="dealer-list">
-                            <template for:each={losers} for:item="dealer">
-                                <li key={dealer.name} class="dealer-row">
-                                    <span class="rank">{dealer.rank}</span>
-                                    <span class="name">
-                                        <template if:true={dealer.accountUrl}>
-                                            <a href={dealer.accountUrl} target="_blank" class="dealer-link-text">{dealer.name}</a>
-                                        </template>
-                                        <template if:false={dealer.accountUrl}>
-                                            {dealer.name}
-                                        </template>
-                                    </span>
-                                    <span class="delta {dealer.deltaClass}">{dealer.deltaText}</span>
-                                </li>
-                            </template>
-                        </ul>
-                    </div>
+
+            <template if:true={isLoading}>
+                <div class="loading-container">
+                    <lightning-spinner alternative-text="Loading dealer data..." size="small"></lightning-spinner>
                 </div>
             </template>
-        </template>
+            <template if:false={isLoading}>
+                <template if:true={hasNoData}>
+                    <div class="no-data-message">No dealer data available.</div>
+                </template>
+                <template if:false={hasNoData}>
+                    <div class="lists-grid">
+                        <div class="list-section winners">
+                            <div class="section-header">Top Performers ({winnersCount})</div>
+                            <ul class="dealer-list">
+                                <template for:each={winners} for:item="dealer">
+                                    <li key={dealer.name} class="dealer-row">
+                                        <span class="rank">{dealer.rank}</span>
+                                        <span class="name">
+                                            <template if:true={dealer.accountUrl}>
+                                                <a href={dealer.accountUrl} target="_blank" class="dealer-link-text">{dealer.name}</a>
+                                            </template>
+                                            <template if:false={dealer.accountUrl}>
+                                                {dealer.name}
+                                            </template>
+                                        </span>
+                                        <span class={dealer.deltaClass}>{dealer.deltaText}</span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div class="list-section losers">
+                            <div class="section-header">Underperformers ({losersCount})</div>
+                            <ul class="dealer-list">
+                                <template for:each={losers} for:item="dealer">
+                                    <li key={dealer.name} class="dealer-row">
+                                        <span class="rank">{dealer.rank}</span>
+                                        <span class="name">
+                                            <template if:true={dealer.accountUrl}>
+                                                <a href={dealer.accountUrl} target="_blank" class="dealer-link-text">{dealer.name}</a>
+                                            </template>
+                                            <template if:false={dealer.accountUrl}>
+                                                {dealer.name}
+                                            </template>
+                                        </span>
+                                        <span class={dealer.deltaClass}>{dealer.deltaText}</span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </div>
     </div>
 </template>

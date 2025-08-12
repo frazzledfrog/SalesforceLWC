@@ -40,10 +40,9 @@ export default class DealerWatchlistCompact extends LightningElement {
     return this.comparisonType === "YearOverYear";
   }
 
+  // Subtitle previously shown in older header layout; retained for potential future tooltip use
   get bannerSubtitle() {
-    const comparison = this.isYearOverYear
-      ? "YTD vs 2024 Comparison"
-      : "Month over Month Comparison";
+    const comparison = this.isYearOverYear ? "YTD vs 2024 Comparison" : "Month over Month Comparison";
     return `Winners & Losers • Recreational Business Line • ${comparison}`;
   }
 

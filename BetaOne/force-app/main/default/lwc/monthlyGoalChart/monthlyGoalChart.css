@@ -1,6 +1,6 @@
 .region-picker {
   max-width: 200px;
-  margin-bottom: 1rem;
+  margin: 0;
 }
 
 .chart-container {
@@ -8,6 +8,8 @@
   min-height: clamp(340px, 40vh, 640px);
   height: 100%;
   max-height: 640px; /* cap normal view height */
+  padding: 0.5rem 0.75rem 0.75rem 0.75rem;
+  box-sizing: border-box;
 }
 
 :host([data-national='true']) .chart-container {
@@ -16,3 +18,8 @@
 }
 
 .chart-hint { font-size: 0.65rem; line-height: 1.1; }
+
+/* Header layout (reuse shared-header background, just flex alignment) */
+.monthly-goal-chart-header { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.monthly-goal-chart-header .shared-title { flex: 1; }
+.monthly-goal-chart-header .header-controls { display: flex; align-items: center; gap: .5rem; }

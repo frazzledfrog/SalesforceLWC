@@ -1,27 +1,29 @@
 <template>
   <div class="app-container app-container--flush monthly-goal-chart-container">
-    <lightning-card title={cardTitle}>
-      <template if:true={regionOptions}>
-        <lightning-combobox
-          class="region-picker"
-          variant="label-hidden"
-          value={selectedRegion}
-          options={regionOptions}
-          onchange={handleRegionChange}
-        >
-        </lightning-combobox>
-      </template>
-      <div class="chart-container">
-        <template if:true={isLoading}>
-          <lightning-spinner size="medium"></lightning-spinner>
-        </template>
-        <canvas class="goal-chart" lwc:dom="manual" aria-label="Monthly sales performance chart"></canvas>
-        <template if:true={selectedRegion}>
-          <p class="chart-hint slds-text-color_weak slds-m-top_x-small">
-            <template if:true={isNationalView}>Stacked areas show daily regional contribution. Solid line overlays cumulative national total; dashed line is monthly goal.</template>
-          </p>
+    <div class="header shared-header monthly-goal-chart-header">
+      <h2 class="shared-title">{cardTitle}</h2>
+      <div class="header-controls">
+        <template if:true={regionOptions}>
+          <lightning-combobox
+            class="region-picker"
+            variant="label-hidden"
+            value={selectedRegion}
+            options={regionOptions}
+            onchange={handleRegionChange}>
+          </lightning-combobox>
         </template>
       </div>
-    </lightning-card>
+    </div>
+    <div class="chart-container">
+      <template if:true={isLoading}>
+        <lightning-spinner size="medium"></lightning-spinner>
+      </template>
+      <canvas class="goal-chart" lwc:dom="manual" aria-label="Monthly sales performance chart"></canvas>
+      <template if:true={selectedRegion}>
+        <p class="chart-hint slds-text-color_weak slds-m-top_x-small">
+          <template if:true={isNationalView}>Stacked areas show daily regional contribution. Solid line overlays cumulative national total; dashed line is monthly goal.</template>
+        </p>
+      </template>
+    </div>
   </div>
 </template>

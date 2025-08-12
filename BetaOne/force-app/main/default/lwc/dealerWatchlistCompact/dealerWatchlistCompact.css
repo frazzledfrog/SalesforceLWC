@@ -1,13 +1,13 @@
-.watchlist-compact-container {
-    background: var(--card-background-color);
-    padding: 1rem;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px var(--shadow-color);
-}
+/* Root container now uses shared-card + app-container classes */
+.watchlist-compact-container { padding-right: .75rem; box-sizing: border-box; }
 
 .compact-header {
-    margin-bottom: 0.75rem;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
+    text-align: left;
 }
 
 .compact-title {
@@ -23,12 +23,8 @@
     font-size: var(--text-sm);
 }
 
-.controls-row {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: center;
-    margin-bottom: 0.75rem;
-}
+/* Inline filters like other compact components */
+.controls-section { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; margin-bottom: .5rem; }
 
 .lists-grid {
     display: flex;
@@ -46,6 +42,7 @@
     font-weight: var(--font-weight-semibold);
     color: var(--brand-secondary);
     margin-bottom: 0.5rem;
+    font-size: var(--text-lg); /* bumped from base for better readability */
 }
 
 .dealer-list {
@@ -60,6 +57,7 @@
     justify-content: space-between;
     padding: 0.25rem 0;
     border-bottom: 1px solid var(--border-light);
+    font-size: var(--text-lg); /* increase overall row text size */
 }
 
 .dealer-row:last-child {
@@ -79,6 +77,7 @@
 
 .delta {
     font-weight: var(--font-weight-semibold);
+    font-size: var(--text-lg);
 }
 
 .delta-positive {
@@ -93,3 +92,9 @@
     text-align: center;
     color: var(--text-muted);
 }
+
+/* Consistent widths for dropdowns */
+.region-combobox, .limit-combobox, .comparison-combobox { width: 10rem; }
+
+/* Internal padding for content inside flush wrapper */
+.content-section { padding: 0 0.75rem 0.5rem 0.75rem; box-sizing: border-box; }

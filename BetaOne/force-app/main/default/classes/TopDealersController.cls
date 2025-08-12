@@ -2,15 +2,17 @@
 public with sharing class TopDealersController {
     @AuraEnabled(cacheable=true)
     public static List<AccountWrapper> getTopDealers(String region) {
+        // Existing convenience method defaults to top 5
+        return getTopDealersWithLimit(region, 5);
+    }
+
+    @AuraEnabled(cacheable=true)
+    public static List<AccountWrapper> getTopDealersWithLimit(String region, Integer limitCount) {
         if (String.isBlank(region)) {
             return new List<AccountWrapper>();
         }
-
-        Date startDate = Date.today().toStartOfMonth(); // Start of the current month
-        
-        // Convert region back to province codes
+        Date startDate = Date.today().toStartOfMonth();
         Set<String> provinces = getProvincesForRegion(region);
-        
         List<Master_LOS__c> records = [
             SELECT Applications_Dealer_Name__c, Applications_Last_Amount_To_Finance_Sum__c
             FROM Master_LOS__c
@@ -19,36 +21,35 @@ public with sharing class TopDealersController {
             AND Applications_Last_Amount_To_Finance_Sum__c != null
             AND Applications_Risk_Tier_Code__c IN ('P1', 'P2', 'P3', 'P4', 'P+')
         ];
-
         Map<String, Decimal> dealerTotals = new Map<String, Decimal>();
-
+        Decimal regionTotal = 0;
         for (Master_LOS__c record : records) {
             String dealerName = record.Applications_Dealer_Name__c;
-            
             if (dealerName != null) {
                 Decimal currentTotal = dealerTotals.get(dealerName);
-                if (currentTotal == null) {
-                    currentTotal = 0;
-                }
+                if (currentTotal == null) currentTotal = 0;
                 currentTotal += record.Applications_Last_Amount_To_Finance_Sum__c;
                 dealerTotals.put(dealerName, currentTotal);
             }
         }
-
+        for (Decimal amt : dealerTotals.values()) {
+            regionTotal += amt;
+        }
         List<AccountWrapper> wrappers = new List<AccountWrapper>();
         for (String dealerName : dealerTotals.keySet()) {
-            wrappers.add(new AccountWrapper(dealerName, dealerTotals.get(dealerName)));
+            wrappers.add(new AccountWrapper(dealerName, dealerTotals.get(dealerName), regionTotal));
         }
-
         wrappers.sort();
-
-        List<AccountWrapper> topDealers = new List<AccountWrapper>();
-        Integer maxDealers = Math.min(5, wrappers.size()); // Changed to top 5 dealers
-        for (Integer i = 0; i < maxDealers; i++) {
-            topDealers.add(wrappers[i]);
+        // Determine how many to return. limitCount <=0 or null => all
+        Integer maxDealers = wrappers.size();
+        if (limitCount != null && limitCount > 0) {
+            maxDealers = Math.min(limitCount, wrappers.size());
         }
-
-        return topDealers;
+        List<AccountWrapper> selected = new List<AccountWrapper>();
+        for (Integer i = 0; i < maxDealers; i++) {
+            selected.add(wrappers[i]);
+        }
+        return selected;
     }
 
     @AuraEnabled(cacheable=true)
@@ -226,12 +227,18 @@ public with sharing class TopDealersController {
         public String accountName { get; set; }
         @AuraEnabled
         public Decimal totalAmount { get; set; }
-
+        @AuraEnabled
+        public Decimal regionTotal { get; set; }
         public AccountWrapper(String accountName, Decimal totalAmount) {
             this.accountName = accountName;
             this.totalAmount = totalAmount;
+            this.regionTotal = totalAmount; // legacy path, will be overwritten when using new method
         }
-
+        public AccountWrapper(String accountName, Decimal totalAmount, Decimal regionTotal) {
+            this.accountName = accountName;
+            this.totalAmount = totalAmount;
+            this.regionTotal = regionTotal;
+        }
         public Integer compareTo(Object compareTo) {
             AccountWrapper compareToWrapper = (AccountWrapper)compareTo;
             if (totalAmount < compareToWrapper.totalAmount) {
