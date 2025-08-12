@@ -1,10 +1,12 @@
 import { LightningElement, track } from 'lwc';
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 export default class DailyNotes extends LightningElement {
     @track notes = '';
     todayKey;
 
-    connectedCallback() {
+    async connectedCallback() {
+        try { await loadUnifiedStyles(this); } catch(e) { /* noop */ }
         const today = new Date().toISOString().slice(0, 10);
         this.todayKey = `dailyNotes-${today}`;
         this.notes = localStorage.getItem(this.todayKey) || '';

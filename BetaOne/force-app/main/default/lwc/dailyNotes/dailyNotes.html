@@ -1,12 +1,14 @@
 <template>
-    <lightning-card title="Daily Notes">
-        <div class="slds-p-horizontal_medium">
-            <p class="slds-text-title_caps">{today}</p>
-            <lightning-textarea
-                label="Notes / Announcements"
-                value={notes}
-                onchange={handleChange}
-            ></lightning-textarea>
-        </div>
-    </lightning-card>
+    <div class="app-container daily-notes-container app-container--flush">
+        <lightning-card title="Daily Notes">
+            <div class="slds-p-horizontal_medium">
+                <p class="slds-text-title_caps">{today}</p>
+                <lightning-textarea
+                    label="Notes / Announcements"
+                    value={notes}
+                    onchange={handleChange}
+                ></lightning-textarea>
+            </div>
+        </lightning-card>
+    </div>
 </template>

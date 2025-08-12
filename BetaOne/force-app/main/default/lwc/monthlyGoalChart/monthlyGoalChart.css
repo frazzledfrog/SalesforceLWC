@@ -5,11 +5,14 @@
 
 .chart-container {
   position: relative;
-  height: 320px;
+  min-height: clamp(340px, 40vh, 640px);
+  height: 100%;
+  max-height: 640px; /* cap normal view height */
 }
 
 :host([data-national='true']) .chart-container {
-  height: 380px; /* slightly taller when stacking multiple regions */
+  min-height: clamp(380px, 45vh, 700px);
+  max-height: 700px; /* cap national view height */
 }
 
 .chart-hint { font-size: 0.65rem; line-height: 1.1; }

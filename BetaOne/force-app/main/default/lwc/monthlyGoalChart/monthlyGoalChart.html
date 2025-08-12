@@ -1,6 +1,6 @@
 <template>
-  <lightning-card title={cardTitle}>
-    <div class="slds-p-around_medium">
+  <div class="app-container app-container--flush monthly-goal-chart-container">
+    <lightning-card title={cardTitle}>
       <template if:true={regionOptions}>
         <lightning-combobox
           class="region-picker"
@@ -22,6 +22,6 @@
           </p>
         </template>
       </div>
-    </div>
-  </lightning-card>
+    </lightning-card>
+  </div>
 </template>

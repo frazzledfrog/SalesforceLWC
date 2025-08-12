@@ -3,6 +3,7 @@ import { loadScript } from "lightning/platformResourceLoader";
 import chartjs from "@salesforce/resourceUrl/chartjs";
 import getSalesData from "@salesforce/apex/SalesDataService.getSalesData";
 import getRegions from "@salesforce/apex/SalesDataService.getRegions";
+import { loadUnifiedStyles } from 'c/unifiedStylesHelper';
 
 const REGION_COLORS = {
   Ontario: "#e6194b",
@@ -22,6 +23,10 @@ function hexToRgba(hex, alpha = 0.35) {
 }
 
 export default class MonthlyGoalChart extends LightningElement {
+  async connectedCallback(){
+    try { await loadUnifiedStyles(this); } catch(e){ /* silent */ }
+  }
+
   @track regionOptions = [];
   @track selectedRegion;
   @track isLoading = true;

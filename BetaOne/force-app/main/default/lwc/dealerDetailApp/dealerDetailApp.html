@@ -1,6 +1,6 @@
 <template>
-    <lightning-card title="Dealer Detail Application">
-        <div class="slds-p-around_medium">
+    <div class="app-container dealer-detail-app-container app-container--flush">
+        <lightning-card title="Dealer Detail Application">
             <lightning-combobox
                 name="dealer"
                 label="Select Dealer"
@@ -8,9 +8,7 @@
                 options={dealerOptions}
                 onchange={handleDealerChange}
             ></lightning-combobox>
-        </div>
-        <template if:true={selectedDealer}>
-            <div class="slds-p-around_medium">
+            <template if:true={selectedDealer}>
                 <div class="summary-grid">
                     <div class="summary-item">
                         <p class="summary-label">Dealer</p>
@@ -37,7 +35,7 @@
                 <div class="chart-container">
                     <canvas class="chart-canvas"></canvas>
                 </div>
-            </div>
-        </template>
-    </lightning-card>
+            </template>
+        </lightning-card>
+    </div>
 </template>

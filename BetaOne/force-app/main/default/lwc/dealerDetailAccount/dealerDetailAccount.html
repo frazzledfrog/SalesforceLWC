@@ -1,6 +1,6 @@
 <template>
     <!-- Modern Dealer Analytics Component -->
-    <div class="dealer-analytics-container">
+    <div class="dealer-analytics-container app-container app-container--flush">
 
         <!-- Loading State -->
         <template if:true={isLoading}>
@@ -39,45 +39,6 @@
         <!-- Main Dealer Content -->
         <template if:true={hasDealer}>
             <div class="dealer-content">
-
-                <!-- Key Metrics Grid -->
-                <div class="metrics-grid">
-                    <!-- Amount Financed This Month -->
-                    <div class="metric-card">
-                        <div class="metric-header">
-                            <lightning-icon icon-name="utility:currency" size="small" class="metric-icon"></lightning-icon>
-                            <span class="metric-label">Amount Financed This Month</span>
-                        </div>
-                        <div class="metric-value">{selectedDealer.monthlyAmountFinanced}</div>
-                    </div>
-
-                    <!-- Average Deal Size -->
-                    <div class="metric-card">
-                        <div class="metric-header">
-                            <lightning-icon icon-name="utility:chart" size="small" class="metric-icon"></lightning-icon>
-                            <span class="metric-label">Average Deal Size</span>
-                        </div>
-                        <div class="metric-value">{selectedDealer.averageDealSize}</div>
-                    </div>
-
-                    <!-- Deals This Month -->
-                    <div class="metric-card">
-                        <div class="metric-header">
-                            <lightning-icon icon-name="utility:number_input" size="small" class="metric-icon"></lightning-icon>
-                            <span class="metric-label">Deals This Month</span>
-                        </div>
-                        <div class="metric-value">{selectedDealer.monthlyDeals}</div>
-                    </div>
-
-                    <!-- Last Month Amount -->
-                    <div class="metric-card">
-                        <div class="metric-header">
-                            <lightning-icon icon-name="utility:date_time" size="small" class="metric-icon"></lightning-icon>
-                            <span class="metric-label">Last Month Amount</span>
-                        </div>
-                        <div class="metric-value">{selectedDealer.lastMonthAmountFinanced}</div>
-                    </div>
-                </div>
 
                 <!-- Performance Chart Section -->
                 <div class="chart-section">
