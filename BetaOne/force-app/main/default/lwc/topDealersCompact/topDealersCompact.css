@@ -27,3 +27,7 @@
 /* .content-section { padding-right: .75rem; box-sizing: border-box; } */
 
 .dealers-table-wrapper { padding-right:0.25rem; }
+
+/* Override global unifiedStyles dealer-metric $ prefix now that values include currency symbol */
+.dealer-metric { padding-left: 0 !important; }
+.dealer-metric:before { content: none !important; }
